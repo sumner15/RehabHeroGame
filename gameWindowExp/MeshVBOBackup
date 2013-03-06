@@ -1,0 +1,456 @@
+Imports System
+Imports System.Collections.Generic
+Imports System.Threading
+Imports System.Drawing
+Imports System.Drawing.Imaging
+
+Imports OpenTK
+Imports OpenTK.Platform
+Imports OpenTK.Graphics.OpenGL
+Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.FileIO
+Imports System.IO
+Imports OpenTK.Graphics
+
+Public Class MeshVbo
+    Private Vertices() As Vector3
+    Private Indices() As Integer
+    Private Normals() As Vector3
+    Private NormalsList() As Vector3
+    Private NormalsIndices() As Integer
+    Private Texcoords() As Vector2
+    Private TexcoordList() As Vector2
+    Private TexcoordIndices() As Integer
+    Private Colors() As Integer
+
+    Public VertexBufferID As Integer
+    Public TexcoordBufferID As Integer
+    Public NormalBufferID As Integer
+    Public ElementBufferID As Integer
+    Public ColorBufferID As Integer
+    Public numElements As Integer
+
+    Public useMaterial As Boolean = True
+    Public polyType As Integer = poly.tris
+
+    Public textureID As Integer
+    Public meshTexture As Bitmap
+
+    Private vertexData As ObjConverter
+
+    Public Sub New()
+        ReDim Vertices(23)
+        ReDim Indices(23)
+        ReDim Normals(23)
+        ReDim Texcoords(23)
+        ReDim Colors(23)
+
+        polyType = poly.QUADS
+
+        'bottom
+        Vertices(0) = New Vector3(1.0, -1.0, -1.0)  '1
+        Vertices(1) = New Vector3(1.0, -1.0, 1.0)   '2
+        Vertices(2) = New Vector3(-1.0, -1.0, 1.0)  '3
+        Vertices(3) = New Vector3(-1.0, -1.0, -1.0) '4
+        'top
+        Vertices(4) = New Vector3(1.0, 1.0, -1.0)   '5
+        Vertices(5) = New Vector3(1.0, 1.0, 1.0)    '6
+        Vertices(6) = New Vector3(-1.0, 1.0, 1.0)   '7
+        Vertices(7) = New Vector3(-1.0, 1.0, -1.0)  '8
+        'back
+        Vertices(8) = New Vector3(1.0, 1.0, -1.0)   '5
+        Vertices(9) = New Vector3(1.0, -1.0, -1.0)  '1
+        Vertices(10) = New Vector3(-1.0, -1.0, -1.0) '4
+        Vertices(11) = New Vector3(-1.0, 1.0, -1.0) '8
+        'left
+        Vertices(12) = New Vector3(-1.0, 1.0, -1.0) '8
+        Vertices(13) = New Vector3(-1.0, -1.0, -1.0) '4
+        Vertices(14) = New Vector3(-1.0, -1.0, 1.0)  '3
+        Vertices(15) = New Vector3(-1.0, 1.0, 1.0)   '7
+        'right
+        Vertices(16) = New Vector3(1.0, 1.0, -1.0)   '5
+        Vertices(17) = New Vector3(1.0, -1.0, -1.0)  '1
+        Vertices(18) = New Vector3(1.0, -1.0, 1.0)   '2
+        Vertices(19) = New Vector3(1.0, 1.0, 1.0)    '6
+        'front
+        Vertices(20) = New Vector3(1.0, 1.0, 1.0)    '6
+        Vertices(21) = New Vector3(1.0, -1.0, 1.0)   '2
+        Vertices(22) = New Vector3(-1.0, -1.0, 1.0)  '3
+        Vertices(23) = New Vector3(-1.0, 1.0, 1.0)   '7
+
+        For i = 0 To 23
+            Normals(i) = Vertices(i)
+            Normals(i).NormalizeFast()
+        Next i
+
+        For i = 0 To 23 Step 4
+            Texcoords(i) = New Vector2(0.0, 0.0)
+            Texcoords(i + 1) = New Vector2(1.0, 0.0)
+            Texcoords(i + 2) = New Vector2(1.0, 1.0)
+            Texcoords(i + 3) = New Vector2(0.0, 1.0)
+        Next
+
+        For i = 0 To 3 Step 1
+            Colors(i) = convertRGBA32(Color.BlanchedAlmond)
+            Colors(4 + i) = convertRGBA32(Color.Aqua)
+            Colors(8 + i) = convertRGBA32(Color.LightPink)
+            Colors(12 + i) = convertRGBA32(Color.Crimson)
+            Colors(16 + i) = convertRGBA32(Color.Cyan)
+            Colors(20 + i) = convertRGBA32(Color.Cyan)
+        Next i
+
+        Indices = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23}
+
+    End Sub
+
+    Public Sub New(ByVal objPath As String)
+        readWavefront(objPath)
+        ReDim Vertices(0)
+        ReDim Indices(0)
+        ReDim Normals(0)
+        ReDim Texcoords(0)
+        ReDim Colors(0)
+    End Sub
+
+    Public Sub New(ByVal polyType_ As Integer)
+        polyType = polyType_
+        ReDim Vertices(0)
+        ReDim Indices(0)
+        ReDim Normals(0)
+        ReDim Texcoords(0)
+        ReDim Colors(0)
+    End Sub
+
+    '' -----------------------------------------------------------------------------------------------------''
+    '' ---------------------------- this sub loads our Mesh data into buffers ------------------------------''
+    '' -----------------------------------------------------------------------------------------------------''
+    Public Sub loadVbo()
+        Dim bufferSize As Integer
+
+        If (Not IsDBNull(Colors)) Then
+            GL.GenBuffers(1, ColorBufferID)  'Generate Array Buffer Id
+            GL.BindBuffer(BufferTarget.ArrayBuffer, ColorBufferID)  'Bind current context to Array Buffer ID
+            GL.BufferData(BufferTarget.ArrayBuffer, CType(Colors.Length * Marshal.SizeOf(GetType(Integer)), IntPtr), Colors, BufferUsageHint.StaticDraw)  'Send data to buffer
+
+            ' check the buffer size
+            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, bufferSize)
+            If (Colors.Length * Marshal.SizeOf(GetType(Integer)) <> bufferSize) Then _
+                Throw New ApplicationException("Vertex array not uploaded correctly - colors")
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0)  ' clear the buffer binding
+        End If
+
+        If (Not IsDBNull(Normals)) Then
+            GL.GenBuffers(1, NormalBufferID)  'Generate Array Buffer Id
+            GL.BindBuffer(BufferTarget.ArrayBuffer, NormalBufferID)  'Bind current context to Array Buffer ID
+            GL.BufferData(BufferTarget.ArrayBuffer, CType(Normals.Length * Vector3.SizeInBytes, IntPtr), Normals, BufferUsageHint.StaticDraw)  'Send data to buffer
+
+            ' check the buffer size
+            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, bufferSize)
+            If (Normals.Length * Vector3.SizeInBytes <> bufferSize) Then _
+                Throw New ApplicationException("Vertex array not uploaded correctly - normals")
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0)  ' clear the buffer binding
+        End If
+
+        If (Not IsDBNull(Texcoords)) Then
+            GL.GenBuffers(1, TexcoordBufferID)  'Generate Array Buffer Id
+            GL.BindBuffer(BufferTarget.ArrayBuffer, TexcoordBufferID)  'Bind current context to Array Buffer ID
+            GL.BufferData(BufferTarget.ArrayBuffer, CType(Texcoords.Length * Vector2.SizeInBytes, IntPtr), Texcoords, BufferUsageHint.StaticDraw)  'Send data to buffer
+
+            ' check the buffer size
+            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, bufferSize)
+            If (Texcoords.Length * Vector2.SizeInBytes <> bufferSize) Then _
+                Throw New ApplicationException("Vertex array not uploaded correctly - normals")
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0)  ' clear the buffer binding
+        End If
+
+        If (Not IsDBNull(Vertices)) Then
+            GL.GenBuffers(1, VertexBufferID)  'Generate Array Buffer Id
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferID)  'Bind current context to Array Buffer ID
+            GL.BufferData(BufferTarget.ArrayBuffer, CType(Vertices.Length * Vector3.SizeInBytes, IntPtr), Vertices, BufferUsageHint.StaticDraw)  'Send data to buffer
+
+            ' check the buffer size
+            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, bufferSize)
+            If (Vertices.Length * Vector3.SizeInBytes <> bufferSize) Then _
+                Throw New ApplicationException("Vertex array not uploaded correctly - normals")
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0)  ' clear the buffer binding
+        End If
+
+        If (Not IsDBNull(Indices)) Then
+            GL.GenBuffers(1, ElementBufferID)  'Generate Array Buffer Id
+            GL.BindBuffer(BufferTarget.ArrayBuffer, ElementBufferID)  'Bind current context to Array Buffer ID
+            GL.BufferData(BufferTarget.ArrayBuffer, CType(Indices.Length * Marshal.SizeOf(GetType(Integer)), IntPtr), Indices, BufferUsageHint.StaticDraw)  'Send data to buffer
+
+            ' check the buffer size
+            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, bufferSize)
+            If (Indices.Length * Marshal.SizeOf(GetType(Integer)) <> bufferSize) Then _
+                Throw New ApplicationException("Vertex array not uploaded correctly - colors")
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0)  ' clear the buffer binding
+        End If
+
+        numElements = Indices.Length
+    End Sub
+
+    '' -----------------------------------------------------------------------------------------------------''
+    '' --------------------------- this sub draws the objects stored in our buffers ------------------------''
+    '' -----------------------------------------------------------------------------------------------------''
+    Public Sub drawVbo()
+        GL.PushClientAttrib(ClientAttribMask.ClientVertexArrayBit)
+        If (VertexBufferID = 0) Then Return
+        If (ElementBufferID = 0) Then Return
+
+        ' first deal with normals and colors
+        If (GL.IsEnabled(EnableCap.Lighting)) Then
+            If (NormalBufferID <> 0) Then
+                ' Bind to the Array Buffer ID
+                GL.BindBuffer(BufferTarget.ArrayBuffer, NormalBufferID)
+                ' Set the Pointer to the current bound array describing how the data ia stored
+                GL.NormalPointer(NormalPointerType.Float, Vector3.SizeInBytes, IntPtr.Zero)
+                ' Enable the client state so it will use this array buffer pointer
+                GL.EnableClientState(ArrayCap.NormalArray)
+            End If
+        End If
+        If (ColorBufferID <> 0 And ((Not GL.IsEnabled(EnableCap.Lighting)) Or GL.IsEnabled(EnableCap.ColorMaterial))) Then
+            ' Bind to the Array Buffer ID
+            GL.BindBuffer(BufferTarget.ArrayBuffer, ColorBufferID)
+            ' Set the Pointer to the current bound array describing how the data ia stored
+            GL.ColorPointer(4, ColorPointerType.UnsignedByte, Marshal.SizeOf(GetType(Integer)), IntPtr.Zero)
+            ' Enable the client state so it will use this array buffer pointer
+            GL.EnableClientState(ArrayCap.ColorArray)
+        End If
+
+
+        ' Now for the textures
+        If (GL.IsEnabled(EnableCap.Texture2D)) Then
+            If (TexcoordBufferID <> 0) Then
+                ' Bind to the Array Buffer ID
+                GL.BindBuffer(BufferTarget.ArrayBuffer, TexcoordBufferID)
+                ' Set the Pointer to the current bound array describing how the data ia stored
+                GL.TexCoordPointer(2, TexCoordPointerType.Float, Vector2.SizeInBytes, IntPtr.Zero)
+                ' Enable the client state so it will use this array buffer pointer
+                GL.EnableClientState(ArrayCap.TextureCoordArray)
+            End If
+        End If
+
+        ' Now for the actual vertices
+        GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferID)  ' Bind to the Array Buffer ID
+        GL.VertexPointer(3, VertexPointerType.Float, Vector3.SizeInBytes, IntPtr.Zero)
+        GL.EnableClientState(ArrayCap.VertexArray)
+
+        Dim Ka As New Color4(0.0F, 0.08F, 0.06F, 1.0F)
+        Dim Kd As New Color4(0.0F, 0.8F, 0.6F, 1.0F)
+        Dim Ks As New Color4(0.4F, 0.4F, 0.4F, 1.0F)
+
+        ' bind the element array
+
+        If useMaterial Then
+            GL.Material(MaterialFace.Front, MaterialParameter.Ambient, Ka)
+            GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, Kd)
+            GL.Material(MaterialFace.Front, MaterialParameter.Specular, Ks)
+            GL.Material(MaterialFace.Front, MaterialParameter.Emission, 1.0F)
+            GL.ShadeModel(ShadingModel.Smooth)
+        End If
+
+        GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID)
+
+        ' Draw the elements in the element array buffer
+        ' Draws up items in the Color, Vertex, TexCoordinate, and Normal Buffers using indices in the ElementArrayBuffer
+        If polyType = poly.QUADS Then
+            GL.DrawElements(BeginMode.Quads, numElements, DrawElementsType.UnsignedInt, IntPtr.Zero)
+        ElseIf polyType = poly.TRIS Then
+            GL.DrawElements(BeginMode.Triangles, numElements, DrawElementsType.UnsignedInt, IntPtr.Zero)
+        End If
+
+        ' Restore the state
+        GL.PopClientAttrib()
+
+    End Sub
+
+    ' generate a texture
+    Public Sub loadTexture(ByVal fNamePath As String)
+        If Dir$(fNamePath) <> "" Then
+            meshTexture = New Bitmap(fNamePath)
+            meshTexture.RotateFlip(RotateFlipType.Rotate90FlipX)
+            createTexture()
+        Else
+            MsgBox("texture fail")
+        End If
+    End Sub
+
+    Public Sub createTexture()
+        GL.GenTextures(1, textureID)
+        GL.BindTexture(TextureTarget.Texture2D, textureID)
+
+        Dim data As BitmapData = meshTexture.LockBits(New System.Drawing.Rectangle(0, 0, meshTexture.Width, meshTexture.Height), _
+            ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+
+        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, _
+            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0)
+
+        GL.GenerateMipmap(TextureTarget.Texture2D) ' generates a mipmap of our texture
+
+        meshTexture.UnlockBits(data)
+
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, CInt(TextureMagFilter.Linear))
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, CInt(TextureMinFilter.LinearMipmapNearest))
+        GL.BindTexture(TextureTarget.Texture2D, 0)
+        MsgBox("texture loaded")
+    End Sub
+
+    Public Sub freeBuffers()
+        If (VertexBufferID <> 0) Then GL.DeleteBuffers(1, VertexBufferID)
+        If (TexcoordBufferID <> 0) Then GL.DeleteBuffers(1, TexcoordBufferID)
+        If (NormalBufferID <> 0) Then GL.DeleteBuffers(1, NormalBufferID)
+        If (ElementBufferID <> 0) Then GL.DeleteBuffers(1, ElementBufferID)
+    End Sub
+
+    ' Read object from wavefront file
+    Public Sub readWavefront(ByVal fPath As String)
+        If (Not File.Exists(fPath)) Then Throw New ApplicationException("Invalid path to obj file :(")
+
+        Dim vertsPerFace As Integer
+
+        If polyType = poly.QUADS Then
+            vertsPerFace = 4
+        ElseIf polyType = poly.TRIS Then
+            vertsPerFace = 3
+        End If
+
+        Dim currentRow As String()
+        Dim vCount As Integer = 0
+        Dim nCount As Integer = 0
+        Dim iCount As Integer = 0
+        Dim tcCount As Integer = 0
+        Dim mtlCount As Integer = 0
+
+        Dim SetNormals As Boolean = False
+        Dim SetTexcoords As Boolean = False
+
+        Dim MyReader As New TextFieldParser(fPath)
+        MyReader.SetDelimiters(" ", "/")
+
+        While Not MyReader.EndOfData
+            Try
+                currentRow = MyReader.ReadFields()
+                If (currentRow(0) = "#") Then
+                ElseIf (currentRow(0) = "o") Then
+                ElseIf (currentRow(0) = "v") Then
+                    vCount = vCount + 1
+                ElseIf (currentRow(0) = "vn") Then
+                    nCount = nCount + 1
+                ElseIf (currentRow(0) = "vt") Then
+                    tcCount = tcCount + 1
+                ElseIf (currentRow(0) = "f") Then
+                    iCount = iCount + 1
+                ElseIf (currentRow(0) = "usemtl") Then
+                    mtlCount = mtlCount + 1
+                End If
+            Catch ex As MalformedLineException
+                MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
+            End Try
+        End While
+
+        'determine whether or not we are setting normals and texcoords
+        If nCount > 0 Then SetNormals = True
+        If tcCount > 0 Then SetTexcoords = True
+
+        ' define the dimensions of our buffer arrays
+        ReDim Vertices(vCount - 1)
+        ReDim Indices(iCount * vertsPerFace - 1)
+        If SetNormals Then
+            ReDim NormalsList(nCount - 1)
+            ReDim NormalsIndices(iCount - 1)
+            ReDim Normals(iCount - 1)
+        End If
+        If SetTexcoords Then
+            ReDim TexcoordList(tcCount - 1)
+            ReDim TexcoordIndices(iCount * vertsPerFace - 1)
+            ReDim Texcoords(iCount * vertsPerFace - 1)
+        End If
+
+        ' close and reopen the reader because it's lame
+        MyReader.Close()
+        MyReader = New TextFieldParser(fPath)
+        MyReader.SetDelimiters(" ", "/")
+
+        'define counters for all of our arrays - this is just the easiest way
+        Dim iVpos As Integer = 0
+        Dim iVposInd As Integer = 0
+        Dim iNormList As Integer = 0
+        Dim iNormInd As Integer = 0
+        Dim iTexList As Integer = 0
+        Dim iTexInd As Integer = 0
+
+        'read data from the file into our arrays
+        While Not MyReader.EndOfData
+            Try
+                currentRow = MyReader.ReadFields()
+                If (currentRow(0) = "#") Then
+                ElseIf (currentRow(0) = "v") Then
+                    Vertices(iVpos) = New Vector3(CDbl(currentRow(1)), CDbl(currentRow(2)), CDbl(currentRow(3)))
+                    iVpos = iVpos + 1
+                ElseIf (currentRow(0) = "vt") Then
+                    TexcoordList(iTexList) = New Vector2(CDbl(currentRow(1)), CDbl(currentRow(2)))
+                    iTexList = iTexList + 1
+                ElseIf (currentRow(0) = "vn") Then
+                    NormalsList(iNormList) = New Vector3(CDbl(currentRow(1)), CDbl(currentRow(2)), CDbl(currentRow(3)))
+                    iNormList = iNormList + 1
+                ElseIf (currentRow(0) = "f") Then
+                    For iFace = 0 To (vertsPerFace - 1) Step 1
+                        Indices(iVposInd + iFace) = CDbl(currentRow(3 * iFace + 1) - 1)
+                    Next iFace
+                    iVposInd = iVposInd + vertsPerFace
+
+                    If SetNormals Then
+                        NormalsIndices(iNormInd) = CInt(currentRow(3) - 1)
+                        iNormInd = iNormInd + 1
+                    End If
+
+                    If SetTexcoords Then
+                        For iFace = 0 To (vertsPerFace - 1) Step 1
+                            TexcoordIndices(iTexInd + iFace) = CDbl(currentRow(3 * iFace + 2) - 1)
+                        Next iFace
+                        iTexInd = iTexInd + vertsPerFace
+                    End If
+
+                ElseIf (currentRow(0) = "usemtl") Then
+                    mtlCount = mtlCount + 1
+                End If
+
+            Catch ex As MalformedLineException
+                MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
+            End Try
+        End While
+
+
+        'finish the arrays for our normals and texcoords
+        If SetNormals Then
+            For i = 0 To (Normals.Length - 1) Step 1
+                Normals(i) = NormalsList(NormalsIndices(i))
+                'MsgBox("normal " & CStr(i) & " - " & CStr(Normals(i).X) & " " & CStr(Normals(i).Y) & " " & CStr(Normals(i).Z))
+            Next
+        End If
+
+        Dim tcString As String = ""
+
+        If SetTexcoords Then
+            For i = 0 To (Texcoords.Length - 1) Step 1
+                Texcoords(i) = TexcoordList(TexcoordIndices(i))
+                tcString = tcString & vbNewLine & CStr(Texcoords(i).X) & " " & CStr(Texcoords(i).Y)
+                'MsgBox("texcoords " & CStr(i) & " - " & CStr(Texcoords(i).X) & " " & CStr(Texcoords(i).Y))
+            Next
+        End If
+
+        Console.Write(tcString)
+
+    End Sub
+
+    Private Function convertRGBA32(ByVal c As Color) As Integer
+        Return CInt((CInt(c.A) << CInt(24)) Or (CInt(c.B) << CInt(16)) Or (CInt(c.G) << 8) Or CInt(c.R))
+    End Function
+
+End Class
