@@ -1,6 +1,8 @@
 ﻿Imports System
 Imports System.Windows.Forms
 
+'This comment is an initial test of Mercurial/TortiseHG push process -SUMNER (03/07/13)
+
 Module Module1
 
     'Public GAMEPATH As String = "C:\ROBOTIC LAB\Hand Rehabilitation Robot\expo2012\gameWindowExp\"
