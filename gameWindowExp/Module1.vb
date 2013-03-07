@@ -4,6 +4,7 @@ Imports System.Windows.Forms
 Module Module1
 
     'Public GAMEPATH As String = "C:\ROBOTIC LAB\Hand Rehabilitation Robot\expo2012\gameWindowExp\"
+    '' testing out version control
     Public GAMEPATH As String = Application.StartupPath
     Public positions() As Double = {2.25, 1.15, 0.0, -1.15, -2.25}
     Public FPS As Double = 200
