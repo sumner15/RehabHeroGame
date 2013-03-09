@@ -39,6 +39,7 @@ Public Class SongGame
     Private randomBlocker As New Random()
 
     Public secondHand As FingerBot
+    Public bci2000 As BCI2000Exchange
 
     Private zeroPosComplete As Boolean = False
     Private startupTimer As New Stopwatch
@@ -86,6 +87,8 @@ Public Class SongGame
         PrepBlockedTrials(15)
         'debugFile.WriteLine("pos1" & vbTab & "pos2" & vbTab & "desiredNote" & vbTab & "desiredNoteTime" & vbTab & "time")
         debugFile.WriteLine("status" & vbTab & "desirednote" & vbTab & "kp1" & vbTab & "kd1" & vbTab & "kp2" & vbTab & "kv2")
+
+        bci2000 = New BCI2000Exchange(Me)
     End Sub
 
     '----------------------------------------------------------------------------------'
@@ -106,6 +109,7 @@ Public Class SongGame
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
         PrepBlockedTrials(15)
+        bci2000 = New BCI2000Exchange(Me)
     End Sub
 
     '----------------------------------------------------------------------------------'
@@ -127,6 +131,7 @@ Public Class SongGame
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
         PrepBlockedTrials(15)
+        bci2000 = New BCI2000Exchange(Me)
     End Sub
 
 #End Region
@@ -496,6 +501,7 @@ Public Class SongGame
         secondHand.getPos()
         secondHand.getTargetTime()
         secondHand.moveFingerBalls()
+        bci2000.Update(secondHand)
 
         'If blockedTrial And (secondHand.targetTime > (fretboard.nextNoteTime - secondHand.fixedDur * 1000 - 200) And (Not fretboard.songOver)) Then
         '    secondHand.moveFingersToCurrent(True)

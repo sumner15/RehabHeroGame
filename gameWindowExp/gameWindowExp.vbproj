@@ -80,6 +80,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BCI2000Exchange.vb" />
     <Compile Include="Camera.vb" />
     <Compile Include="FingerBall.vb" />
     <Compile Include="FingerBot.vb" />
@@ -149,6 +150,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="BCI2000AutomationLib">
+      <Guid>{363D672D-41EC-4B3E-AE58-50B49A83D530}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="GUITAR2COMIFACELib">
       <Guid>{D7C6310B-89A8-4FEB-BF72-F2734489AE41}</Guid>
       <VersionMajor>1</VersionMajor>
