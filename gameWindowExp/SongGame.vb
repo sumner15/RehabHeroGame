@@ -551,7 +551,7 @@ Public Class SongGame
         mySong.player.Dispose()
 
         debugFile.Close()
-
+        bci2000.Close()
     End Sub
 
 #End Region
