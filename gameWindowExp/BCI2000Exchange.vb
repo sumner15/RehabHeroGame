@@ -10,9 +10,15 @@ Public Class BCI2000Exchange
     Private samplesPerBlock As Double
     Private samplesPerSecond As Double
 
-    Private Const timeRes As UInteger = 5 ' 10 msec is standard. This affects all processes on the OS
+    Private Const timeRes As UInteger = 10 ' 10 msec is standard. This affects all processes on the OS
     Declare Function timeBeginPeriod Lib "winmm.dll" (uPeriod As UInteger) As Integer
     Declare Function timeEndPeriod Lib "winmm.dll" (uPeriod As UInteger) As Integer
+
+    Private running As Boolean
+    Private sourceTime As Double
+
+    Private udpIncoming As Boolean = False
+    Private udpOutgoing As Boolean = False
 
     '----------------------------------------------------------------------------------'
     '---------------------------- BCI2000 setup ---------------------------------------'
@@ -32,11 +38,6 @@ Public Class BCI2000Exchange
     Public Sub ExecuteScript(cmd As String)
         CheckInit()
         If remote.Execute(cmd) <> 0 Then Die() ' Execute() returns zero on success, unlike other methods
-    End Sub
-
-    Public Sub SetState(name As String, value As Double)
-        CheckInit()
-        If Not remote.SetStateVariable(name, value) Then Die()
     End Sub
 
     Public Function GetBlockDurationMsec()
@@ -106,79 +107,53 @@ Public Class BCI2000Exchange
         lastSourceTime = -1.23 ' a value that would never be returned by an actual call to remote.GetStateVariable("SourceTime")
         lastCall = Now()
     End Sub
-    Public Sub Update(ByRef secondHand As FingerBot)
-        CheckInit()
-        Dim tStart, tEnd As Date
-        Dim updatePeriod, scriptDuration As TimeSpan
 
-        tStart = Now()
-        updatePeriod = tStart - lastCall
-        lastCall = tStart
+    Private Sub Incoming()
 
-        Dim script As String = ""
-        script = script & "SET VARIABLE Foo ${SourceTime}; " ' NB: scripts cannot have newlines in them when called from the COM interface
-        script = script & "IF ${Foo} != " & lastSourceTime & "; "
-        script = script & "  SET STATE FingerBotPosF1 " & (secondHand.posF1 * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotVelF1 " & (secondHand.velF1 * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotPosF1Lie " & (secondHand.posF1Lie * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotVelF1Lie " & (secondHand.velF1Lie * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotPosF2 " & (secondHand.posF2 * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotVelF2 " & (secondHand.velF2 * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotPosF2Lie " & (secondHand.posF2Lie * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotVelF2Lie " & (secondHand.velF2Lie * stateScaling + stateOffset) & "; "
-        script = script & "  SET STATE FingerBotTargetTime " & secondHand.targetTime & "; "
-        'TODO: states that record how far away the three targets are and whether we've just had a miss or a hit
-        script = script & "END" & "; "    ' TODO: Ideally BCI2000's interpreter needs to be altered to have the capability to set multiple states while ensuring that all the changes happen in the same SampleBlock.
-        script = script & "${Foo}" & "; " '       As it is, the IF statement, implementing a SourceTime watch, should approximate this, but only if BCI2000's SampleBlock duration is at least twice the period with which this Sub gets called in the game update loop
-
-        ExecuteScript(script)
-        lastSourceTime = CDbl(remote.Result)
-
-        tEnd = Now()
-        scriptDuration = tEnd - tStart
-        tStart = tEnd
-
-        'TODO: this is where we would use remote.GetControlSignal(oneBasedChannelIndex, oneBasedElementIndex, byref val as double) to read back from BCI2000 if we were doing true BCI interaction and had a real signal-processing module in place
-
-        Console.WriteLine("Source module is " & modules(0))
-        Console.WriteLine("SamplingRate = " & samplesPerSecond & ";  SampleBlockSize = " & samplesPerBlock & ";   Block duration = " & GetBlockDurationMsec() & "msec")
-        Console.Write("Previous event loop period was ") : Console.WriteLine(updatePeriod)
-        Console.Write("Performed script operations in ") : Console.WriteLine(scriptDuration)
-        Console.Write("Console writes above took      ") : Console.WriteLine(Now() - tStart)
+        If udpIncoming Then
+            ' TODO: obtain mutex lock, copy the latest line of WATCH output, which has been updated in a separate thread, then unlock the mutex; parse the line into Running and SourceTime (and control signal, if you want)
+        Else
+            CheckInit()
+            Dim systemState As String = "Running"
+            If Not remote.GetSystemState(systemState) Then Die()
+            running = (systemState = "Running")
+            sourceTime = 0
+            If Not running Then Return
+            If Not remote.GetStateVariable("SourceTime", sourceTime) Then Die()
+            'TODO: this is where we would use remote.GetControlSignal(oneBasedChannelIndex, oneBasedElementIndex, byref val as double) to read back from BCI2000 if we were doing true BCI interaction and had a real signal-processing module in place
+        End If
 
     End Sub
 
-    Public Sub Update2(ByRef secondHand As FingerBot)
+    Public Sub SetState(name As String, value As Double)
+
+        If udpOutgoing Then
+            'TODO: write to ConnectorInput (shouldn't need a separate thread)
+        Else
+            CheckInit()
+            If Not remote.SetStateVariable(name, value) Then Die()
+        End If
+
+    End Sub
+
+    Public Sub Update(ByRef secondHand As FingerBot)
 
         CheckInit()
 
         Dim tStart, tEnd As Date
-        Dim updatePeriod, getSystemStateDuration, getStateVariablesDuration, setStateVariablesDuration As TimeSpan
+        Dim updatePeriod, incomingDuration, outgoingDuration As TimeSpan
 
-        tStart = Now()
-        updatePeriod = tStart - lastCall
-        lastCall = tStart
+        tStart = Now() : updatePeriod = tStart - lastCall : lastCall = tStart
 
+        Incoming()
 
-        Dim systemState As String
-        systemState = "Running"
-        If Not remote.GetSystemState(systemState) Then Die()
-        If systemState <> "Running" Then Return
+        tEnd = Now() : incomingDuration = tEnd - tStart : tStart = tEnd
 
-        tEnd = Now()
-        getSystemStateDuration = tEnd - tStart
-        tStart = tEnd
-
-        Dim sourceTime As Double
-        If Not remote.GetStateVariable("SourceTime", sourceTime) Then Die()
         If sourceTime = lastSourceTime Then Return
+        lastSourceTime = sourceTime
         ' TODO: Ideally BCI2000's interpreter needs to be altered to have the capability to set multiple states while ensuring that all the changes happen in the same SampleBlock.
         '       As it is, the sourceTime logic above should approximate this, but only if BCI2000's SampleBlock duration is at least twice the period with which this Sub gets called in the game update loop
-        lastSourceTime = sourceTime
 
-        tEnd = Now()
-        getStateVariablesDuration = tEnd - tStart
-        tStart = tEnd
 
         SetState("FingerBotPosF1", secondHand.posF1 * stateScaling + stateOffset)
         SetState("FingerBotVelF1", secondHand.velF1 * stateScaling + stateOffset)
@@ -193,26 +168,20 @@ Public Class BCI2000Exchange
         SetState("FingerBotTargetTime", secondHand.targetTime)
 
         'TODO: states that record how far away the three targets are and whether we've just had a miss or a hit
+        'TODO: states that record how far away the three targets are and whether we've just had a miss or a hit
 
-        tEnd = Now()
-        setStateVariablesDuration = tEnd - tStart
-        tStart = tEnd
+        tEnd = Now() : outgoingDuration = tEnd - tStart : tStart = tEnd
 
-
-        ExecuteScript("SourceTime") : Console.WriteLine(remote.Result)
-        'Console.WriteLine("Source module is " & modules(0))
-        'Console.WriteLine("SamplingRate = " & samplesPerSecond & ";  SampleBlockSize = " & samplesPerBlock & ";   Block duration = " & GetBlockDurationMsec() & "msec")
-        'Console.Write("Previous event loop period was      ") : Console.WriteLine(updatePeriod)
-        'Console.Write("Performed 1 x GetSystemState   in   ") : Console.WriteLine(getSystemStateDuration)
-        'Console.Write("Performed 1 x GetStateVariable in   ") : Console.WriteLine(getStateVariablesDuration)
-        'Console.Write("Performed 9 x SetStateVariable in   ") : Console.WriteLine(setStateVariablesDuration)
-        'Console.Write("Console writes except for this one: ") : Console.WriteLine(Now() - tStart)
-
-        'TODO: this is where we would use remote.GetControlSignal(oneBasedChannelIndex, oneBasedElementIndex, byref val as double) to read back from BCI2000 if we were doing true BCI interaction and had a real signal-processing module in place
+        Console.WriteLine("Source module is " & modules(0))
+        Console.WriteLine("SamplingRate = " & samplesPerSecond & ";  SampleBlockSize = " & samplesPerBlock & ";   Block duration = " & GetBlockDurationMsec() & "msec")
+        Console.Write("Previous event loop period was      ") : Console.WriteLine(updatePeriod)
+        Console.Write("Performed incoming operations in    ") : Console.WriteLine(incomingDuration)
+        Console.Write("Performed outgoing operations in    ") : Console.WriteLine(outgoingDuration)
+        Console.Write("Console writes except for this one: ") : Console.WriteLine(Now() - tStart)
 
     End Sub
     Public Sub Close()
-        remote.Disconnect()
+        If Not (remote Is Nothing) Then remote.Disconnect()
         remote = Nothing
         timeEndPeriod(timeRes)
     End Sub
