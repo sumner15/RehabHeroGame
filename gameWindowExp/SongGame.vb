@@ -233,7 +233,7 @@ Public Class SongGame
 
         ' check if it was on time
         If (secondHand.hitChanged) And secondHand.InPosWindow And secondHand.InTimeWindow Then
-            Console.WriteLine("NOTE HIT CORRECTLY")
+            'Console.WriteLine("NOTE HIT CORRECTLY")
             greatSuccess = True
         Else
             'greatSuccess = False
@@ -247,7 +247,7 @@ Public Class SongGame
         If secondHand.hitChanged Then
             If Not hitAttempted Then
                 hitAttempted = True
-                Console.WriteLine("hit Attempted")
+                'Console.WriteLine("hit Attempted")
             End If
         End If
 
@@ -386,7 +386,7 @@ Public Class SongGame
             scoreText.visable = Not scoreText.visable
         ElseIf (e.KeyChar = "s") Then
             secondHand.setForceOnOff()
-            Console.WriteLine("forcves toggled")
+            'Console.WriteLine("forcves toggled")
         ElseIf (AscW(e.KeyChar) = 27) Then
             Me.Exit()
         End If

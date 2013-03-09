@@ -228,7 +228,7 @@ Public Class FingerBot
         
         scope_obj.ScopeSetNumSamples(scopeNum, 4.5 * 60 * 1000)
         scope_obj.ScopeSetDecimation(scopeNum, 1)
-        MsgBox("number of samples is " & CStr(scope_obj.ScopeGetNumSamples(scopeNum)))
+        'MsgBox("number of samples is " & CStr(scope_obj.ScopeGetNumSamples(scopeNum)))
 
         'scope_obj.ScopeSetNumSamples(scopeNum, CInt(5.5 * 60 * 1000)) ' set it up to record for 2.5 minutes without interuption
         dataFile = New System.IO.StreamWriter(GAMEPATH & "dataFiles\" & "positions" & "_" & currentSub.ID & trialStr & String.Format("{0:yyyyMMddhhmmss}", Now) & ".txt")
@@ -273,10 +273,10 @@ Public Class FingerBot
             numSamples = scope_obj.ScopeGetNumSamples(scopeNum)
             signals = scope_obj.ScopeGetSignals(scopeNum, 11)
 
-            Console.Write("signals are ")
-            For Each signal In signals
-                Console.Write(CStr(signal) & vbTab)
-            Next
+            'Console.Write("signals are ")
+            'For Each signal In signals
+            'Console.Write(CStr(signal) & vbTab)
+            'Next
 
             posBlue = scope_obj.ScopeGetData(scopeNum, signals(0), 0, numSamples, 1)
             velBlue = scope_obj.ScopeGetData(scopeNum, signals(1), 0, numSamples, 1)
@@ -451,7 +451,7 @@ Public Class FingerBot
 
             If (InTimeWindow And InPosWindow And Not FakeSuccessRate) Then : fretBoard.triggerFlame(hitString) : End If
 
-            Console.WriteLine("hit attempt on string " & hitString & " on time?" & " " & InTimeWindow & vbTab & "In target?" & " " & InPosWindow)
+            'Console.WriteLine("hit attempt on string " & hitString & " on time?" & " " & InTimeWindow & vbTab & "In target?" & " " & InPosWindow)
 
         ElseIf (velF2 < velThreshold) And (posF2 > hitSetResetPos) And Not hitSet Then
             hitChanged = True
@@ -478,7 +478,7 @@ Public Class FingerBot
                 'Console.WriteLine("hit attempt on string " & hitString & " NOT in window")
             End If
 
-            Console.WriteLine("hit attempt on string " & hitString & " on time?" & " " & InTimeWindow & vbTab & "In target?" & " " & InPosWindow)
+            'Console.WriteLine("hit attempt on string " & hitString & " on time?" & " " & InTimeWindow & vbTab & "In target?" & " " & InPosWindow)
 
             If (InTimeWindow And InPosWindow And Not FakeSuccessRate) Then : fretBoard.triggerFlame(hitString) : End If
 
@@ -487,7 +487,7 @@ Public Class FingerBot
         End If
 
         If (posF1 <= hitSetResetPos) And (posF2 <= hitSetResetPos) Then
-            If hitSet Then Console.WriteLine("hitSet flag reset")
+            'If hitSet Then Console.WriteLine("hitSet flag reset")
             hitSet = False
             InPosWindow = False
             InTimeWindow = False
@@ -567,7 +567,7 @@ Public Class FingerBot
         End If
 
         If (posF1Lie <= hitSetResetPos) And (posF2Lie <= hitSetResetPos) Then
-            If hitSetVis Then Console.WriteLine("hitSet flag reset")
+            'If hitSetVis Then Console.WriteLine("hitSet flag reset")
             hitSetVis = False
             InPosWindowVis = False
             InTimeWindowVis = False
@@ -589,11 +589,11 @@ Public Class FingerBot
                 If InPosWindowVis And InTimeWindowVis Then
                     If f1VisLieWeight(0) - visSigma >= 0 Then f1VisLieWeight(0) -= visSigma
                     f1VisLieWeight(1) += visSigma
-                    Console.WriteLine("weight updated to " & f1VisLieWeight(0))
+                    'Console.WriteLine("weight updated to " & f1VisLieWeight(0))
                 Else
                     If f1VisLieWeight(1) - visAlpha * visSigma >= 0 Then f1VisLieWeight(1) -= visAlpha * visSigma
                     f1VisLieWeight(0) += visAlpha * visSigma
-                    Console.WriteLine("weight updated to " & f1VisLieWeight(0))
+                    'Console.WriteLine("weight updated to " & f1VisLieWeight(0))
                 End If
             ElseIf hitString = 1 Then
                 If InPosWindowVis And InTimeWindowVis Then
@@ -601,24 +601,24 @@ Public Class FingerBot
                     f1VisLieWeight(1) += visSigma
                     If f2VisLieWeight(0) - visSigma >= 0 Then f2VisLieWeight(0) -= visSigma
                     f2VisLieWeight(1) += visSigma
-                    Console.WriteLine("weight updated to " & f1VisLieWeight(0))
+                    'Console.WriteLine("weight updated to " & f1VisLieWeight(0))
                 Else
                     If f1VisLieWeight(1) - visAlpha * visSigma >= 0 Then f1VisLieWeight(1) -= visAlpha * visSigma
                     f1VisLieWeight(0) += visAlpha * visSigma
                     If f2VisLieWeight(1) - visAlpha * visSigma >= 0 Then f2VisLieWeight(1) -= visAlpha * visSigma
                     f2VisLieWeight(0) += visAlpha * visSigma
-                    Console.WriteLine("weight updated to " & f1VisLieWeight(0))
+                    'Console.WriteLine("weight updated to " & f1VisLieWeight(0))
                 End If
 
             ElseIf hitString = 2 Then
                 If InPosWindowVis And InTimeWindowVis Then
                     If f2VisLieWeight(0) - visSigma >= 0 Then f2VisLieWeight(0) -= visSigma
                     f2VisLieWeight(1) += visSigma
-                    Console.WriteLine("weight updated to " & f1VisLieWeight(0))
+                    'Console.WriteLine("weight updated to " & f1VisLieWeight(0))
                 Else
                     If f2VisLieWeight(1) - visAlpha * visSigma >= 0 Then f2VisLieWeight(1) -= visAlpha * visSigma
                     f2VisLieWeight(0) += visAlpha * visSigma
-                    Console.WriteLine("weight updated to " & f1VisLieWeight(0))
+                    'Console.WriteLine("weight updated to " & f1VisLieWeight(0))
                 End If
             End If
             visSigma = 0.995 * visSigma
@@ -638,14 +638,14 @@ Public Class FingerBot
             If hitString = 0 Then
                 If InPosWindow And InTimeWindow Then
                     If (Kp1 - decreaseStepKp > Kpcap(0)) Then Kp1 -= decreaseStepKp
-                    Console.WriteLine("decreased gain to " & Kp1)
+                    'Console.WriteLine("decreased gain to " & Kp1)
                 Else
                     If (Kp1 + increaseStepKp < Kpcap(1)) Then
                         Kp1 += increaseStepKp
                     Else
                         Kp1 = Kpcap(1)
                     End If
-                    Console.WriteLine("increased gain to " & Kp1)
+                    'Console.WriteLine("increased gain to " & Kp1)
                 End If
             ElseIf hitString = 1 Then
                 If InPosWindow And InTimeWindow Then
@@ -729,10 +729,10 @@ Public Class FingerBot
             If hitString = 0 Then
                 If InPosWindow Then
                     If (Kp1 - decreaseStepKp > Kpcap(0)) Then Kp1 -= decreaseStepKp
-                    Console.WriteLine("decreased gain to " & Kp1)
+                    'Console.WriteLine("decreased gain to " & Kp1)
                 Else
                     If (Kp1 + increaseStepKp < Kpcap(1)) Then Kp1 += increaseStepKp
-                    Console.WriteLine("increased gain to " & Kp1)
+                    'Console.WriteLine("increased gain to " & Kp1)
                 End If
                 setVal(0) = Kp1
                 stat = target_obj.SetParam(parameters_obj.Kp1, setVal)
@@ -888,12 +888,12 @@ Public Class FingerBot
             stat = target_obj.SetParam(parameters_obj.Kp2, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-            Console.WriteLine("gain incramented to " & Kp1)
+            'Console.WriteLine("gain incramented to " & Kp1)
         Else
             stat = target_obj.SetParam(parameters_obj.Kp1, setVal)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
-            Console.WriteLine("gain incramented to " & Kp1)
+            'Console.WriteLine("gain incramented to " & Kp1)
         End If
 
     End Sub
@@ -937,12 +937,12 @@ Public Class FingerBot
             stat = target_obj.SetParam(parameters_obj.Kp2, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-            Console.WriteLine("gain incramented to " & Kp1)
+            'Console.WriteLine("gain incramented to " & Kp1)
         Else
             stat = target_obj.SetParam(parameters_obj.Kp1, setVal)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
-            Console.WriteLine("gain incramented to " & Kp1)
+            'Console.WriteLine("gain incramented to " & Kp1)
         End If
 
     End Sub
@@ -960,12 +960,12 @@ Public Class FingerBot
             stat = target_obj.SetParam(parameters_obj.Kp1, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
             setVal(0) = Kv2
             stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
-            Console.WriteLine("gain incramented to " & Kp2)
+            'Console.WriteLine("gain incramented to " & Kp2)
         Else
             stat = target_obj.SetParam(parameters_obj.Kp2, setVal)
             setVal(0) = Kv2
             stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-            Console.WriteLine("gain incramented to " & Kp2)
+            'Console.WriteLine("gain incramented to " & Kp2)
         End If
 
     End Sub
@@ -982,7 +982,7 @@ Public Class FingerBot
         setVal(0) = KdBlock
         stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
         stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-        Console.WriteLine("Kp1 set to blocking gain of " & KpBlock)
+        'Console.WriteLine("Kp1 set to blocking gain of " & KpBlock)
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -997,7 +997,7 @@ Public Class FingerBot
         setVal(0) = 6
         stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
         stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-        Console.WriteLine("Kp1 set to blocking gain of " & KpBlock)
+        'Console.WriteLine("Kp1 set to blocking gain of " & KpBlock)
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -1051,7 +1051,7 @@ Public Class FingerBot
         stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
         setVal(0) = Kv2
         stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-        Console.WriteLine("Kp1 setBack to " & Kp1)
+        'Console.WriteLine("Kp1 setBack to " & Kp1)
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -1119,18 +1119,18 @@ Public Class FingerBot
         If velF1 < velThreshold And posF1 > hitSetResetPos Then
             ' check for a combo hit
             If Abs(posF1 - posF2) < 0.04 Then
-                Console.WriteLine("combo")
+                'Console.WriteLine("combo")
                 Return positions(1)
             Else
-                Console.WriteLine("index")
+                'Console.WriteLine("index")
                 Return positions(0)
             End If
         ElseIf velF2 < velThreshold And posF2 > hitSetResetPos Then
             If Abs(posF1 - posF2) < 0.04 Then
-                Console.WriteLine("combo")
+                'Console.WriteLine("combo")
                 Return positions(1)
             Else
-                Console.WriteLine("middle")
+                'Console.WriteLine("middle")
                 Return positions(2)
             End If
         Else
@@ -1155,11 +1155,11 @@ Public Class FingerBot
         End If
 
         If (Abs(poscheck - destination) < posHitWindow) Then
-            Console.WriteLine("in pos window")
+            'Console.WriteLine("in pos window")
         End If
 
         If (fb.checkHit(targetTime)) Then
-            Console.WriteLine("in time window")
+            'Console.WriteLine("in time window")
         End If
 
         If (Abs(poscheck - destination) < posHitWindow) And (fb.checkHit(targetTime)) Then
@@ -1393,7 +1393,7 @@ Public Class FingerBot
         decreaseStepKp = sigmaKp
         increaseStepKd = alpha * sigmaKd
         decreaseStepKd = sigmaKd
-        MsgBox("increase step " & CStr(increaseStepKp))
+        'MsgBox("increase step " & CStr(increaseStepKp))
 
     End Sub
 
@@ -1403,7 +1403,7 @@ Public Class FingerBot
     Public Sub checkGravityDir()
         Dim gDir As Single = target_obj.GetSignal(signals_obj.gDirection) '= -0.05 '
         'uncomment this line to see what the raw accelerometer values are in left and right hand modes.
-        Console.WriteLine("gravity direction value " & CStr(gDir))
+        'Console.WriteLine("gravity direction value " & CStr(gDir))
 
         If gDir < 0.001 Then
             rightHandMode = True
@@ -1411,7 +1411,7 @@ Public Class FingerBot
             rightHandMode = False
         End If
 
-        Console.WriteLine("right hand mode is " & CStr(rightHandMode) & vbTab & CStr(gDir))
+        'Console.WriteLine("right hand mode is " & CStr(rightHandMode) & vbTab & CStr(gDir))
 
     End Sub
 
