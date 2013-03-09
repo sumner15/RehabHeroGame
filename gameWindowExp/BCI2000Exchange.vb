@@ -1,4 +1,6 @@
 ﻿Imports BCI2000AutomationLib
+Imports System.Net.Sockets ' for UdpClient
+Imports System.Text ' for Encoding
 
 Public Class BCI2000Exchange
     Public remote As BCI2000Remote
@@ -17,8 +19,11 @@ Public Class BCI2000Exchange
     Private running As Boolean
     Private sourceTime As Double
 
-    Private udpIncoming As Boolean = False
-    Private udpOutgoing As Boolean = False
+    Private udpIncomingPort As UInteger = 0 ' specify port number, or 0 to use BCI2000Automation calls for incoming info instead during the update loop
+    Private udpOutgoingPort As UInteger = 5678 ' specify port number, or 0 to use BCI2000Automation calls for outgoing info instead during the update loop
+
+    Private udpSender As UdpClient
+    Private udpReceiver As UdpClient
 
     '----------------------------------------------------------------------------------'
     '---------------------------- BCI2000 setup ---------------------------------------'
@@ -78,8 +83,19 @@ Public Class BCI2000Exchange
         ExecuteScript("SET PARAMETER VisualizeSource 1")
         ExecuteScript("SET PARAMETER VisualizeTiming 1")
 
-        ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm")
 
+        If udpIncomingPort Then
+            CheckInit() : remote.Execute("WATCH Running SourceTime AT localhost:" & udpIncomingPort) ' TODO: should be ExecuteScript() but remote.Execute() returns non-zero (indicating failure) and a message "127.0.0.1:4567" - a bug at juergen's end?
+            'TODO: start the thread
+        End If
+        If udpOutgoingPort Then
+            ExecuteScript("SET PARAMETER Connector:Connector%20Input list   ConnectorInputFilter=  1 *")
+            ExecuteScript("SET PARAMETER Connector:Connector%20Input string ConnectorInputAddress=   localhost:" & udpOutgoingPort)
+        End If
+
+
+
+        ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm")
         'TODO: load any additional BCI2000 parameters (signal-processing?) Flag the parameter-set by encoding in session number? or subject name?
 
         'TODO: remove this bit, which lets you visualize the FingerBot states-----------------
@@ -104,13 +120,19 @@ Public Class BCI2000Exchange
         If Not remote.GetParameter("SampleBlockSize", tempStr) Then Die()
         samplesPerBlock = CDbl(tempStr)
         If Not remote.Start() Then Die()
+
+        If udpOutgoingPort Then
+            udpSender = New UdpClient()
+            udpSender.Connect("localhost", udpOutgoingPort)
+        End If
+
         lastSourceTime = -1.23 ' a value that would never be returned by an actual call to remote.GetStateVariable("SourceTime")
         lastCall = Now()
     End Sub
 
     Private Sub Incoming()
 
-        If udpIncoming Then
+        If udpIncomingPort Then
             ' TODO: obtain mutex lock, copy the latest line of WATCH output, which has been updated in a separate thread, then unlock the mutex; parse the line into Running and SourceTime (and control signal, if you want)
         Else
             CheckInit()
@@ -127,8 +149,12 @@ Public Class BCI2000Exchange
 
     Public Sub SetState(name As String, value As Double)
 
-        If udpOutgoing Then
-            'TODO: write to ConnectorInput (shouldn't need a separate thread)
+        If udpOutgoingPort Then
+            Dim msg As String
+            msg = name & " " & value & vbLf
+            Dim raw As Byte() = New Byte() {}
+            raw = Encoding.ASCII.GetBytes(msg)
+            udpSender.Send(raw, raw.Length)
         Else
             CheckInit()
             If Not remote.SetStateVariable(name, value) Then Die()
@@ -150,7 +176,7 @@ Public Class BCI2000Exchange
         tEnd = Now() : incomingDuration = tEnd - tStart : tStart = tEnd
 
         If sourceTime = lastSourceTime Then Return
-        lastSourceTime = sourceTime
+        lastSourceTime = sourceTime 'TODO: uncomment this
         ' TODO: Ideally BCI2000's interpreter needs to be altered to have the capability to set multiple states while ensuring that all the changes happen in the same SampleBlock.
         '       As it is, the sourceTime logic above should approximate this, but only if BCI2000's SampleBlock duration is at least twice the period with which this Sub gets called in the game update loop
 
@@ -183,6 +209,9 @@ Public Class BCI2000Exchange
     Public Sub Close()
         If Not (remote Is Nothing) Then remote.Disconnect()
         remote = Nothing
+        If udpOutgoingPort Then
+            udpSender.Close()
+        End If
         timeEndPeriod(timeRes)
     End Sub
 End Class
