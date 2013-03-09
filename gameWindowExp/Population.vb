@@ -32,7 +32,10 @@ Public Class Population
             fileReader = My.Computer.FileSystem.OpenTextFileReader(GAMEPATH & "Subjects\" & subList)
 
             For i As Integer = 0 To (popSize - 1) Step 1
-                subIds(i) = fileReader.ReadLine()
+                subIds(i) = ""
+                While subIds(i) = "" Or subIds(i) = " "
+                    subIds(i) = fileReader.ReadLine()
+                End While
                 subjects(i) = New Subject(subIds(i))
             Next i
 
