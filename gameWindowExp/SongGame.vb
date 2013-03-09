@@ -84,7 +84,7 @@ Public Class SongGame
 
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
-        PrepBlockedTrials(15)
+        PrepBlockedTrials(0)
         'debugFile.WriteLine("pos1" & vbTab & "pos2" & vbTab & "desiredNote" & vbTab & "desiredNoteTime" & vbTab & "time")
         debugFile.WriteLine("status" & vbTab & "desirednote" & vbTab & "kp1" & vbTab & "kd1" & vbTab & "kp2" & vbTab & "kv2")
 
@@ -108,7 +108,7 @@ Public Class SongGame
 
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
-        PrepBlockedTrials(15)
+        PrepBlockedTrials(0)
         bci2000 = New BCI2000Exchange(Me)
     End Sub
 
@@ -130,7 +130,7 @@ Public Class SongGame
 
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
-        PrepBlockedTrials(15)
+        PrepBlockedTrials(0)
         bci2000 = New BCI2000Exchange(Me)
     End Sub
 

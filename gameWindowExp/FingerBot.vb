@@ -117,7 +117,7 @@ Public Class FingerBot
     Public hitSetResetPos As Single = 0.045
     Private gainFileMaker As New GainFileWriter(GAMEPATH & "gainFiles\" & "gains_" & currentSub.ID & String.Format("{0:yyyyMMddhhmmss}", Now) & ".txt")
 
-    Private Const FakeSuccessRate As Boolean = True
+    Private Const FakeSuccessRate As Boolean = False
 
 #Region "constructors"
     '--------------------------------------------------------------------------------'
