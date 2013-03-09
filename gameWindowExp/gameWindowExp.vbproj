@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="GUITAR2COMIFACELib">
-      <Guid>{12B99711-0D89-4021-8032-82F861F87A5F}</Guid>
+      <Guid>{D7C6310B-89A8-4FEB-BF72-F2734489AE41}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
