@@ -45,7 +45,7 @@ Public Class SongGame
     Private startupTimer As New Stopwatch
     Private trueStartUpDelay As Single
     Private zeroingInst As New TextSign("relax while the robot zeros itself")
-    Private scoreText As New TextSign("this is ued to show your score")
+    Private scoreText As New TextSign("this is used to show your score")
 
     Private scorefile As New StreamWriter(GAMEPATH & "scoreFiles\" & "score_" & currentSub.ID & "_" & String.Format("{0:yyyyMMddhhmmss}", Now) & ".txt")
     Private greatSuccess As Boolean = False
@@ -501,7 +501,7 @@ Public Class SongGame
         secondHand.getPos()
         secondHand.getTargetTime()
         secondHand.moveFingerBalls()
-        bci2000.Update(secondHand)
+        bci2000.Update(Me)
 
         'If blockedTrial And (secondHand.targetTime > (fretboard.nextNoteTime - secondHand.fixedDur * 1000 - 200) And (Not fretboard.songOver)) Then
         '    secondHand.moveFingersToCurrent(True)

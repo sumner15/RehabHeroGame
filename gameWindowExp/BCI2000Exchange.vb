@@ -23,15 +23,16 @@ Public Class BCI2000Exchange
 
     Private udpSender As System.Net.Sockets.UdpClient
     Private udpReceiver As System.Net.Sockets.UdpClient
-    Private receiverThread As System.Threading.Thread
     Private remoteIPEndPoint As System.Net.IPEndPoint
+    Private listenerThread As System.Threading.Thread
+    Private listenerLock As System.Threading.Mutex
     Private keepListening As Boolean
     Private watchMessage As String = ""
 
     Private verbose As Boolean = False
     Private visualize As Boolean = True
-    Private udpIncomingPort As Integer = 4567 ' specify port number, or 0 to use BCI2000Automation calls for incoming info instead during the update loop
-    Private udpOutgoingPort As Integer = 5678 ' specify port number, or 0 to use BCI2000Automation calls for outgoing info instead during the update loop
+    Private udpIncomingPort As Integer = 4567 ' specify port number, or 0 to use BCI2000Automation calls for incoming updates instead
+    Private udpOutgoingPort As Integer = 5678 ' specify port number, or 0 to use BCI2000Automation calls for outgoing updates instead
     ' TODO: ideally we would get rid of the udp communication and use BCI2000Automation COM calls exclusively, making for much simpler vb code in this file, but currently each interpreter command takes too long to return (Juergen will try to fix this)
 #End Region
 
@@ -63,26 +64,33 @@ Public Class BCI2000Exchange
         If Not remote.Connect() Then Die()
 
         modules(0) = "gUSBampSource32Release --local"
-        'modules(0) = "SignalGenerator --local" 'TODO: remove
-        modules(0) = modules(0) & " --FileFormat=Null"  'TODO: remove
+        'modules(0) = "SignalGenerator --local" 'TODO: this line is for testing with a fake signal in the absence of actual EEG hardware - remove it!
+        modules(0) = modules(0) & " --FileFormat=Null"  'TODO: this line prevents EEG data from being saved to disk - remove it!
 
         modules(1) = "DummySignalProcessing --local" 'TODO: eventually, replace this with some real BCI signal processing (such as SpectralSignalProcessing) to do real BCI interaction
         modules(2) = "DummyApplication --local" ' this one can probably be left as is: the song game takes on the role of the application module
+
+        'TODO: the graphical launch interface needs a left/right-handed switch
+        ExecuteScript("ADD PARAMETER Application:FingerBot string FingerBotHandedness= " & If(game.secondHand.rightHandMode, "right", "left"))
+        'TODO: ship out more useful bits of session info as parameters - from the SongGame and FingerBot instances
+        '      e.g. GameType, GameMode, SongTitle, DifficultyLevel, Gains, GameCodeVersion
+
         If Not remote.StartupModules(modules) Then Die()
 
-        Console.WriteLine("Current subject is " & currentSub.ID)
+        Console.WriteLine("Current subject: " & currentSub.ID)
         remote.SubjectID = currentSub.ID
-        'TODO: extract useful bits of session info from game and add this info as parameters here - like for example whether right- or left-handed, GameType, Song, GameMode, GameCodeVersion
+
 
         ExecuteScript("ADD STATE FingerBotPosF1      32 0")
         ExecuteScript("ADD STATE FingerBotVelF1      32 0")
         ExecuteScript("ADD STATE FingerBotPosF2      32 0")
         ExecuteScript("ADD STATE FingerBotVelF2      32 0")
-
         ExecuteScript("ADD STATE FingerBotTargetTime 32 0")
+        ' TODO: more game-related states
 
+        ' Set some initial defaults:  (note that .prm files will probably overrides these settings)
         ExecuteScript("SET PARAMETER SamplingRate   600")
-        ExecuteScript("SET PARAMETER SampleBlockSize 30") ' defaults: 600Hz sample rate, 20Hz block rate (50ms blocks) - but note that .prm file probably overrides these settings
+        ExecuteScript("SET PARAMETER SampleBlockSize 30") ' defaults: 600Hz sample rate, 20Hz block rate (50ms blocks)
         ExecuteScript("SET PARAMETER VisualizeSource  1")
         ExecuteScript("SET PARAMETER VisualizeTiming  0")
 
@@ -114,18 +122,17 @@ Public Class BCI2000Exchange
         samplesPerSecond = CDbl(tempStr)
         If Not remote.GetParameter("SampleBlockSize", tempStr) Then Die()
         samplesPerBlock = CDbl(tempStr)
-        If udpIncomingPort Then
-            CheckInit() : remote.Execute("WATCH Running SourceTime Signal(1,1) AT localhost:" & udpIncomingPort) ' TODO: should be ExecuteScript() but remote.Execute() returns non-zero (indicating failure) and a message "127.0.0.1:4567" - a bug at juergen's end?
-        End If
 
         If Not remote.Start() Then Die()
 
         If udpIncomingPort Then
+            remote.Execute("WATCH Running SourceTime Signal(1,1) AT localhost:" & udpIncomingPort) ' TODO: this should really be ExecuteScript(), but at the moment remote.Execute() returns non-zero from the WATCH command even when it succeeds (usually indicates failure, and so triggers an exception in ExecuteScript). A bug at Juergen's end?
             udpReceiver = New System.Net.Sockets.UdpClient(udpIncomingPort)
             remoteIPEndPoint = New System.Net.IPEndPoint(System.Net.IPAddress.Any, udpIncomingPort)
-            receiverThread = New System.Threading.Thread(AddressOf ReceiveMessages)
+            listenerThread = New System.Threading.Thread(AddressOf ReceiveMessages)
+            listenerLock = New System.Threading.Mutex()
             keepListening = True
-            receiverThread.Start()
+            listenerThread.Start()
         End If
         If udpOutgoingPort Then
             udpSender = New System.Net.Sockets.UdpClient()
@@ -136,11 +143,27 @@ Public Class BCI2000Exchange
         lastCall = Now()
     End Sub
 
+    Public Sub Close()
+        If udpIncomingPort Then
+            keepListening = False
+            Threading.Thread.Sleep(100)
+            udpReceiver.Close()
+        End If
+        If udpOutgoingPort Then
+            udpSender.Close()
+        End If
+        If Not (remote Is Nothing) Then remote.Disconnect()
+        remote = Nothing
+        'timeEndPeriod(timeRes)
+    End Sub
+
     Private Sub ReceiveMessages()
         While keepListening
             Dim raw As Byte() = udpReceiver.Receive(remoteIPEndPoint)
             If raw.Length Then
+                listenerLock.WaitOne()
                 watchMessage = System.Text.Encoding.ASCII.GetString(raw)
+                listenerLock.ReleaseMutex()
             End If
             System.Threading.Thread.Yield()
         End While
@@ -149,14 +172,16 @@ Public Class BCI2000Exchange
     Private Sub Incoming()
 
         If udpIncomingPort Then
+            listenerLock.WaitOne()
             Dim delims As Char() = {vbTab}
-            Dim substrings As String() = watchMessage.Split(delims) 'TODO: need mutex or not?
+            Dim substrings As String() = watchMessage.Split(delims)
             If substrings.Length = 3 Or substrings.Length = 4 Then
                 sampleBlockIndex = CUInt(substrings(0))
                 running = CBool(substrings(1))
                 sourceTime = CDbl(substrings(2))
-                If substrings.Length = 4 Then controlSignal = CDbl(substrings(3))
+                If substrings.Length >= 4 Then controlSignal = CDbl(substrings(3))
             End If
+            listenerLock.ReleaseMutex()
         Else
             CheckInit()
             Dim systemState As String = "Running"
@@ -165,7 +190,7 @@ Public Class BCI2000Exchange
             sourceTime = 0
             If Not running Then Return
             If Not remote.GetStateVariable("SourceTime", sourceTime) Then Die()
-            remote.GetControlSignal(1, 1, controlSignal) 'TODO: to do true BCI interaction, put a real signal-processing module in place instead of DummySignalProcessing
+            If Not remote.GetControlSignal(1, 1, controlSignal) Then Die() 'TODO: to do true BCI interaction, put a real signal-processing module in place instead of DummySignalProcessing
         End If
 
     End Sub
@@ -182,7 +207,7 @@ Public Class BCI2000Exchange
 
     End Sub
 
-    Public Sub Update(ByRef secondHand As FingerBot)
+    Public Sub Update(ByRef game As SongGame)
 
         CheckInit()
 
@@ -200,13 +225,11 @@ Public Class BCI2000Exchange
         ' TODO: Ideally BCI2000's interpreter needs to be altered to have the capability to set multiple states while ensuring that all the changes happen in the same SampleBlock.
         '       As it is, the sourceTime logic above should approximate this, but only if BCI2000's SampleBlock duration is at least twice the period with which this Sub gets called in the game update loop
 
-        SetState("FingerBotPosF1", secondHand.posF1 * stateScaling + stateOffset)
-        SetState("FingerBotVelF1", secondHand.velF1 * stateScaling + stateOffset)
-        SetState("FingerBotPosF2", secondHand.posF2 * stateScaling + stateOffset)
-        SetState("FingerBotVelF2", secondHand.velF2 * stateScaling + stateOffset)
-
-        SetState("FingerBotTargetTime", secondHand.targetTime)
-
+        SetState("FingerBotPosF1", game.secondHand.posF1 * stateScaling + stateOffset)
+        SetState("FingerBotVelF1", game.secondHand.velF1 * stateScaling + stateOffset)
+        SetState("FingerBotPosF2", game.secondHand.posF2 * stateScaling + stateOffset)
+        SetState("FingerBotVelF2", game.secondHand.velF2 * stateScaling + stateOffset)
+        SetState("FingerBotTargetTime", game.secondHand.targetTime)
         'TODO: states that record how far away the three targets are and whether we've just had a miss or a hit
 
         tEnd = Now() : outgoingDuration = tEnd - tStart : tStart = tEnd
@@ -221,17 +244,5 @@ Public Class BCI2000Exchange
         End If
 
     End Sub
-    Public Sub Close()
-        If udpIncomingPort Then
-            keepListening = False
-            Threading.Thread.Sleep(100)
-            udpReceiver.Close()
-        End If
-        If udpOutgoingPort Then
-            udpSender.Close()
-        End If
-        If Not (remote Is Nothing) Then remote.Disconnect()
-        remote = Nothing
-        'timeEndPeriod(timeRes)
-    End Sub
+
 End Class
