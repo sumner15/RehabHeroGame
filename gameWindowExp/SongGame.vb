@@ -563,7 +563,7 @@ Public Class SongGame
             note = False
         Next
 
-        For i As Integer = 0 To numBlocked
+        For i As Integer = 0 To numBlocked - 1
             blockedNotes(i) = True
         Next
 
