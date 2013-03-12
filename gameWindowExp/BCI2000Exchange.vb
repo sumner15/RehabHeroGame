@@ -11,11 +11,13 @@ Public Class BCI2000Exchange
     Private Const stateOffset As Integer = 0 'stateScaling
     Private samplesPerBlock As Double
     Private samplesPerSecond As Double
+    Private blockDurationMsec As Double
 
     Private sampleBlockIndex As UInteger
     Private running As Boolean
     Private sourceTime As Double
     Private controlSignal As Double
+    Private flamePos As Integer
 
     'Private Const timeRes As UInteger = 10 ' 10 msec is standard. This affects all processes on the OS
     'Declare Function timeBeginPeriod Lib "winmm.dll" (uPeriod As UInteger) As Integer
@@ -53,10 +55,6 @@ Public Class BCI2000Exchange
         If remote.Execute(cmd) <> 0 Then Die() ' Execute() returns zero on success, unlike other methods
     End Sub
 
-    Public Function GetBlockDurationMsec()
-        Return 1000.0 * samplesPerBlock / samplesPerSecond
-    End Function
-
     Public Sub New(ByRef game As SongGame)
         'timeBeginPeriod(timeRes)
         remote = New BCI2000Remote()
@@ -86,7 +84,11 @@ Public Class BCI2000Exchange
         ExecuteScript("ADD STATE FingerBotPosF2      32 0")
         ExecuteScript("ADD STATE FingerBotVelF2      32 0")
         ExecuteScript("ADD STATE FingerBotTargetTime 32 0")
-        ' TODO: more game-related states
+        For i = 0 To game.fretboard.strings.Length - 1
+            ExecuteScript("ADD STATE GuitarString" & (i + 1) & "TimeToNote 13 0")
+        Next
+        ExecuteScript("ADD STATE NextString  3 0")
+        ExecuteScript("ADD STATE HitFeedback 3 0")
 
         ' Set some initial defaults:  (note that .prm files will probably overrides these settings)
         ExecuteScript("SET PARAMETER SamplingRate   600")
@@ -100,6 +102,7 @@ Public Class BCI2000Exchange
         End If
 
         ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm")
+        'ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBampsAAAA-Cap64.prm")
         'TODO: load any additional BCI2000 parameters (signal-processing?) Flag the parameter-set by encoding in session number? or subject name?
 
         If visualize Then
@@ -110,6 +113,8 @@ Public Class BCI2000Exchange
             expr = expr & " 100*(FingerBotPosF2-" & stateOffset & ")/" & stateScaling
             expr = expr & " 100*(FingerBotVelF2-" & stateOffset & ")/" & stateScaling
             ExecuteScript(expr)
+            'ExecuteScript("SET PARAMETER Filtering matrix Expressions= 5 1 String1TimeToNote String2TimeToNote String3TimeToNote String4TimeToNote String5TimeToNote")
+            ExecuteScript("SET PARAMETER Filtering matrix Expressions= 2 1 NextString HitFeedback")
             ExecuteScript("SET PARAMETER VisualizeExpressionFilter 1")
             ExecuteScript("SET PARAMETER VisualizeSource 1")
             ExecuteScript("SET PARAMETER VisualizeTiming 1")
@@ -122,6 +127,7 @@ Public Class BCI2000Exchange
         samplesPerSecond = CDbl(tempStr)
         If Not remote.GetParameter("SampleBlockSize", tempStr) Then Die()
         samplesPerBlock = CDbl(tempStr)
+        blockDurationMsec = 1000.0 * samplesPerBlock / samplesPerSecond
 
         If Not remote.Start() Then Die()
 
@@ -209,6 +215,10 @@ Public Class BCI2000Exchange
 
     Public Sub Update(ByRef game As SongGame)
 
+        For i = 0 To game.fretboard.targets.Length - 1
+            If game.fretboard.targets(i).GetFlameState() Then flamePos = i + 1
+        Next
+
         CheckInit()
 
         Dim tStart, tEnd As Date
@@ -230,13 +240,31 @@ Public Class BCI2000Exchange
         SetState("FingerBotPosF2", game.secondHand.posF2 * stateScaling + stateOffset)
         SetState("FingerBotVelF2", game.secondHand.velF2 * stateScaling + stateOffset)
         SetState("FingerBotTargetTime", game.secondHand.targetTime)
-        'TODO: states that record how far away the three targets are and whether we've just had a miss or a hit
+        SetState("HitFeedback", flamePos) : flamePos = 0
+
+        Dim nextString As Integer = 0
+        Dim minNoteTime As Double = 3600000
+        For i = 0 To game.fretboard.strings.Length - 1
+            Dim nn As Integer = game.fretboard.strings(i).nextNote
+            Dim noteTime As Double = Math.Round(game.fretboard.strings(i).noteTimes(nn) - game.secondHand.targetTime)
+            Dim nonNegativeNoteTime As Double = noteTime
+            If nonNegativeNoteTime < 0 And nn < game.fretboard.strings(i).noteTimes.Length - 1 Then nonNegativeNoteTime = Math.Round(game.fretboard.strings(i).noteTimes(nn + 1) - game.secondHand.targetTime)
+            If nonNegativeNoteTime >= 0 And nonNegativeNoteTime <= minNoteTime Then
+                minNoteTime = nonNegativeNoteTime
+                nextString = i + 1
+            End If
+            Const maxNoteTime As Double = 5000
+            If noteTime < 0 Or noteTime > maxNoteTime Then noteTime = maxNoteTime + 1
+            SetState("GuitarString" & (i + 1) & "TimeToNote", noteTime)
+        Next
+        SetState("NextString", nextString)
+
 
         tEnd = Now() : outgoingDuration = tEnd - tStart : tStart = tEnd
 
         If verbose Then
             Console.WriteLine("Source module is " & modules(0))
-            Console.WriteLine("SamplingRate = " & samplesPerSecond & ";  SampleBlockSize = " & samplesPerBlock & ";   Block duration = " & GetBlockDurationMsec() & "msec")
+            Console.WriteLine("SamplingRate = " & samplesPerSecond & ";  SampleBlockSize = " & samplesPerBlock & ";   Block duration = " & blockDurationMsec & "msec")
             Console.Write("Previous event loop period was      ") : Console.WriteLine(updatePeriod)
             Console.Write("Performed incoming operations in    ") : Console.WriteLine(incomingDuration)
             Console.Write("Performed outgoing operations in    ") : Console.WriteLine(outgoingDuration)
