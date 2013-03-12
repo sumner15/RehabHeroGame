@@ -135,7 +135,7 @@ Public Class FingerBot
             MsgBox("Could not load api") 'We can no longer continue.
             End
         End If
-        stat = protocol_obj.TcpIpConnect("129.101.53.73", "22222") ' 129.101.53.73
+        stat = protocol_obj.TcpIpConnect(TARGETIP, "22222") ' 129.101.53.73
         If (stat = 0) Then MsgBox("failed to connect to xpc target computer" & vbNewLine)
         stat = target_obj.Init(protocol_obj)
         stat = scope_obj.Init(protocol_obj)
