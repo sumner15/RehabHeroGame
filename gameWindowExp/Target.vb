@@ -138,4 +138,7 @@ Public Class Target
         flame.freeBuffers()
     End Sub
 
+    Public Function GetFlameState() As Boolean
+        Return flameOn
+    End Function
 End Class
