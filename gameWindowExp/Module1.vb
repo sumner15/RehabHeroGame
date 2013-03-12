@@ -11,17 +11,21 @@ Module Module1
     Public positions() As Double = {2.25, 1.15, 0.0, -1.15, -2.25}
     Public FPS As Double = 200
     Public diagnostic As Boolean = False
+    Public TARGETIP As String = "assigned inside setContextValues()"
 
     Public currentSub As Subject
     Public currentSong As Song
-    Public trialStr As String = ""
+    Public trialStr As String = ""  'used
 
     Public menu As Menu
 
     Sub Main()
         GAMEPATH = GAMEPATH.Substring(0, GAMEPATH.LastIndexOf("\"))
         GAMEPATH = GAMEPATH.Substring(0, GAMEPATH.LastIndexOf("\") + 1)
+        setContextValues()
         makeAbsentDirectories()
+
+        MsgBox(My.Computer.Name)
 
         Application.EnableVisualStyles()
         menu = New Menu
@@ -70,5 +74,18 @@ Module Module1
         End If
 
     End Sub
+
+
+    ''------------------------- complete context specific settup ------------------------''
+    '' Setup context specific values (like the IP address of the target computer)
+    Sub setContextValues()
+        If My.Computer.Name = "finger-hostUCI" Then
+            TARGETIP = "169.254.201.253"
+        Else
+            TARGETIP = "129.101.53.73"
+        End If
+    End Sub
+
+
 
 End Module
