@@ -25,8 +25,6 @@ Module Module1
         setContextValues()
         makeAbsentDirectories()
 
-        MsgBox(My.Computer.Name)
-
         Application.EnableVisualStyles()
         menu = New Menu
         Application.Run(menu)
@@ -79,8 +77,9 @@ Module Module1
     ''------------------------- complete context specific settup ------------------------''
     '' Setup context specific values (like the IP address of the target computer)
     Sub setContextValues()
-        If My.Computer.Name = "finger-hostUCI" Then
-            TARGETIP = "169.254.201.253"
+        If My.Computer.Name = "FINGER-HOSTUCI" Then
+            'TARGETIP = "169.254.201.253"
+            TARGETIP = "129.101.53.73"
         Else
             TARGETIP = "129.101.53.73"
         End If

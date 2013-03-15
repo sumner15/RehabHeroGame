@@ -29,17 +29,17 @@ Public Class Menu
     '--------------------------------------------------------------------------------'
     Private Sub updateLstBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles updateLstBtn.Click
         Dim subj As Subject
-        Dim num As Integer           ' number corresponding to subejct
+        Dim num As Integer           ' number corresponding to subject
 
         If Not (subIdTb.Text = "") Then
             num = pop.popSize + 1
-            subj = New Subject(num, subIdTb.Text)
-            pop.addSubejct(subj)
+            subj = New Subject(num, subIdTb.Text, subHandList.SelectedItem, 1)
+            pop.addSubject(subj)
 
             subjectList.DataSource = pop.subIds
             subjectList.Update()
         Else
-            MsgBox("Enter the subject's information before trying to save the subejct.")
+            MsgBox("Enter the subject's information before trying to save the subject.")
         End If
     End Sub
 
@@ -50,6 +50,7 @@ Public Class Menu
         Dim selected As Integer
         selected = subjectList.SelectedIndex
         currentSub = pop.subjects(selected)
+        trialNumLbl.Text = currentSub.getTrial()
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -67,9 +68,14 @@ Public Class Menu
     '---------------------------------- play song button ----------------------------'
     '--------------------------------------------------------------------------------'
     Private Sub playSongBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles playSongBtn.Click
+
+        currentSub.trial += 1
+        currentSub.update()
+
         Dim successRate As Single
         Dim perceivedSuccessRate As Single
         Dim difficulties() As Integer = {level.superEasy, level.easy, level.medium}
+
         If Not gameRunning Then
             successRate = successRateList.SelectedItem
             perceivedSuccessRate = perceivedSuccessLB.SelectedItem

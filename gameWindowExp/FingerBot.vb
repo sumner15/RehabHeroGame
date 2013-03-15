@@ -45,6 +45,9 @@ Public Class FingerBot
     Public Kv1 As Single = 0.8
     Public Kv2 As Single = 0.8
 
+    Public hand As String = "R"
+    Public trial As Single = 1
+
     Private sigmaKp As Single = 0.625 '0.5
     Private sigmaKd As Single = 0.05
     Public alpha As Single = 4 '4
@@ -134,7 +137,7 @@ Public Class FingerBot
         If stat < 0 Then
             MsgBox("Could not load api") 'We can no longer continue.
             End
-        End If
+        End If        
         stat = protocol_obj.TcpIpConnect(TARGETIP, "22222") ' 129.101.53.73
         If (stat = 0) Then MsgBox("failed to connect to xpc target computer" & vbNewLine)
         stat = target_obj.Init(protocol_obj)
@@ -1055,7 +1058,7 @@ Public Class FingerBot
     End Sub
 
     '--------------------------------------------------------------------------------'
-    '---------------------- attribute gains to curerent subject ---------------------'
+    '---------------------- attribute gains to current subject ----------------------'
     '--------------------------------------------------------------------------------'
     Public Sub attributeGainsToSubject()
 
@@ -1063,7 +1066,7 @@ Public Class FingerBot
             currentSub.Kp1 = Kp2
             currentSub.Kp2 = Kp1
             currentSub.Kd1 = Kv2
-            currentSub.Kd2 = Kv1
+            currentSub.Kd2 = Kv1                        
             currentSub.update()
         Else
             currentSub.Kp1 = Kp1
@@ -1405,7 +1408,9 @@ Public Class FingerBot
         'uncomment this line to see what the raw accelerometer values are in left and right hand modes.
         'Console.WriteLine("gravity direction value " & CStr(gDir))
 
-        If gDir < 0.001 Then
+        hand = currentSub.hand
+        'If gDir < 0.001 Then        
+        If StrComp(hand, "L") Then
             rightHandMode = True
         Else
             rightHandMode = False
