@@ -39,7 +39,7 @@ Public Class SongGame
     Private randomBlocker As New Random()
 
     Public secondHand As FingerBot
-    Public bci2000 As BCI2000Exchange
+    Public bci2000 As BCI2000Exchange = Nothing
 
     Private zeroPosComplete As Boolean = False
     Private startupTimer As New Stopwatch
@@ -88,7 +88,6 @@ Public Class SongGame
         'debugFile.WriteLine("pos1" & vbTab & "pos2" & vbTab & "desiredNote" & vbTab & "desiredNoteTime" & vbTab & "time")
         debugFile.WriteLine("status" & vbTab & "desirednote" & vbTab & "kp1" & vbTab & "kd1" & vbTab & "kp2" & vbTab & "kv2")
 
-        bci2000 = New BCI2000Exchange(Me)
     End Sub
 
     '----------------------------------------------------------------------------------'
@@ -109,7 +108,6 @@ Public Class SongGame
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
         PrepBlockedTrials(0)
-        bci2000 = New BCI2000Exchange(Me)
     End Sub
 
     '----------------------------------------------------------------------------------'
@@ -131,7 +129,6 @@ Public Class SongGame
         cloudBox.loadVbo()
         cloudBox.loadTexture("clouds2.bmp")
         PrepBlockedTrials(0)
-        bci2000 = New BCI2000Exchange(Me)
     End Sub
 
 #End Region
@@ -406,7 +403,7 @@ Public Class SongGame
         startupTimer.Start()
         absoluteTimer.Start()
         scorefile.WriteLine("stringNum" & vbTab & "noteStime" & vbTab & "TrueSuccess" & vbTab & "perceivedSuccess")
-
+ 
         secondHand.initializeGains()
 
         secondHand.getMovementTimes()
@@ -426,6 +423,7 @@ Public Class SongGame
             End Select
         End If
 
+        bci2000 = New BCI2000Exchange(Me) ' TODO: make this optional/switchable: if you leave bci2000 = Nothing, then nothing will happen
     End Sub
     '----------------------------------------------------------------------------------'
     '----------------------- drawing commands - render event --------------------------'
@@ -501,7 +499,7 @@ Public Class SongGame
         secondHand.getPos()
         secondHand.getTargetTime()
         secondHand.moveFingerBalls()
-        bci2000.Update(Me)
+        If Not (bci2000 Is Nothing) Then bci2000.Update(Me)
 
         'If blockedTrial And (secondHand.targetTime > (fretboard.nextNoteTime - secondHand.fixedDur * 1000 - 200) And (Not fretboard.songOver)) Then
         '    secondHand.moveFingersToCurrent(True)
@@ -551,7 +549,7 @@ Public Class SongGame
         mySong.player.Dispose()
 
         debugFile.Close()
-        bci2000.Close()
+        If Not (bci2000 Is Nothing) Then bci2000.Close()
     End Sub
 
 #End Region
