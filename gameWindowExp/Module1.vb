@@ -25,7 +25,7 @@ Module Module1
         setContextValues()
         makeAbsentDirectories()
 
-        MsgBox(My.Computer.Name)
+        'MsgBox(My.Computer.Name)
 
         Application.EnableVisualStyles()
         menu = New Menu
