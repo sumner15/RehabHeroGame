@@ -19,7 +19,7 @@ Public Class BCI2000Exchange
     Private controlSignal As Double
     Private flamePos As Integer
 
-    'Private Const timeRes As UInteger = 10 ' 10 msec is standard. This affects all processes on the OS
+    'Private Const timeRes As UInteger = 10 '10 msec is standard. This affects all processes on the OS
     'Declare Function timeBeginPeriod Lib "winmm.dll" (uPeriod As UInteger) As Integer
     'Declare Function timeEndPeriod Lib "winmm.dll" (uPeriod As UInteger) As Integer
 
@@ -33,8 +33,8 @@ Public Class BCI2000Exchange
 
     Private verbose As Boolean = False
     Private visualize As Boolean = True
-    Private udpIncomingPort As Integer = 4567 ' specify port number, or 0 to use BCI2000Automation calls for incoming updates instead
-    Private udpOutgoingPort As Integer = 5678 ' specify port number, or 0 to use BCI2000Automation calls for outgoing updates instead
+    Private udpIncomingPort As Integer = 0 ' specify port number, or 0 to use BCI2000Automation calls for incoming updates instead
+    Private udpOutgoingPort As Integer = 0 ' specify port number, or 0 to use BCI2000Automation calls for outgoing updates instead
     ' TODO: ideally we would get rid of the udp communication and use BCI2000Automation COM calls exclusively, making for much simpler vb code in this file, but currently each interpreter command takes too long to return (Juergen will try to fix this)
 #End Region
 
@@ -52,7 +52,7 @@ Public Class BCI2000Exchange
 
     Public Sub ExecuteScript(cmd As String)
         CheckInit()
-        If remote.Execute(cmd) <> 0 Then Die() ' Execute() returns zero on success, unlike other methods
+        If remote.Execute(cmd) <> 0 Then Die() ' old convention: Execute() returns zero on success, unlike other methods
     End Sub
 
     Public Sub New(ByRef game As SongGame)
@@ -61,28 +61,17 @@ Public Class BCI2000Exchange
         remote.WindowVisible = 0
         If Not remote.Connect() Then Die()
 
-        modules(0) = "gUSBampSource32Release --local"
-        'modules(0) = "SignalGenerator --local" 'TODO: this line is for testing with a fake signal in the absence of actual EEG hardware - remove it!
-        modules(0) = modules(0) & " --FileFormat=Null"  'TODO: this line prevents EEG data from being saved to disk - remove it!
-
-        modules(1) = "DummySignalProcessing --local" 'TODO: eventually, replace this with some real BCI signal processing (such as SpectralSignalProcessing) to do real BCI interaction
-        modules(2) = "DummyApplication --local" ' this one can probably be left as is: the song game takes on the role of the application module
-
-        'TODO: the graphical launch interface needs a left/right-handed switch
-        ExecuteScript("ADD PARAMETER Application:FingerBot string FingerBotHandedness= " & If(game.secondHand.rightHandMode, "right", "left"))
-        'TODO: ship out more useful bits of session info as parameters - from the SongGame and FingerBot instances
-        '      e.g. GameType, GameMode, SongTitle, DifficultyLevel, Gains, GameCodeVersion
-
-        If Not remote.StartupModules(modules) Then Die()
-
-        Console.WriteLine("Current subject: " & currentSub.ID)
-        remote.SubjectID = currentSub.ID
-
+        ' Parameter handling 0: Define any BCI2000 parameters that this experiment will use
+        ExecuteScript("ADD PARAMETER Application:FingerBot string FingerBotHandedness= % % % %")
+        ExecuteScript("ADD PARAMETER Application:FingerBot string SongPath=            % % % %")
+        ExecuteScript("ADD PARAMETER Application:FingerBot int    NumberOfNotes=       0 0 0 %")
 
         ExecuteScript("ADD STATE FingerBotPosF1      32 0")
         ExecuteScript("ADD STATE FingerBotVelF1      32 0")
+        ExecuteScript("ADD STATE FingerBotKp1        32 0")
         ExecuteScript("ADD STATE FingerBotPosF2      32 0")
         ExecuteScript("ADD STATE FingerBotVelF2      32 0")
+        ExecuteScript("ADD STATE FingerBotKp2        32 0")
         ExecuteScript("ADD STATE FingerBotTargetTime 32 0")
         For i = 0 To game.fretboard.strings.Length - 1
             ExecuteScript("ADD STATE GuitarString" & (i + 1) & "TimeToNote 13 0")
@@ -90,31 +79,54 @@ Public Class BCI2000Exchange
         ExecuteScript("ADD STATE NextString  3 0")
         ExecuteScript("ADD STATE HitFeedback 3 0")
 
-        ' Set some initial defaults:  (note that .prm files will probably overrides these settings)
+
+        modules(0) = "gUSBampSource32Release --local"  'TODO: get the 32-bit 3.12.00 DLL and replace the one that's currently in prog
+        'modules(0) = "SignalGenerator --local" 'TODO: this line is for testing with a fake signal in the absence of actual EEG hardware - remove it!
+        modules(0) = modules(0) & " --FileFormat=Null"  'TODO: this line prevents EEG data from being saved to disk - remove it!
+
+        modules(1) = "DummySignalProcessing --local" 'TODO: eventually, replace this with some real BCI signal processing (such as SpectralSignalProcessing) to do real BCI interaction
+        modules(2) = "DummyApplication --local" ' this one can probably be left as is: the song game takes on the role of the application module
+        If Not remote.StartupModules(modules) Then Die()
+
+
+        ' Parameter handling 1: Set some initial defaults:  (note that .prm files will probably overrides these settings)
         ExecuteScript("SET PARAMETER SamplingRate   600")
         ExecuteScript("SET PARAMETER SampleBlockSize 30") ' defaults: 600Hz sample rate, 20Hz block rate (50ms blocks)
         ExecuteScript("SET PARAMETER VisualizeSource  1")
         ExecuteScript("SET PARAMETER VisualizeTiming  0")
 
-        If udpOutgoingPort Then
-            ExecuteScript("SET PARAMETER Connector:Connector%20Input list   ConnectorInputFilter=  1 *")
-            ExecuteScript("SET PARAMETER Connector:Connector%20Input string ConnectorInputAddress=   localhost:" & udpOutgoingPort)
-        End If
-
-        ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm")
+        ' Parameter handling 2: Load parameter files
+        ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm") 'TODO: remove this
         'ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBampsAAAA-Cap64.prm")
         'TODO: load any additional BCI2000 parameters (signal-processing?) Flag the parameter-set by encoding in session number? or subject name?
 
+        ' Parameter handling 3: set any "read-only" parameters that we don't want overwritten by carelessly saved overcomplete parameter files
+        If udpOutgoingPort Then
+            ExecuteScript("SET PARAMETER Connector:Connector%20Input list   ConnectorInputFilter=  1 *")
+            ExecuteScript("SET PARAMETER Connector:Connector%20Input string ConnectorInputAddress=   localhost:" & udpOutgoingPort)
+        Else
+            ExecuteScript("SET PARAMETER Connector:Connector%20Input string ConnectorInputAddress=   %")
+        End If
+
+        'Console.WriteLine("Current subject: " & currentSub.ID)
+        remote.SubjectID = currentSub.ID
+        SetParameter("FingerBotHandedness", If(game.secondHand.rightHandMode, "right", "left"))
+        SetParameter("SongPath", game.mySong.songPath)
+        SetParameter("NumberOfNotes", game.fretboard.numNotes)
+        'TODO: ship out as parameter values any further useful bits of session info from SongGame/FretBoard/FingerBot instances - e.g. GameType, GameMode, Gains, GameCodeVersion
+
         If visualize Then
             Dim expr As String
-            expr = "SET PARAMETER Filtering matrix Expressions= { PosF1 VelF1 PosF2 VelF2 } 1 "  ' TODO: how to change the channel labels output by the ExpressionFilter? these matrix row labels don't work
+            expr = "SET PARAMETER Filtering matrix Expressions= { PosF1 VelF1 Kp1 PosF2 VelF2 Kp2 } 1 "  ' TODO: how to change the channel labels output by the ExpressionFilter? these matrix row labels don't work
             expr = expr & " 100*(FingerBotPosF1-" & stateOffset & ")/" & stateScaling
             expr = expr & " 100*(FingerBotVelF1-" & stateOffset & ")/" & stateScaling
+            expr = expr & " 100*(FingerBotKp1-" & stateOffset & ")/" & stateScaling
             expr = expr & " 100*(FingerBotPosF2-" & stateOffset & ")/" & stateScaling
             expr = expr & " 100*(FingerBotVelF2-" & stateOffset & ")/" & stateScaling
+            expr = expr & " 100*(FingerBotKp2-" & stateOffset & ")/" & stateScaling
             ExecuteScript(expr)
-            'ExecuteScript("SET PARAMETER Filtering matrix Expressions= 5 1 String1TimeToNote String2TimeToNote String3TimeToNote String4TimeToNote String5TimeToNote")
-            ExecuteScript("SET PARAMETER Filtering matrix Expressions= 2 1 NextString HitFeedback")
+            'ExecuteScript("SET PARAMETER Filtering matrix Expressions= 5 1 GuitarString1TimeToNote GuitarString2TimeToNote GuitarString3TimeToNote GuitarString4TimeToNote GuitarString5TimeToNote")
+            'ExecuteScript("SET PARAMETER Filtering matrix Expressions= 2 1 NextString HitFeedback")
             ExecuteScript("SET PARAMETER VisualizeExpressionFilter 1")
             ExecuteScript("SET PARAMETER VisualizeSource 1")
             ExecuteScript("SET PARAMETER VisualizeTiming 1")
@@ -213,6 +225,20 @@ Public Class BCI2000Exchange
 
     End Sub
 
+    Public Function EscapeString(s As String) As String
+        If s.Length = 0 Then Return "%" Else Return s.Replace("%", "%%").Replace(" ", "%20")
+    End Function
+
+    Public Sub SetParameter(name As String, value As String)
+        CheckInit()
+        ExecuteScript("SET PARAMETER " & name & " " & EscapeString(value))
+    End Sub
+
+    Public Sub SetParameter(fullParameterLine As String)
+        CheckInit()
+        ExecuteScript("SET PARAMETER " & fullParameterLine)
+    End Sub
+
     Public Sub Update(ByRef game As SongGame)
 
         For i = 0 To game.fretboard.targets.Length - 1
@@ -237,8 +263,10 @@ Public Class BCI2000Exchange
 
         SetState("FingerBotPosF1", game.secondHand.posF1 * stateScaling + stateOffset)
         SetState("FingerBotVelF1", game.secondHand.velF1 * stateScaling + stateOffset)
+        SetState("FingerBotKp1", game.secondHand.Kp1 * stateScaling + stateOffset)
         SetState("FingerBotPosF2", game.secondHand.posF2 * stateScaling + stateOffset)
         SetState("FingerBotVelF2", game.secondHand.velF2 * stateScaling + stateOffset)
+        SetState("FingerBotKp2", game.secondHand.Kp2 * stateScaling + stateOffset)
         SetState("FingerBotTargetTime", game.secondHand.targetTime)
         SetState("HitFeedback", flamePos) : flamePos = 0
 
