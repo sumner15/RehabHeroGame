@@ -31,6 +31,7 @@ Public Class BCI2000Exchange
     Private keepListening As Boolean
     Private watchMessage As String = ""
 
+    Private operatorWindow As Boolean = False
     Private verbose As Boolean = False
     Private visualize As Boolean = True
     Private udpIncomingPort As Integer = 0 ' specify port number, or 0 to use BCI2000Automation calls for incoming updates instead
@@ -58,13 +59,14 @@ Public Class BCI2000Exchange
     Public Sub New(ByRef game As SongGame)
         'timeBeginPeriod(timeRes)
         remote = New BCI2000Remote()
-        remote.WindowVisible = 0
+        remote.WindowVisible = operatorWindow
         If Not remote.Connect() Then Die()
 
         ' Parameter handling 0: Define any BCI2000 parameters that this experiment will use
         ExecuteScript("ADD PARAMETER Application:FingerBot string FingerBotHandedness= % % % %")
-        ExecuteScript("ADD PARAMETER Application:FingerBot string SongPath=            % % % %")
-        ExecuteScript("ADD PARAMETER Application:FingerBot int    NumberOfNotes=       0 0 0 %")
+        ExecuteScript("ADD PARAMETER Application:FingerBot string AssistivePolicy=     % % % %")
+        ExecuteScript("ADD PARAMETER Application:SongGame  string SongPath=            % % % %")
+        ExecuteScript("ADD PARAMETER Application:SongGame  int    NumberOfNotes=       0 0 0 %")
 
         ExecuteScript("ADD STATE FingerBotPosF1      32 0")
         ExecuteScript("ADD STATE FingerBotVelF1      32 0")
@@ -113,6 +115,7 @@ Public Class BCI2000Exchange
         SetParameter("FingerBotHandedness", If(game.secondHand.rightHandMode, "right", "left"))
         SetParameter("SongPath", game.mySong.songPath)
         SetParameter("NumberOfNotes", game.fretboard.numNotes)
+        SetParameter("AssistivePolicy", "target success rate") ' TODO: change this accordingly...
         'TODO: ship out as parameter values any further useful bits of session info from SongGame/FretBoard/FingerBot instances - e.g. GameType, GameMode, Gains, GameCodeVersion
 
         If visualize Then
