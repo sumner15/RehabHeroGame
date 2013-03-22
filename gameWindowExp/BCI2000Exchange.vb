@@ -111,7 +111,7 @@ Public Class BCI2000Exchange
         End If
 
         'Console.WriteLine("Current subject: " & currentSub.ID)
-        remote.SubjectID = currentSub.ID
+        remote.SubjectID = currentSub.ID.Replace(" ", "")
         SetParameter("FingerBotHandedness", If(game.secondHand.rightHandMode, "right", "left"))
         SetParameter("SongPath", game.mySong.songPath)
         SetParameter("NumberOfNotes", game.fretboard.numNotes)
