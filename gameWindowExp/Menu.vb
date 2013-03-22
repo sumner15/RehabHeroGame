@@ -76,18 +76,32 @@ Public Class Menu
         Dim perceivedSuccessRate As Single
         Dim difficulties() As Integer = {level.superEasy, level.easy, level.medium}
 
-        If Not gameRunning Then
-            successRate = successRateList.SelectedItem
-            perceivedSuccessRate = perceivedSuccessLB.SelectedItem
-            If successRate = 0 Then successRate = 0.75
-            If perceivedSuccessRate = 0 Then perceivedSuccessRate = 0.75
+        successRate = CSng(setSucRateHSB.Value) / 100.0
+        perceivedSuccessRate = CSng(setFakeSucRateHSB.Value) / 100.0
 
-            gameRunning = True
-            trialStr = currentSong.name & "_" & CStr(CInt(perceivedSuccessRate * 100)) & "_"
-            ourWindow = New SongGame(currentSong, successRate, perceivedSuccessRate, difficulties(difficultyList.SelectedIndex))
-            ourWindow.Run(FPS)
-            ourWindow.Dispose()
-            gameRunning = False
+        If successRate = 0 Then successRate = 0.75
+        If perceivedSuccessRate = 0 Then perceivedSuccessRate = 0.75
+
+        If Not gameRunning Then
+            If useExplicitGainsBtn.Checked Then
+
+                Dim propGains() As Single = {setGainsHSB.Value, setGainsHSB.Value}
+
+                gameRunning = True
+                trialStr = currentSong.name & "_" & CStr(CInt(perceivedSuccessRate * 100)) & "_"
+                ourWindow = New SongGame(currentSong, perceivedSuccessRate, propGains, difficulties(difficultyList.SelectedIndex))
+                ourWindow.Run(FPS)
+                ourWindow.Dispose()
+                gameRunning = False
+            Else
+                gameRunning = True
+                trialStr = currentSong.name & "_" & CStr(CInt(perceivedSuccessRate * 100)) & "_"
+                ourWindow = New SongGame(currentSong, successRate, perceivedSuccessRate, difficulties(difficultyList.SelectedIndex))
+                ourWindow.Run(FPS)
+                ourWindow.Dispose()
+                gameRunning = False
+            End If
+
         End If
     End Sub
 
@@ -117,5 +131,65 @@ Public Class Menu
             measurementGame.Dispose()
             gameRunning = False
         End If
+    End Sub
+
+    '--------------------------------------------------------------------------------'
+    '-------------------------- update horizontal scroll bars -----------------------'
+    '--------------------------------------------------------------------------------'
+    Private Sub setSucRateHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles setSucRateHSB.Scroll
+        ' I want this slider to be discrete
+        If setSucRateHSB.Value >= 80 Then
+            setSucRateHSB.Value = 99
+        ElseIf setSucRateHSB.Value < 80 And setSucRateHSB.Value > 60 Then
+            setSucRateHSB.Value = 75
+        ElseIf setSucRateHSB.Value <= 60 Then
+            setSucRateHSB.Value = 50
+        End If
+
+        successRateLbl.Text = CStr(CSng(setSucRateHSB.Value) / 100)
+    End Sub
+
+    Private Sub setFakeSucRateHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles setFakeSucRateHSB.Scroll
+        If setFakeSucRateHSB.Value >= 80 Then
+            setFakeSucRateHSB.Value = 99
+        ElseIf setFakeSucRateHSB.Value < 80 And setFakeSucRateHSB.Value > 60 Then
+            setFakeSucRateHSB.Value = 75
+        ElseIf setFakeSucRateHSB.Value <= 60 Then
+            setFakeSucRateHSB.Value = 50
+        End If
+
+        fakeSuccessRateLbl.Text = CStr(CSng(setFakeSucRateHSB.Value) / 100)
+    End Sub
+
+    Private Sub setGainsHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles setGainsHSB.Scroll
+        setGainsTb.Text = CStr(setGainsHSB.Value)
+    End Sub
+
+    '--------------------------------------------------------------------------------'
+    '----------------- toggle explicit gains settings visibility --------------------'
+    '--------------------------------------------------------------------------------'
+    Private Sub useExplicitGainsBtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles useExplicitGainsBtn.CheckedChanged
+        setGainsHSB.Visible = useExplicitGainsBtn.Checked
+        setGainsInstructions.Visible = useExplicitGainsBtn.Checked
+        setGainsTb.Visible = useExplicitGainsBtn.Checked
+
+        If useExplicitGainsBtn.Checked Then
+            successRateLbl.Text = "not used"
+        End If
+    End Sub
+
+   
+    Private Sub setGainsTb_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles setGainsTb.TextChanged
+        If IsNumeric(setGainsTb.Text) Then
+            Dim val = CInt(setGainsTb.Text)
+            If val <= setGainsHSB.Maximum Then
+                setGainsHSB.Value = CInt(setGainsTb.Text)
+            End If
+        Else
+            If Not (setGainsTb.Text = "" Or setGainsTb.Text = " ") Then
+                MsgBox("friend, you seem to be confused. You can only put number is this box.")
+            End If
+        End If
+
     End Sub
 End Class

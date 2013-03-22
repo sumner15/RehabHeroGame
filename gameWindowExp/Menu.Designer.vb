@@ -39,14 +39,24 @@ Partial Class Menu
         Me.songNameLbl = New System.Windows.Forms.Label()
         Me.thumbnail = New System.Windows.Forms.PictureBox()
         Me.playSongBtn = New System.Windows.Forms.Button()
-        Me.successRateList = New System.Windows.Forms.ListBox()
         Me.difficultyList = New System.Windows.Forms.ListBox()
         Me.isometricForcesBtn = New System.Windows.Forms.Button()
         Me.rangeOfMotionBtn = New System.Windows.Forms.Button()
-        Me.perceivedSuccessLB = New System.Windows.Forms.ListBox()
+        Me.gameSettingPnl = New System.Windows.Forms.Panel()
+        Me.setGainsInstructions = New System.Windows.Forms.Label()
+        Me.setGainsHSB = New System.Windows.Forms.HScrollBar()
+        Me.fakeSuccessRateLbl = New System.Windows.Forms.Label()
+        Me.setFakeSucRateHSB = New System.Windows.Forms.HScrollBar()
+        Me.successRateLbl = New System.Windows.Forms.Label()
+        Me.setSucRateHSB = New System.Windows.Forms.HScrollBar()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
+        Me.setGainsTb = New System.Windows.Forms.TextBox()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gameSettingPnl.SuspendLayout()
         Me.SuspendLayout()
         '
         'subjectList
@@ -56,7 +66,7 @@ Partial Class Menu
         Me.subjectList.ItemHeight = 18
         Me.subjectList.Location = New System.Drawing.Point(12, 61)
         Me.subjectList.Name = "subjectList"
-        Me.subjectList.Size = New System.Drawing.Size(178, 256)
+        Me.subjectList.Size = New System.Drawing.Size(178, 400)
         Me.subjectList.TabIndex = 0
         '
         'titleRehabHeroLbl
@@ -81,7 +91,7 @@ Partial Class Menu
         Me.subjectPnl.Controls.Add(Me.addNewSubLbl)
         Me.subjectPnl.Controls.Add(Me.subIDLbl)
         Me.subjectPnl.Controls.Add(Me.subIdTb)
-        Me.subjectPnl.Location = New System.Drawing.Point(14, 325)
+        Me.subjectPnl.Location = New System.Drawing.Point(14, 471)
         Me.subjectPnl.Name = "subjectPnl"
         Me.subjectPnl.Size = New System.Drawing.Size(340, 100)
         Me.subjectPnl.TabIndex = 2
@@ -168,7 +178,7 @@ Partial Class Menu
         Me.songList.ItemHeight = 18
         Me.songList.Location = New System.Drawing.Point(195, 61)
         Me.songList.Name = "songList"
-        Me.songList.Size = New System.Drawing.Size(159, 256)
+        Me.songList.Size = New System.Drawing.Size(159, 400)
         Me.songList.TabIndex = 3
         '
         'songPnl
@@ -203,32 +213,23 @@ Partial Class Menu
         '
         Me.playSongBtn.Location = New System.Drawing.Point(361, 348)
         Me.playSongBtn.Name = "playSongBtn"
-        Me.playSongBtn.Size = New System.Drawing.Size(87, 44)
+        Me.playSongBtn.Size = New System.Drawing.Size(251, 44)
         Me.playSongBtn.TabIndex = 5
         Me.playSongBtn.Text = "Play Song"
         Me.playSongBtn.UseVisualStyleBackColor = True
-        '
-        'successRateList
-        '
-        Me.successRateList.FormattingEnabled = True
-        Me.successRateList.Items.AddRange(New Object() {".5", ".75", ".99"})
-        Me.successRateList.Location = New System.Drawing.Point(454, 348)
-        Me.successRateList.Name = "successRateList"
-        Me.successRateList.Size = New System.Drawing.Size(39, 43)
-        Me.successRateList.TabIndex = 8
         '
         'difficultyList
         '
         Me.difficultyList.FormattingEnabled = True
         Me.difficultyList.Items.AddRange(New Object() {"easy", "medium", "hard"})
-        Me.difficultyList.Location = New System.Drawing.Point(545, 348)
+        Me.difficultyList.Location = New System.Drawing.Point(187, 13)
         Me.difficultyList.Name = "difficultyList"
-        Me.difficultyList.Size = New System.Drawing.Size(67, 43)
+        Me.difficultyList.Size = New System.Drawing.Size(58, 56)
         Me.difficultyList.TabIndex = 9
         '
         'isometricForcesBtn
         '
-        Me.isometricForcesBtn.Location = New System.Drawing.Point(361, 398)
+        Me.isometricForcesBtn.Location = New System.Drawing.Point(361, 539)
         Me.isometricForcesBtn.Name = "isometricForcesBtn"
         Me.isometricForcesBtn.Size = New System.Drawing.Size(120, 32)
         Me.isometricForcesBtn.TabIndex = 10
@@ -237,33 +238,138 @@ Partial Class Menu
         '
         'rangeOfMotionBtn
         '
-        Me.rangeOfMotionBtn.Location = New System.Drawing.Point(487, 398)
+        Me.rangeOfMotionBtn.Location = New System.Drawing.Point(487, 539)
         Me.rangeOfMotionBtn.Name = "rangeOfMotionBtn"
         Me.rangeOfMotionBtn.Size = New System.Drawing.Size(125, 32)
         Me.rangeOfMotionBtn.TabIndex = 11
         Me.rangeOfMotionBtn.Text = "range of motion"
         Me.rangeOfMotionBtn.UseVisualStyleBackColor = True
         '
-        'perceivedSuccessLB
+        'gameSettingPnl
         '
-        Me.perceivedSuccessLB.FormattingEnabled = True
-        Me.perceivedSuccessLB.Items.AddRange(New Object() {".5", ".75", ".99"})
-        Me.perceivedSuccessLB.Location = New System.Drawing.Point(500, 348)
-        Me.perceivedSuccessLB.Name = "perceivedSuccessLB"
-        Me.perceivedSuccessLB.Size = New System.Drawing.Size(39, 43)
-        Me.perceivedSuccessLB.TabIndex = 12
+        Me.gameSettingPnl.Controls.Add(Me.setGainsTb)
+        Me.gameSettingPnl.Controls.Add(Me.useExplicitGainsBtn)
+        Me.gameSettingPnl.Controls.Add(Me.setGainsInstructions)
+        Me.gameSettingPnl.Controls.Add(Me.setGainsHSB)
+        Me.gameSettingPnl.Controls.Add(Me.fakeSuccessRateLbl)
+        Me.gameSettingPnl.Controls.Add(Me.setFakeSucRateHSB)
+        Me.gameSettingPnl.Controls.Add(Me.successRateLbl)
+        Me.gameSettingPnl.Controls.Add(Me.setSucRateHSB)
+        Me.gameSettingPnl.Controls.Add(Me.Label2)
+        Me.gameSettingPnl.Controls.Add(Me.Label1)
+        Me.gameSettingPnl.Controls.Add(Me.difficultyList)
+        Me.gameSettingPnl.Location = New System.Drawing.Point(364, 399)
+        Me.gameSettingPnl.Name = "gameSettingPnl"
+        Me.gameSettingPnl.Size = New System.Drawing.Size(248, 134)
+        Me.gameSettingPnl.TabIndex = 13
+        '
+        'setGainsInstructions
+        '
+        Me.setGainsInstructions.AutoSize = True
+        Me.setGainsInstructions.Location = New System.Drawing.Point(4, 95)
+        Me.setGainsInstructions.Name = "setGainsInstructions"
+        Me.setGainsInstructions.Size = New System.Drawing.Size(96, 13)
+        Me.setGainsInstructions.TabIndex = 20
+        Me.setGainsInstructions.Text = "Set Gains Explicitly"
+        Me.setGainsInstructions.Visible = False
+        '
+        'setGainsHSB
+        '
+        Me.setGainsHSB.LargeChange = 15
+        Me.setGainsHSB.Location = New System.Drawing.Point(6, 112)
+        Me.setGainsHSB.Maximum = 45
+        Me.setGainsHSB.Name = "setGainsHSB"
+        Me.setGainsHSB.Size = New System.Drawing.Size(132, 13)
+        Me.setGainsHSB.SmallChange = 5
+        Me.setGainsHSB.TabIndex = 19
+        Me.setGainsHSB.Visible = False
+        '
+        'fakeSuccessRateLbl
+        '
+        Me.fakeSuccessRateLbl.AutoSize = True
+        Me.fakeSuccessRateLbl.Location = New System.Drawing.Point(142, 56)
+        Me.fakeSuccessRateLbl.Name = "fakeSuccessRateLbl"
+        Me.fakeSuccessRateLbl.Size = New System.Drawing.Size(16, 13)
+        Me.fakeSuccessRateLbl.TabIndex = 18
+        Me.fakeSuccessRateLbl.Text = ".5"
+        '
+        'setFakeSucRateHSB
+        '
+        Me.setFakeSucRateHSB.Location = New System.Drawing.Point(7, 56)
+        Me.setFakeSucRateHSB.Maximum = 99
+        Me.setFakeSucRateHSB.Minimum = 50
+        Me.setFakeSucRateHSB.Name = "setFakeSucRateHSB"
+        Me.setFakeSucRateHSB.Size = New System.Drawing.Size(132, 13)
+        Me.setFakeSucRateHSB.SmallChange = 10
+        Me.setFakeSucRateHSB.TabIndex = 17
+        Me.setFakeSucRateHSB.Value = 50
+        '
+        'successRateLbl
+        '
+        Me.successRateLbl.AutoSize = True
+        Me.successRateLbl.Location = New System.Drawing.Point(142, 19)
+        Me.successRateLbl.Name = "successRateLbl"
+        Me.successRateLbl.Size = New System.Drawing.Size(16, 13)
+        Me.successRateLbl.TabIndex = 16
+        Me.successRateLbl.Text = ".5"
+        '
+        'setSucRateHSB
+        '
+        Me.setSucRateHSB.Location = New System.Drawing.Point(7, 19)
+        Me.setSucRateHSB.Maximum = 99
+        Me.setSucRateHSB.Minimum = 50
+        Me.setSucRateHSB.Name = "setSucRateHSB"
+        Me.setSucRateHSB.Size = New System.Drawing.Size(132, 13)
+        Me.setSucRateHSB.TabIndex = 1
+        Me.setSucRateHSB.Value = 50
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(3, 41)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(120, 13)
+        Me.Label2.TabIndex = 14
+        Me.Label2.Text = "Set Fake Success Rate"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(4, 4)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(93, 13)
+        Me.Label1.TabIndex = 13
+        Me.Label1.Text = "Set Success Rate"
+        '
+        'useExplicitGainsBtn
+        '
+        Me.useExplicitGainsBtn.AutoSize = True
+        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(6, 75)
+        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
+        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
+        Me.useExplicitGainsBtn.TabIndex = 23
+        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
+        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
+        '
+        'setGainsTb
+        '
+        Me.setGainsTb.AutoCompleteCustomSource.AddRange(New String() {"0"})
+        Me.setGainsTb.Location = New System.Drawing.Point(141, 109)
+        Me.setGainsTb.Name = "setGainsTb"
+        Me.setGainsTb.Size = New System.Drawing.Size(17, 20)
+        Me.setGainsTb.TabIndex = 24
+        Me.setGainsTb.Text = "0"
+        Me.setGainsTb.Visible = False
         '
         'Menu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
-        Me.ClientSize = New System.Drawing.Size(624, 442)
-        Me.Controls.Add(Me.perceivedSuccessLB)
+        Me.ClientSize = New System.Drawing.Size(624, 583)
+        Me.Controls.Add(Me.gameSettingPnl)
         Me.Controls.Add(Me.rangeOfMotionBtn)
         Me.Controls.Add(Me.isometricForcesBtn)
-        Me.Controls.Add(Me.difficultyList)
-        Me.Controls.Add(Me.successRateList)
         Me.Controls.Add(Me.playSongBtn)
         Me.Controls.Add(Me.songPnl)
         Me.Controls.Add(Me.songList)
@@ -277,6 +383,8 @@ Partial Class Menu
         Me.songPnl.ResumeLayout(False)
         Me.songPnl.PerformLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gameSettingPnl.ResumeLayout(False)
+        Me.gameSettingPnl.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -293,13 +401,22 @@ Partial Class Menu
     Friend WithEvents songNameLbl As System.Windows.Forms.Label
     Friend WithEvents thumbnail As System.Windows.Forms.PictureBox
     Friend WithEvents playSongBtn As System.Windows.Forms.Button
-    Friend WithEvents successRateList As System.Windows.Forms.ListBox
     Friend WithEvents difficultyList As System.Windows.Forms.ListBox
     Friend WithEvents isometricForcesBtn As System.Windows.Forms.Button
     Friend WithEvents rangeOfMotionBtn As System.Windows.Forms.Button
-    Friend WithEvents perceivedSuccessLB As System.Windows.Forms.ListBox
     Friend WithEvents handLbl As System.Windows.Forms.Label
     Friend WithEvents trialNumTextLbl As System.Windows.Forms.Label
     Friend WithEvents subHandList As System.Windows.Forms.ListBox
     Friend WithEvents trialNumLbl As System.Windows.Forms.Label
+    Friend WithEvents gameSettingPnl As System.Windows.Forms.Panel
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents setSucRateHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents fakeSuccessRateLbl As System.Windows.Forms.Label
+    Friend WithEvents setFakeSucRateHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents successRateLbl As System.Windows.Forms.Label
+    Friend WithEvents setGainsInstructions As System.Windows.Forms.Label
+    Friend WithEvents setGainsHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents useExplicitGainsBtn As System.Windows.Forms.CheckBox
+    Friend WithEvents setGainsTb As System.Windows.Forms.TextBox
 End Class
