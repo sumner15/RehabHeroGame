@@ -40,10 +40,10 @@ Public Class FingerBot
     Private f1VisLieWeight() As Single = {0.1, 0.0}
     Private f2VisLieWeight() As Single = {0.1, 0.0}
 
-    Public Kp1 As Single = 8
-    Public Kp2 As Single = 8
-    Public Kv1 As Single = 0.8
-    Public Kv2 As Single = 0.8
+    Private Kp1 As Single = 8
+    Private Kp2 As Single = 8
+    Private Kv1 As Single = 0.8
+    Private Kv2 As Single = 0.8
 
     Public hand As String = "R"
     Public trial As Single = 1
@@ -820,29 +820,72 @@ Public Class FingerBot
     '--------------------------------------------------------------------------------'
     Public Sub updateGainFile()
         If rightHandMode Then
-            If hitChanged Then
-                If hitString = 0 Then
-                    gainFileMaker.storeGainsF1(Kp2, Kv2, targetTime)
-                ElseIf hitString = 1 Then
-                    gainFileMaker.storeGainsF1(Kp2, Kv2, targetTime)
-                    gainFileMaker.storeGainsF2(Kp1, Kv1, targetTime)
-                ElseIf hitString = 2 Then
-                    gainFileMaker.storeGainsF2(Kp1, Kv1, targetTime)
-                End If
+            If hitString = 0 Then
+                gainFileMaker.storeGainsF1(Kp2, Kv2, targetTime)
+            ElseIf hitString = 1 Then
+                gainFileMaker.storeGainsF1(Kp2, Kv2, targetTime)
+                gainFileMaker.storeGainsF2(Kp1, Kv1, targetTime)
+            ElseIf hitString = 2 Then
+                gainFileMaker.storeGainsF2(Kp1, Kv1, targetTime)
             End If
         Else
-            If hitChanged Then
-                If hitString = 0 Then
-                    gainFileMaker.storeGainsF1(Kp1, Kv1, targetTime)
-                ElseIf hitString = 1 Then
-                    gainFileMaker.storeGainsF1(Kp1, Kv1, targetTime)
-                    gainFileMaker.storeGainsF2(Kp2, Kv2, targetTime)
-                ElseIf hitString = 2 Then
-                    gainFileMaker.storeGainsF2(Kp2, Kv2, targetTime)
-                End If
+        If hitChanged Then
+            If hitString = 0 Then
+                gainFileMaker.storeGainsF1(Kp1, Kv1, targetTime)
+            ElseIf hitString = 1 Then
+                gainFileMaker.storeGainsF1(Kp1, Kv1, targetTime)
+                gainFileMaker.storeGainsF2(Kp2, Kv2, targetTime)
+            ElseIf hitString = 2 Then
+                gainFileMaker.storeGainsF2(Kp2, Kv2, targetTime)
             End If
         End If
+        End If
 
+    End Sub
+
+    '--------------------------------------------------------------------------------'
+    '---------------------------- set gains explicitly ------------------------------'
+    '--------------------------------------------------------------------------------'
+    ' this function will allow us explicitly set our gains to specific values.
+    ' for simplicity, we will allow the user to set only the proporetional gains.
+    ' we will set the differential gains to 1/10 of the value of the proportional gains
+    ' as we have been doing in the past.
+    Public Sub setGainsExplicitly(ByRef propGains As Single())
+        Dim setVal(0) As Double
+        ' check
+        If (propGains(0) < Kpcap(1)) Then
+            Kp1 = propGains(0)
+        Else
+            Kp1 = Kpcap(1)
+        End If
+
+        If (propGains(1) < Kpcap(1)) Then
+            Kp2 = propGains(1)
+        Else
+            Kp2 = Kpcap(1)
+        End If
+
+        Kv1 = Kp1 / 10
+        Kv2 = Kp2 / 10
+        If rightHandMode Then
+            setVal(0) = Kp1
+            stat = target_obj.SetParam(parameters_obj.Kp2, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
+            setVal(0) = Kp2
+            stat = target_obj.SetParam(parameters_obj.Kp1, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
+            setVal(0) = Kv1
+            stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
+            setVal(0) = Kv2
+            stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
+        Else
+            setVal(0) = Kp1
+            stat = target_obj.SetParam(parameters_obj.Kp1, setVal)
+            setVal(0) = Kp2
+            stat = target_obj.SetParam(parameters_obj.Kp2, setVal)
+            setVal(0) = Kv1
+            stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
+            setVal(0) = Kv2
+            stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
+        End If
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -1075,8 +1118,6 @@ Public Class FingerBot
             currentSub.Kd2 = Kv2
             currentSub.update()
         End If
-
-
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -1097,6 +1138,13 @@ Public Class FingerBot
         setVal(0) = Kv2
         target_obj.SetParam(parameters_obj.Kd2, setVal)
     End Sub
+
+    '--------------------------------------------------------------------------------'
+    '---------------- get the prop[ortional gains (they're private) -----------------'
+    '--------------------------------------------------------------------------------'
+    Public Function getPropGains() As Single()
+        Return {Kp1, Kp2}
+    End Function
 
 #End Region
 

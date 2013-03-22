@@ -40,6 +40,8 @@ Public Class SongGame
 
     Public secondHand As FingerBot
     Public bci2000 As BCI2000Exchange = Nothing
+    Private explicitGains() As Single = {0.0, 0.0} ' only used when in explicit gain mode
+    Private useExplicitGains As Boolean = False
 
     Private zeroPosComplete As Boolean = False
     Private startupTimer As New Stopwatch
@@ -118,6 +120,30 @@ Public Class SongGame
         secondHand = New FingerBot()
         secondHand.updateGainStep(successRate)
         secondHand.visAlpha = perceivedSuccessRate / (1 - perceivedSuccessRate)
+
+        mySong = currentSong
+        mySong.createAudioPlayer()
+        fretboard = New Fretboard(mySong, difficulty)
+        cloudBox.readWavefront("cloudSphere.obj")
+
+        initializeGL()
+
+        cloudBox.loadVbo()
+        cloudBox.loadTexture("clouds2.bmp")
+        PrepBlockedTrials(0)
+    End Sub
+
+
+    '----------------------------------------------------------------------------------'
+    '------------------ alternate constructor - set gains explicitly ------------------'
+    '----------------------------------------------------------------------------------'
+    ' this constructor allows us to set the song, the perceived successRate, the gains, and the difficulty.
+    Public Sub New(ByRef currentSong As Song, ByVal perceivedSuccessRate As Single, ByVal propGains As Single(), ByVal difficulty As Integer)
+        secondHand = New FingerBot()
+        secondHand.visAlpha = perceivedSuccessRate / (1 - perceivedSuccessRate)
+
+        useExplicitGains = True
+        explicitGains = propGains
 
         mySong = currentSong
         mySong.createAudioPlayer()
@@ -255,8 +281,10 @@ Public Class SongGame
 
         'secondHand.updatePGains(blockedTrial)
         'secondHand.updateDGains(inTimeWindow, blockedTrial)
-        secondHand.updateGainsRatiometrically(blockedTrial)
-        secondHand.updateGainFile()
+        '' this is the code that automatically updates the gains to control the success rate.
+        '' we want to make this manual, so we will comment this out for now.
+        'secondHand.updateGainsRatiometrically(blockedTrial)
+        'secondHand.updateGainFile()
         secondHand.updateWeightsRationmetrically(blockedTrial)
 
     End Sub
@@ -279,25 +307,27 @@ Public Class SongGame
             Dim previousNote As Single
             previousNote = fretboard.nextNotePos
             ' check if they attempted the hit and increases the gain if they didn't - unless the previous trial was a blocked trial
-            If Not blockedTrial Then
-                Select Case previousNote
-                    Case positions(0)
-                        If Not hitAttempted Then secondHand.incramentGainsF1()
-                        Exit Select
-                    Case positions(1)
-                        If Not hitAttempted Then
-                            secondHand.incramentGainsF1()
-                            secondHand.incramentGainsF2()
-                        End If
-                        Exit Select
-                    Case positions(2)
-                        If Not hitAttempted Then secondHand.incramentGainsF2()
-                        Exit Select
-                End Select
-            Else
-                ' restore normal gains
-                secondHand.returnToCurrentGains()
-                secondHand.noteBlockerOff()
+            If Not useExplicitGains Then
+                If Not blockedTrial Then
+                    Select Case previousNote
+                        Case positions(0)
+                            If Not hitAttempted Then secondHand.incramentGainsF1()
+                            Exit Select
+                        Case positions(1)
+                            If Not hitAttempted Then
+                                secondHand.incramentGainsF1()
+                                secondHand.incramentGainsF2()
+                            End If
+                            Exit Select
+                        Case positions(2)
+                            If Not hitAttempted Then secondHand.incramentGainsF2()
+                            Exit Select
+                    End Select
+                Else
+                    ' restore normal gains
+                    secondHand.returnToCurrentGains()
+                    secondHand.noteBlockerOff()
+                End If
             End If
 
             ' write a line to the score file indicating whether or not the trial was sucessful
@@ -319,8 +349,6 @@ Public Class SongGame
                     possibleScore += 1 : setProgrssBar(score / possibleScore)
                 End If
             End If
-
-            debugFile.WriteLine(success & vbTab & previousNote & vbTab & secondHand.Kp1 & vbTab & secondHand.Kv1 & vbTab & secondHand.Kp2 & vbTab & secondHand.Kv2)
 
             ' determine whether to block the next trial
             If blockedNotes(currentNote) Then
@@ -349,7 +377,7 @@ Public Class SongGame
                     Exit Select
             End Select
 
-            If blockedTrial Then
+            If blockedTrial And Not useExplicitGains Then
                 'secondHand.moveFingersToCurrent(True)
                 Select Case (fretboard.nextNotePos)
                     Case positions(0)
@@ -524,6 +552,9 @@ Public Class SongGame
                 mySong.player.Paused = False
                 trueStartUpDelay = startupTimer.ElapsedMilliseconds
                 zeroPosComplete = True
+                If useExplicitGains Then
+                    secondHand.setGainsExplicitly(explicitGains)
+                End If
             End If
         End If
 
@@ -573,9 +604,9 @@ Public Class SongGame
 
         shuffler(blockedNotes)
 
-        For Each note In blockedNotes
-            Console.WriteLine(note)
-        Next
+        'For Each note In blockedNotes
+        '    Console.WriteLine(note)
+        'Next
 
     End Sub
 
