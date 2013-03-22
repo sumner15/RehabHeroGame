@@ -1063,8 +1063,8 @@ Public Class FingerBot
     Public Sub attributeGainsToSubject()
 
         If rightHandMode Then
-            currentSub.Kp1 = Kp2
-            currentSub.Kp2 = Kp1
+            currentSub.Kp1 = Kp2   ' TODO: am i right to be alarmed by this swap?  Elsewhere, "1" and "2" assume that handedness is *already* taken into account (gold is 1 in right hand mode, 2 in left hand mode)
+            currentSub.Kp2 = Kp1   ' also, in initalizeGains(), the values are not swapped *back* in a handedness-sensitive way...
             currentSub.Kd1 = Kv2
             currentSub.Kd2 = Kv1                        
             currentSub.update()
@@ -1408,11 +1408,11 @@ Public Class FingerBot
         'uncomment this line to see what the raw accelerometer values are in left and right hand modes.
         'Console.WriteLine("gravity direction value " & CStr(gDir))
 
-        hand = currentSub.hand
-        'If gDir < 0.001 Then        
-        If StrComp(hand, "L") Then
+        If gDir < 0.001 Then
+            If currentSub.hand.ToUpper().StartsWith("L") Then MsgBox("This subject usually uses the left hand... Turn robot over?")
             rightHandMode = True
         Else
+            If currentSub.hand.ToUpper().StartsWith("R") Then MsgBox("This subject usually uses the right hand... Turn robot over?")
             rightHandMode = False
         End If
 
