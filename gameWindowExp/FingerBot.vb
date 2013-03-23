@@ -1464,7 +1464,7 @@ Public Class FingerBot
             rightHandMode = False
         End If
 
-        'Console.WriteLine("right hand mode is " & CStr(rightHandMode) & vbTab & CStr(gDir))
+        Console.WriteLine("handedness is " & If(rightHandMode, "right", "left") & vbTab & CStr(gDir))
 
     End Sub
 
