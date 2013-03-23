@@ -63,10 +63,12 @@ Public Class BCI2000Exchange
         If Not remote.Connect() Then Die()
 
         ' Parameter handling 0: Define any BCI2000 parameters that this experiment will use
-        ExecuteScript("ADD PARAMETER Application:FingerBot string FingerBotHandedness= % % % %")
-        ExecuteScript("ADD PARAMETER Application:FingerBot string AssistivePolicy=     % % % %")
-        ExecuteScript("ADD PARAMETER Application:SongGame  string SongPath=            % % % %")
-        ExecuteScript("ADD PARAMETER Application:SongGame  int    NumberOfNotes=       0 0 0 %")
+        ExecuteScript("ADD PARAMETER Application:Versioning  string   HgIdTheBrainPart=         %     % % %")
+        ExecuteScript("ADD PARAMETER Application:Versioning string    HgIdRehabHeroGame=        %     % % %")
+        ExecuteScript("ADD PARAMETER Application:FingerBot  string    FingerBotHandedness=      %     % % %")
+        ExecuteScript("ADD PARAMETER Application:FingerBot  floatlist AssistiveGains=       2   0 0   % 0 %")
+        ExecuteScript("ADD PARAMETER Application:SongGame   string    SongPath=                 %     % % %")
+        ExecuteScript("ADD PARAMETER Application:SongGame   int       NumberOfNotes=            0     0 0 %")
 
         ExecuteScript("ADD STATE FingerBotPosF1      32 0")
         ExecuteScript("ADD STATE FingerBotVelF1      32 0")
@@ -115,8 +117,18 @@ Public Class BCI2000Exchange
         SetParameter("FingerBotHandedness", If(game.secondHand.rightHandMode, "right", "left"))
         SetParameter("SongPath", game.mySong.songPath)
         SetParameter("NumberOfNotes", game.fretboard.numNotes)
-        SetParameter("AssistivePolicy", "target success rate") ' TODO: change this accordingly...
+        Dim propGains As Single() = game.secondHand.getPropGains()
+        SetParameter("Application:FingerBot floatlist AssistiveGains= 2 " & propGains(0) & " " & propGains(1)) ' TODO: do these values make sense?
+        ' TODO: gains are internally called Kp1 and Kp2, BUT it seems like this might be a different "1"/"2" convention from F1/F2 because
+        ' right-/left-handedness seems to be handled differently. Therefore, check that BCI2000's Kp1 always goes with finger 1 and Kp2
+        ' with finger 2, regardless of gravity.  If the convention really is different, name the BCI2000 states Kp1 and Kp2 differently.
+        ' There are two places where this is important, both marked @@@
         'TODO: ship out as parameter values any further useful bits of session info from SongGame/FretBoard/FingerBot instances - e.g. GameType, GameMode, Gains, GameCodeVersion
+
+        SetParameter("HgIdRehabHeroGame", "TODO") ' use Shell command - but how to get the text output?
+        ExecuteScript("SET PARAMETER HgIdTheBrainPart ""${system C:\Program Files\TortoiseHG\hg id}""") ' TODO: spaces in absolute path lead to escaping hell; without absolute path, does not find hg;
+        ' TODO: in any case it would be better to do the hg id at compile time rather than run time - but that's complicated and dependency-ridden
+
 
         If visualize Then
             Dim expr As String
@@ -264,12 +276,17 @@ Public Class BCI2000Exchange
         ' TODO: Ideally BCI2000's interpreter needs to be altered to have the capability to set multiple states while ensuring that all the changes happen in the same SampleBlock.
         '       As it is, the sourceTime logic above should approximate this, but only if BCI2000's SampleBlock duration is at least twice the period with which this Sub gets called in the game update loop
 
+        Dim propGains As Single() = game.secondHand.getPropGains()
+        ' TODO: gains are internally called Kp1 and Kp2, BUT it seems like this might be a different "1"/"2" convention from F1/F2 because
+        ' right-/left-handedness seems to be handled differently. Therefore, check that BCI2000's Kp1 always goes with finger 1 and Kp2
+        ' with finger 2, regardless of gravity.  If the convention really is different, name the BCI2000 states Kp1 and Kp2 differently.
+        ' There are two places where this is important, both marked @@@
         SetState("FingerBotPosF1", game.secondHand.posF1 * stateScaling + stateOffset)
         SetState("FingerBotVelF1", game.secondHand.velF1 * stateScaling + stateOffset)
-        SetState("FingerBotKp1", game.secondHand.Kp1 * stateScaling + stateOffset)
+        SetState("FingerBotKp1", propGains(0) * stateScaling + stateOffset)
         SetState("FingerBotPosF2", game.secondHand.posF2 * stateScaling + stateOffset)
         SetState("FingerBotVelF2", game.secondHand.velF2 * stateScaling + stateOffset)
-        SetState("FingerBotKp2", game.secondHand.Kp2 * stateScaling + stateOffset)
+        SetState("FingerBotKp2", propGains(1) * stateScaling + stateOffset)
         SetState("FingerBotTargetTime", game.secondHand.targetTime)
         SetState("HitFeedback", flamePos) : flamePos = 0
 
