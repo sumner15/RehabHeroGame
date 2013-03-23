@@ -43,6 +43,8 @@ Partial Class Menu
         Me.isometricForcesBtn = New System.Windows.Forms.Button()
         Me.rangeOfMotionBtn = New System.Windows.Forms.Button()
         Me.gameSettingPnl = New System.Windows.Forms.Panel()
+        Me.setGainsTb = New System.Windows.Forms.TextBox()
+        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
         Me.setGainsInstructions = New System.Windows.Forms.Label()
         Me.setGainsHSB = New System.Windows.Forms.HScrollBar()
         Me.fakeSuccessRateLbl = New System.Windows.Forms.Label()
@@ -51,8 +53,6 @@ Partial Class Menu
         Me.setSucRateHSB = New System.Windows.Forms.HScrollBar()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
-        Me.setGainsTb = New System.Windows.Forms.TextBox()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -263,6 +263,28 @@ Partial Class Menu
         Me.gameSettingPnl.Size = New System.Drawing.Size(248, 134)
         Me.gameSettingPnl.TabIndex = 13
         '
+        'setGainsTb
+        '
+        Me.setGainsTb.AutoCompleteCustomSource.AddRange(New String() {"0"})
+        Me.setGainsTb.Location = New System.Drawing.Point(141, 109)
+        Me.setGainsTb.Name = "setGainsTb"
+        Me.setGainsTb.Size = New System.Drawing.Size(17, 20)
+        Me.setGainsTb.TabIndex = 24
+        Me.setGainsTb.Text = "0"
+        Me.setGainsTb.Visible = False
+        '
+        'useExplicitGainsBtn
+        '
+        Me.useExplicitGainsBtn.AutoSize = True
+        Me.useExplicitGainsBtn.Checked = True
+        Me.useExplicitGainsBtn.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(6, 75)
+        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
+        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
+        Me.useExplicitGainsBtn.TabIndex = 23
+        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
+        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
+        '
         'setGainsInstructions
         '
         Me.setGainsInstructions.AutoSize = True
@@ -271,7 +293,6 @@ Partial Class Menu
         Me.setGainsInstructions.Size = New System.Drawing.Size(96, 13)
         Me.setGainsInstructions.TabIndex = 20
         Me.setGainsInstructions.Text = "Set Gains Explicitly"
-        Me.setGainsInstructions.Visible = False
         '
         'setGainsHSB
         '
@@ -282,7 +303,6 @@ Partial Class Menu
         Me.setGainsHSB.Size = New System.Drawing.Size(132, 13)
         Me.setGainsHSB.SmallChange = 5
         Me.setGainsHSB.TabIndex = 19
-        Me.setGainsHSB.Visible = False
         '
         'fakeSuccessRateLbl
         '
@@ -340,26 +360,6 @@ Partial Class Menu
         Me.Label1.Size = New System.Drawing.Size(93, 13)
         Me.Label1.TabIndex = 13
         Me.Label1.Text = "Set Success Rate"
-        '
-        'useExplicitGainsBtn
-        '
-        Me.useExplicitGainsBtn.AutoSize = True
-        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(6, 75)
-        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
-        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
-        Me.useExplicitGainsBtn.TabIndex = 23
-        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
-        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
-        '
-        'setGainsTb
-        '
-        Me.setGainsTb.AutoCompleteCustomSource.AddRange(New String() {"0"})
-        Me.setGainsTb.Location = New System.Drawing.Point(141, 109)
-        Me.setGainsTb.Name = "setGainsTb"
-        Me.setGainsTb.Size = New System.Drawing.Size(17, 20)
-        Me.setGainsTb.TabIndex = 24
-        Me.setGainsTb.Text = "0"
-        Me.setGainsTb.Visible = False
         '
         'Menu
         '
