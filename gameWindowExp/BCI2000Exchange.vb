@@ -86,7 +86,7 @@ Public Class BCI2000Exchange
 
         modules(0) = "gUSBampSource32Release --local"  'TODO: get the 32-bit 3.12.00 DLL and replace the one that's currently in prog
         'modules(0) = "SignalGenerator --local" 'TODO: this line is for testing with a fake signal in the absence of actual EEG hardware - remove it!
-        modules(0) = modules(0) & " --FileFormat=Null"  'TODO: this line prevents EEG data from being saved to disk - remove it!
+        'modules(0) = modules(0) & " --FileFormat=Null"  'TODO: this line prevents EEG data from being saved to disk - remove it!
 
         modules(1) = "DummySignalProcessing --local" 'TODO: eventually, replace this with some real BCI signal processing (such as SpectralSignalProcessing) to do real BCI interaction
         modules(2) = "DummyApplication --local" ' this one can probably be left as is: the song game takes on the role of the application module
@@ -100,8 +100,8 @@ Public Class BCI2000Exchange
         ExecuteScript("SET PARAMETER VisualizeTiming  0")
 
         ' Parameter handling 2: Load parameter files
-        ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm") 'TODO: remove this
-        'ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBampsAAAA-Cap64.prm")
+        'ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBamp-Cap16.prm") 'TODO: remove this
+        ExecuteScript("LOAD PARAMETERFILE ../parms/gUSBampsAAAA-Cap64.prm")
         'TODO: load any additional BCI2000 parameters (signal-processing?) Flag the parameter-set by encoding in session number? or subject name?
 
         ' Parameter handling 3: set any "read-only" parameters that we don't want overwritten by carelessly saved overcomplete parameter files
@@ -114,6 +114,7 @@ Public Class BCI2000Exchange
 
         'Console.WriteLine("Current subject: " & currentSub.ID)
         remote.SubjectID = currentSub.ID.Replace(" ", "")
+        remote.SessionID = currentSub.lastSessionNumber.ToString("000.###")
         SetParameter("FingerBotHandedness", If(game.secondHand.rightHandMode, "right", "left"))
         SetParameter("SongPath", game.mySong.songPath)
         SetParameter("NumberOfNotes", game.fretboard.numNotes)
@@ -123,6 +124,7 @@ Public Class BCI2000Exchange
         ' right-/left-handedness seems to be handled differently. Therefore, check that BCI2000's Kp1 always goes with finger 1 and Kp2
         ' with finger 2, regardless of gravity.  If the convention really is different, name the BCI2000 states Kp1 and Kp2 differently.
         ' There are two places where this is important, both marked @@@
+        ' Finally, note that since UCI's recent changes, the gains don't seem to adapt any more...
         'TODO: ship out as parameter values any further useful bits of session info from SongGame/FretBoard/FingerBot instances - e.g. GameType, GameMode, Gains, GameCodeVersion
 
         SetParameter("HgIdRehabHeroGame", "TODO") ' use Shell command - but how to get the text output?
@@ -159,7 +161,7 @@ Public Class BCI2000Exchange
         If Not remote.Start() Then Die()
 
         If udpIncomingPort Then
-            remote.Execute("WATCH Running SourceTime Signal(1,1) AT localhost:" & udpIncomingPort) ' TODO: this should really be ExecuteScript(), but at the moment remote.Execute() returns non-zero from the WATCH command even when it succeeds (usually indicates failure, and so triggers an exception in ExecuteScript). A bug at Juergen's end?
+            remote.Execute("WATCH Running SourceTime Signal(1,1) AT localhost:" & udpIncomingPort) ' NB: cannot do this in ExecuteScript(), because remote.Execute() returns non-zero from the WATCH command even when it succeeds (usually indicates failure, and so triggers an exception in ExecuteScript)
             udpReceiver = New System.Net.Sockets.UdpClient(udpIncomingPort)
             remoteIPEndPoint = New System.Net.IPEndPoint(System.Net.IPAddress.Any, udpIncomingPort)
             listenerThread = New System.Threading.Thread(AddressOf ReceiveMessages)
