@@ -45,9 +45,6 @@ Public Class FingerBot
     Private Kv1 As Single = 0.8
     Private Kv2 As Single = 0.8
 
-    Public hand As String = "R"
-    Public trial As Single = 1
-
     Private sigmaKp As Single = 0.625 '0.5
     Private sigmaKd As Single = 0.05
     Public alpha As Single = 4 '4
@@ -1347,6 +1344,13 @@ Public Class FingerBot
     '--------------------------------------------------------------------------------'
     Public Sub getPos()
         checkScopeReset()
+
+        'Dim val As Single
+        'val = target_obj.GetSignal(signals_obj.posBlue)
+        'If val > 0.05 Then Console.WriteLine("Blue: " & val)
+        'val = target_obj.GetSignal(signals_obj.posGold)
+        'If val > 0.05 Then Console.WriteLine("Gold: " & val)
+
         If rightHandMode Then
             posF2 = target_obj.GetSignal(signals_obj.posBlue) - zeroPos2
             velF2 = target_obj.GetSignal(signals_obj.velBlue)
@@ -1457,10 +1461,10 @@ Public Class FingerBot
         'Console.WriteLine("gravity direction value " & CStr(gDir))
 
         If gDir < 0.001 Then
-            If currentSub.hand.ToUpper().StartsWith("L") Then MsgBox("This subject usually uses the left hand... Turn robot over?")
+            'If currentSub.hand.ToUpper().StartsWith("L") Then MsgBox("This subject usually uses the left hand... Turn robot over?")
             rightHandMode = True
         Else
-            If currentSub.hand.ToUpper().StartsWith("R") Then MsgBox("This subject usually uses the right hand... Turn robot over?")
+            'If currentSub.hand.ToUpper().StartsWith("R") Then MsgBox("This subject usually uses the right hand... Turn robot over?")
             rightHandMode = False
         End If
 
