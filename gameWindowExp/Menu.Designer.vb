@@ -26,12 +26,7 @@ Partial Class Menu
         Me.subjectList = New System.Windows.Forms.ListBox()
         Me.titleRehabHeroLbl = New System.Windows.Forms.Label()
         Me.subjectPnl = New System.Windows.Forms.Panel()
-        Me.trialNumLbl = New System.Windows.Forms.Label()
-        Me.subHandList = New System.Windows.Forms.ListBox()
-        Me.trialNumTextLbl = New System.Windows.Forms.Label()
-        Me.handLbl = New System.Windows.Forms.Label()
         Me.updateLstBtn = New System.Windows.Forms.Button()
-        Me.addNewSubLbl = New System.Windows.Forms.Label()
         Me.subIDLbl = New System.Windows.Forms.Label()
         Me.subIdTb = New System.Windows.Forms.TextBox()
         Me.songList = New System.Windows.Forms.ListBox()
@@ -51,12 +46,17 @@ Partial Class Menu
         Me.setFakeSucRateHSB = New System.Windows.Forms.HScrollBar()
         Me.successRateLbl = New System.Windows.Forms.Label()
         Me.setSucRateHSB = New System.Windows.Forms.HScrollBar()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.fakeSuccessRateTitle = New System.Windows.Forms.Label()
+        Me.successRateTitle = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.lastSessionLabel = New System.Windows.Forms.Label()
+        Me.sessionNumberTB = New System.Windows.Forms.TextBox()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gameSettingPnl.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'subjectList
@@ -64,9 +64,9 @@ Partial Class Menu
         Me.subjectList.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.subjectList.FormattingEnabled = True
         Me.subjectList.ItemHeight = 18
-        Me.subjectList.Location = New System.Drawing.Point(12, 61)
+        Me.subjectList.Location = New System.Drawing.Point(10, 61)
         Me.subjectList.Name = "subjectList"
-        Me.subjectList.Size = New System.Drawing.Size(178, 400)
+        Me.subjectList.Size = New System.Drawing.Size(180, 364)
         Me.subjectList.TabIndex = 0
         '
         'titleRehabHeroLbl
@@ -83,76 +83,22 @@ Partial Class Menu
         '
         'subjectPnl
         '
-        Me.subjectPnl.Controls.Add(Me.trialNumLbl)
-        Me.subjectPnl.Controls.Add(Me.subHandList)
-        Me.subjectPnl.Controls.Add(Me.trialNumTextLbl)
-        Me.subjectPnl.Controls.Add(Me.handLbl)
         Me.subjectPnl.Controls.Add(Me.updateLstBtn)
-        Me.subjectPnl.Controls.Add(Me.addNewSubLbl)
         Me.subjectPnl.Controls.Add(Me.subIDLbl)
         Me.subjectPnl.Controls.Add(Me.subIdTb)
-        Me.subjectPnl.Location = New System.Drawing.Point(14, 471)
+        Me.subjectPnl.Location = New System.Drawing.Point(12, 505)
         Me.subjectPnl.Name = "subjectPnl"
-        Me.subjectPnl.Size = New System.Drawing.Size(340, 100)
+        Me.subjectPnl.Size = New System.Drawing.Size(342, 66)
         Me.subjectPnl.TabIndex = 2
-        '
-        'trialNumLbl
-        '
-        Me.trialNumLbl.AutoSize = True
-        Me.trialNumLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumLbl.Location = New System.Drawing.Point(270, 58)
-        Me.trialNumLbl.Name = "trialNumLbl"
-        Me.trialNumLbl.Size = New System.Drawing.Size(18, 20)
-        Me.trialNumLbl.TabIndex = 14
-        Me.trialNumLbl.Text = "0"
-        '
-        'subHandList
-        '
-        Me.subHandList.FormattingEnabled = True
-        Me.subHandList.Items.AddRange(New Object() {"R", "L"})
-        Me.subHandList.Location = New System.Drawing.Point(268, 23)
-        Me.subHandList.Name = "subHandList"
-        Me.subHandList.Size = New System.Drawing.Size(17, 30)
-        Me.subHandList.TabIndex = 13
-        '
-        'trialNumTextLbl
-        '
-        Me.trialNumTextLbl.AutoSize = True
-        Me.trialNumTextLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumTextLbl.Location = New System.Drawing.Point(166, 58)
-        Me.trialNumTextLbl.Name = "trialNumTextLbl"
-        Me.trialNumTextLbl.Size = New System.Drawing.Size(98, 20)
-        Me.trialNumTextLbl.TabIndex = 6
-        Me.trialNumTextLbl.Text = "Trial Number"
-        '
-        'handLbl
-        '
-        Me.handLbl.AutoSize = True
-        Me.handLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.handLbl.Location = New System.Drawing.Point(214, 26)
-        Me.handLbl.Name = "handLbl"
-        Me.handLbl.Size = New System.Drawing.Size(48, 20)
-        Me.handLbl.TabIndex = 4
-        Me.handLbl.Text = "Hand"
         '
         'updateLstBtn
         '
-        Me.updateLstBtn.Location = New System.Drawing.Point(7, 58)
+        Me.updateLstBtn.Location = New System.Drawing.Point(207, 23)
         Me.updateLstBtn.Name = "updateLstBtn"
-        Me.updateLstBtn.Size = New System.Drawing.Size(153, 23)
+        Me.updateLstBtn.Size = New System.Drawing.Size(121, 23)
         Me.updateLstBtn.TabIndex = 3
         Me.updateLstBtn.Text = "Update Subject List"
         Me.updateLstBtn.UseVisualStyleBackColor = True
-        '
-        'addNewSubLbl
-        '
-        Me.addNewSubLbl.AutoSize = True
-        Me.addNewSubLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.addNewSubLbl.Location = New System.Drawing.Point(26, 4)
-        Me.addNewSubLbl.Name = "addNewSubLbl"
-        Me.addNewSubLbl.Size = New System.Drawing.Size(131, 20)
-        Me.addNewSubLbl.TabIndex = 2
-        Me.addNewSubLbl.Text = "Add New Subject"
         '
         'subIDLbl
         '
@@ -160,15 +106,15 @@ Partial Class Menu
         Me.subIDLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.subIDLbl.Location = New System.Drawing.Point(3, 26)
         Me.subIDLbl.Name = "subIDLbl"
-        Me.subIDLbl.Size = New System.Drawing.Size(84, 20)
+        Me.subIDLbl.Size = New System.Drawing.Size(100, 20)
         Me.subIDLbl.TabIndex = 1
-        Me.subIDLbl.Text = "Subject ID"
+        Me.subIDLbl.Text = "Add Subject:"
         '
         'subIdTb
         '
-        Me.subIdTb.Location = New System.Drawing.Point(91, 28)
+        Me.subIdTb.Location = New System.Drawing.Point(109, 25)
         Me.subIdTb.Name = "subIdTb"
-        Me.subIdTb.Size = New System.Drawing.Size(69, 20)
+        Me.subIdTb.Size = New System.Drawing.Size(92, 20)
         Me.subIdTb.TabIndex = 0
         '
         'songList
@@ -176,9 +122,9 @@ Partial Class Menu
         Me.songList.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.songList.FormattingEnabled = True
         Me.songList.ItemHeight = 18
-        Me.songList.Location = New System.Drawing.Point(195, 61)
+        Me.songList.Location = New System.Drawing.Point(193, 61)
         Me.songList.Name = "songList"
-        Me.songList.Size = New System.Drawing.Size(159, 400)
+        Me.songList.Size = New System.Drawing.Size(161, 364)
         Me.songList.TabIndex = 3
         '
         'songPnl
@@ -255,8 +201,8 @@ Partial Class Menu
         Me.gameSettingPnl.Controls.Add(Me.setFakeSucRateHSB)
         Me.gameSettingPnl.Controls.Add(Me.successRateLbl)
         Me.gameSettingPnl.Controls.Add(Me.setSucRateHSB)
-        Me.gameSettingPnl.Controls.Add(Me.Label2)
-        Me.gameSettingPnl.Controls.Add(Me.Label1)
+        Me.gameSettingPnl.Controls.Add(Me.fakeSuccessRateTitle)
+        Me.gameSettingPnl.Controls.Add(Me.successRateTitle)
         Me.gameSettingPnl.Controls.Add(Me.difficultyList)
         Me.gameSettingPnl.Location = New System.Drawing.Point(364, 399)
         Me.gameSettingPnl.Name = "gameSettingPnl"
@@ -315,7 +261,7 @@ Partial Class Menu
         '
         'setFakeSucRateHSB
         '
-        Me.setFakeSucRateHSB.Location = New System.Drawing.Point(7, 56)
+        Me.setFakeSucRateHSB.Location = New System.Drawing.Point(7, 57)
         Me.setFakeSucRateHSB.Maximum = 99
         Me.setFakeSucRateHSB.Minimum = 50
         Me.setFakeSucRateHSB.Name = "setFakeSucRateHSB"
@@ -335,7 +281,7 @@ Partial Class Menu
         '
         'setSucRateHSB
         '
-        Me.setSucRateHSB.Location = New System.Drawing.Point(7, 19)
+        Me.setSucRateHSB.Location = New System.Drawing.Point(7, 21)
         Me.setSucRateHSB.Maximum = 99
         Me.setSucRateHSB.Minimum = 50
         Me.setSucRateHSB.Name = "setSucRateHSB"
@@ -343,23 +289,60 @@ Partial Class Menu
         Me.setSucRateHSB.TabIndex = 1
         Me.setSucRateHSB.Value = 50
         '
-        'Label2
+        'fakeSuccessRateTitle
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 41)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(120, 13)
-        Me.Label2.TabIndex = 14
-        Me.Label2.Text = "Set Fake Success Rate"
+        Me.fakeSuccessRateTitle.AutoSize = True
+        Me.fakeSuccessRateTitle.Location = New System.Drawing.Point(3, 41)
+        Me.fakeSuccessRateTitle.Name = "fakeSuccessRateTitle"
+        Me.fakeSuccessRateTitle.Size = New System.Drawing.Size(120, 13)
+        Me.fakeSuccessRateTitle.TabIndex = 14
+        Me.fakeSuccessRateTitle.Text = "Set Fake Success Rate"
         '
-        'Label1
+        'successRateTitle
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(4, 4)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(93, 13)
-        Me.Label1.TabIndex = 13
-        Me.Label1.Text = "Set Success Rate"
+        Me.successRateTitle.AutoSize = True
+        Me.successRateTitle.Location = New System.Drawing.Point(4, 4)
+        Me.successRateTitle.Name = "successRateTitle"
+        Me.successRateTitle.Size = New System.Drawing.Size(93, 13)
+        Me.successRateTitle.TabIndex = 13
+        Me.successRateTitle.Text = "Set Success Rate"
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label6)
+        Me.Panel1.Controls.Add(Me.lastSessionLabel)
+        Me.Panel1.Controls.Add(Me.sessionNumberTB)
+        Me.Panel1.Location = New System.Drawing.Point(10, 431)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(344, 68)
+        Me.Panel1.TabIndex = 15
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(3, 5)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(130, 20)
+        Me.Label6.TabIndex = 2
+        Me.Label6.Text = "Session Number:"
+        '
+        'lastSessionLabel
+        '
+        Me.lastSessionLabel.AutoSize = True
+        Me.lastSessionLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lastSessionLabel.Location = New System.Drawing.Point(4, 40)
+        Me.lastSessionLabel.Name = "lastSessionLabel"
+        Me.lastSessionLabel.Size = New System.Drawing.Size(81, 15)
+        Me.lastSessionLabel.TabIndex = 1
+        Me.lastSessionLabel.Text = "last session: -"
+        '
+        'sessionNumberTB
+        '
+        Me.sessionNumberTB.Location = New System.Drawing.Point(139, 7)
+        Me.sessionNumberTB.Name = "sessionNumberTB"
+        Me.sessionNumberTB.Size = New System.Drawing.Size(69, 20)
+        Me.sessionNumberTB.TabIndex = 0
         '
         'Menu
         '
@@ -367,6 +350,7 @@ Partial Class Menu
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.ClientSize = New System.Drawing.Size(624, 583)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.gameSettingPnl)
         Me.Controls.Add(Me.rangeOfMotionBtn)
         Me.Controls.Add(Me.isometricForcesBtn)
@@ -385,6 +369,8 @@ Partial Class Menu
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gameSettingPnl.ResumeLayout(False)
         Me.gameSettingPnl.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -393,7 +379,6 @@ Partial Class Menu
     Friend WithEvents titleRehabHeroLbl As System.Windows.Forms.Label
     Friend WithEvents subjectPnl As System.Windows.Forms.Panel
     Friend WithEvents updateLstBtn As System.Windows.Forms.Button
-    Friend WithEvents addNewSubLbl As System.Windows.Forms.Label
     Friend WithEvents subIDLbl As System.Windows.Forms.Label
     Friend WithEvents subIdTb As System.Windows.Forms.TextBox
     Friend WithEvents songList As System.Windows.Forms.ListBox
@@ -404,14 +389,10 @@ Partial Class Menu
     Friend WithEvents difficultyList As System.Windows.Forms.ListBox
     Friend WithEvents isometricForcesBtn As System.Windows.Forms.Button
     Friend WithEvents rangeOfMotionBtn As System.Windows.Forms.Button
-    Friend WithEvents handLbl As System.Windows.Forms.Label
-    Friend WithEvents trialNumTextLbl As System.Windows.Forms.Label
-    Friend WithEvents subHandList As System.Windows.Forms.ListBox
-    Friend WithEvents trialNumLbl As System.Windows.Forms.Label
     Friend WithEvents gameSettingPnl As System.Windows.Forms.Panel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents successRateTitle As System.Windows.Forms.Label
     Friend WithEvents setSucRateHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents fakeSuccessRateTitle As System.Windows.Forms.Label
     Friend WithEvents fakeSuccessRateLbl As System.Windows.Forms.Label
     Friend WithEvents setFakeSucRateHSB As System.Windows.Forms.HScrollBar
     Friend WithEvents successRateLbl As System.Windows.Forms.Label
@@ -419,4 +400,8 @@ Partial Class Menu
     Friend WithEvents setGainsHSB As System.Windows.Forms.HScrollBar
     Friend WithEvents useExplicitGainsBtn As System.Windows.Forms.CheckBox
     Friend WithEvents setGainsTb As System.Windows.Forms.TextBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents lastSessionLabel As System.Windows.Forms.Label
+    Friend WithEvents sessionNumberTB As System.Windows.Forms.TextBox
 End Class

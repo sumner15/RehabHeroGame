@@ -33,7 +33,7 @@ Public Class Menu
 
         If Not (subIdTb.Text = "") Then
             num = pop.popSize + 1
-            subj = New Subject(num, subIdTb.Text, subHandList.SelectedItem, 1)
+            subj = New Subject(num, subIdTb.Text, 1)
             pop.addSubject(subj)
 
             subjectList.DataSource = pop.subIds
@@ -50,7 +50,12 @@ Public Class Menu
         Dim selected As Integer
         selected = subjectList.SelectedIndex
         currentSub = pop.subjects(selected)
-        trialNumLbl.Text = currentSub.getTrial()
+        updateSubjectInfoGUI()
+    End Sub
+
+    Private Sub updateSubjectInfoGUI()
+        lastSessionLabel.Text = currentSub.getSessionString()
+        sessionNumberTB.Text = currentSub.getExpectedSessionNumber()
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -69,8 +74,14 @@ Public Class Menu
     '--------------------------------------------------------------------------------'
     Private Sub playSongBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles playSongBtn.Click
 
+        If currentSub.ID = "default" Then MsgBox("select a real subject name") : Return
+        If difficultyList.SelectedIndex = -1 Then MsgBox("choose a difficulty level") : Return
+
         currentSub.trial += 1
+        currentSub.lastSessionDate = Now()
+        currentSub.lastSessionNumber = sessionNumberTB.Text
         currentSub.update()
+        updateSubjectInfoGUI()
 
         Dim successRate As Single
         Dim perceivedSuccessRate As Single
@@ -172,10 +183,12 @@ Public Class Menu
         setGainsHSB.Visible = useExplicitGainsBtn.Checked
         setGainsInstructions.Visible = useExplicitGainsBtn.Checked
         setGainsTb.Visible = useExplicitGainsBtn.Checked
-
-        If useExplicitGainsBtn.Checked Then
-            successRateLbl.Text = "not used"
-        End If
+        successRateLbl.Visible = Not useExplicitGainsBtn.Checked
+        successRateTitle.Visible = Not useExplicitGainsBtn.Checked
+        setSucRateHSB.Visible = Not useExplicitGainsBtn.Checked
+        fakeSuccessRateLbl.Visible = Not useExplicitGainsBtn.Checked
+        fakeSuccessRateTitle.Visible = Not useExplicitGainsBtn.Checked
+        setFakeSucRateHSB.Visible = Not useExplicitGainsBtn.Checked
     End Sub
 
    
@@ -192,4 +205,6 @@ Public Class Menu
         End If
 
     End Sub
+
+
 End Class
