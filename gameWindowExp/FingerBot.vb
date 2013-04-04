@@ -934,12 +934,12 @@ Public Class FingerBot
             stat = target_obj.SetParam(parameters_obj.Kp2, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-            'Console.WriteLine("gain incramented to " & Kp1)
+            Console.WriteLine("gain 1 incramented to " & Kp1)
         Else
             stat = target_obj.SetParam(parameters_obj.Kp1, setVal)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
-            'Console.WriteLine("gain incramented to " & Kp1)
+            Console.WriteLine("gain 1 incramented to " & Kp1)
         End If
 
     End Sub
@@ -961,11 +961,13 @@ Public Class FingerBot
             stat = target_obj.SetParam(parameters_obj.Kp1, setVal) ' kp1 and kd1 corespond to the blue finger this is the bottom finger in righthand mode
             setVal(0) = Kv2
             stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
+            Console.WriteLine("gain 2 incramented to " & Kp2)
         Else
             setVal(0) = Kp2
             stat = target_obj.SetParam(parameters_obj.Kp2, setVal)
             setVal(0) = Kv2
             stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
+            Console.WriteLine("gain 2 incramented to " & Kp2)
         End If
 
     End Sub
@@ -1140,7 +1142,7 @@ Public Class FingerBot
     End Sub
 
     '--------------------------------------------------------------------------------'
-    '---------------- get the prop[ortional gains (they're private) -----------------'
+    '---------------- get the proportional gains (they're private) ------------------'
     '--------------------------------------------------------------------------------'
     Public Function getPropGains() As Single()
         Return {Kp1, Kp2}

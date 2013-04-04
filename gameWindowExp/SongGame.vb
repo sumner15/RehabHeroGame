@@ -277,10 +277,11 @@ Public Class SongGame
             End If
         End If
 
+        '' this is the code that automatically updates the gains to control the success rate.
+        '' we want to make this manual, so we will comment this out for now. (Gains now updated
+        ''using incramentGainsF1 and incramentGainsF2 under updateCurrentNote
         'secondHand.updatePGains(blockedTrial)
         'secondHand.updateDGains(inTimeWindow, blockedTrial)
-        '' this is the code that automatically updates the gains to control the success rate.
-        '' we want to make this manual, so we will comment this out for now.
         'secondHand.updateGainsRatiometrically(blockedTrial)
         'secondHand.updateGainFile()
         secondHand.updateWeightsRationmetrically(blockedTrial)
