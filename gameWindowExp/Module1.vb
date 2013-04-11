@@ -16,6 +16,7 @@ Module Module1
     Public currentSub As Subject
     Public currentSong As Song
     Public trialStr As String = ""  'used
+    'Public gameSettings As GameSettings = New GameSettings()
 
     Public menu As Menu
 

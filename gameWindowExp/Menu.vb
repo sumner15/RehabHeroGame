@@ -7,6 +7,7 @@ Public Class Menu
     Private gameRunning As Boolean
     Public ourWindow As SongGame
     Public measurementGame As measureForce
+    Public settingsMenu As settingsForm
 
     '--------------------------------------------------------------------------------'
     '------------------------- constructor for the menu screen ----------------------'
@@ -33,7 +34,8 @@ Public Class Menu
 
         If Not (subIdTb.Text = "") Then
             num = pop.popSize + 1
-            subj = New Subject(num, subIdTb.Text, subHandList.SelectedItem, 1)
+            'subj = New Subject(num, subIdTb.Text, subHandList.SelectedItem, 1)
+            subj = New Subject(num, subIdTb.Text, 1)
             pop.addSubject(subj)
 
             subjectList.DataSource = pop.subIds
@@ -50,7 +52,7 @@ Public Class Menu
         Dim selected As Integer
         selected = subjectList.SelectedIndex
         currentSub = pop.subjects(selected)
-        trialNumLbl.Text = currentSub.getTrial()
+        trialNumLbl.Text = currentSub.getExpectedSessionNumber()
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -131,6 +133,15 @@ Public Class Menu
             measurementGame.Dispose()
             gameRunning = False
         End If
+    End Sub
+
+    '--------------------------------------------------------------------------------'
+    '--------------------------- Game Settings Btn press ----------------------------'
+    '--------------------------------------------------------------------------------'
+    Private Sub gameSettingsBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles gameSettingsBtn.Click
+        'opens a new settings form
+        settingsMenu = New settingsForm
+        settingsMenu.Show()
     End Sub
 
     '--------------------------------------------------------------------------------'

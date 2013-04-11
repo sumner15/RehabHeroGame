@@ -1458,12 +1458,14 @@ Public Class FingerBot
         'uncomment this line to see what the raw accelerometer values are in left and right hand modes.
         'Console.WriteLine("gravity direction value " & CStr(gDir))
 
-        hand = currentSub.hand
+        'hand = currentSub.hand 'this looks like a valid call to the subjects file, but the files have no hand entry (yet)?
         'If gDir < 0.001 Then        
         If StrComp(hand, "L") Then
             rightHandMode = True
+            hand = "R"
         Else
             rightHandMode = False
+            hand = "L"
         End If
 
         'Console.WriteLine("right hand mode is " & CStr(rightHandMode) & vbTab & CStr(gDir))

@@ -43,6 +43,8 @@ Partial Class Menu
         Me.isometricForcesBtn = New System.Windows.Forms.Button()
         Me.rangeOfMotionBtn = New System.Windows.Forms.Button()
         Me.gameSettingPnl = New System.Windows.Forms.Panel()
+        Me.setGainsTb = New System.Windows.Forms.TextBox()
+        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
         Me.setGainsInstructions = New System.Windows.Forms.Label()
         Me.setGainsHSB = New System.Windows.Forms.HScrollBar()
         Me.fakeSuccessRateLbl = New System.Windows.Forms.Label()
@@ -51,8 +53,7 @@ Partial Class Menu
         Me.setSucRateHSB = New System.Windows.Forms.HScrollBar()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
-        Me.setGainsTb = New System.Windows.Forms.TextBox()
+        Me.gameSettingsBtn = New System.Windows.Forms.Button()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -66,7 +67,7 @@ Partial Class Menu
         Me.subjectList.ItemHeight = 18
         Me.subjectList.Location = New System.Drawing.Point(12, 61)
         Me.subjectList.Name = "subjectList"
-        Me.subjectList.Size = New System.Drawing.Size(178, 400)
+        Me.subjectList.Size = New System.Drawing.Size(178, 382)
         Me.subjectList.TabIndex = 0
         '
         'titleRehabHeroLbl
@@ -91,16 +92,16 @@ Partial Class Menu
         Me.subjectPnl.Controls.Add(Me.addNewSubLbl)
         Me.subjectPnl.Controls.Add(Me.subIDLbl)
         Me.subjectPnl.Controls.Add(Me.subIdTb)
-        Me.subjectPnl.Location = New System.Drawing.Point(14, 471)
+        Me.subjectPnl.Location = New System.Drawing.Point(15, 449)
         Me.subjectPnl.Name = "subjectPnl"
-        Me.subjectPnl.Size = New System.Drawing.Size(340, 100)
+        Me.subjectPnl.Size = New System.Drawing.Size(340, 84)
         Me.subjectPnl.TabIndex = 2
         '
         'trialNumLbl
         '
         Me.trialNumLbl.AutoSize = True
         Me.trialNumLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumLbl.Location = New System.Drawing.Point(270, 58)
+        Me.trialNumLbl.Location = New System.Drawing.Point(280, 52)
         Me.trialNumLbl.Name = "trialNumLbl"
         Me.trialNumLbl.Size = New System.Drawing.Size(18, 20)
         Me.trialNumLbl.TabIndex = 14
@@ -110,7 +111,7 @@ Partial Class Menu
         '
         Me.subHandList.FormattingEnabled = True
         Me.subHandList.Items.AddRange(New Object() {"R", "L"})
-        Me.subHandList.Location = New System.Drawing.Point(268, 23)
+        Me.subHandList.Location = New System.Drawing.Point(255, 13)
         Me.subHandList.Name = "subHandList"
         Me.subHandList.Size = New System.Drawing.Size(17, 30)
         Me.subHandList.TabIndex = 13
@@ -119,7 +120,7 @@ Partial Class Menu
         '
         Me.trialNumTextLbl.AutoSize = True
         Me.trialNumTextLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumTextLbl.Location = New System.Drawing.Point(166, 58)
+        Me.trialNumTextLbl.Location = New System.Drawing.Point(176, 52)
         Me.trialNumTextLbl.Name = "trialNumTextLbl"
         Me.trialNumTextLbl.Size = New System.Drawing.Size(98, 20)
         Me.trialNumTextLbl.TabIndex = 6
@@ -129,7 +130,7 @@ Partial Class Menu
         '
         Me.handLbl.AutoSize = True
         Me.handLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.handLbl.Location = New System.Drawing.Point(214, 26)
+        Me.handLbl.Location = New System.Drawing.Point(201, 20)
         Me.handLbl.Name = "handLbl"
         Me.handLbl.Size = New System.Drawing.Size(48, 20)
         Me.handLbl.TabIndex = 4
@@ -137,7 +138,7 @@ Partial Class Menu
         '
         'updateLstBtn
         '
-        Me.updateLstBtn.Location = New System.Drawing.Point(7, 58)
+        Me.updateLstBtn.Location = New System.Drawing.Point(7, 49)
         Me.updateLstBtn.Name = "updateLstBtn"
         Me.updateLstBtn.Size = New System.Drawing.Size(153, 23)
         Me.updateLstBtn.TabIndex = 3
@@ -148,7 +149,7 @@ Partial Class Menu
         '
         Me.addNewSubLbl.AutoSize = True
         Me.addNewSubLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.addNewSubLbl.Location = New System.Drawing.Point(26, 4)
+        Me.addNewSubLbl.Location = New System.Drawing.Point(18, 0)
         Me.addNewSubLbl.Name = "addNewSubLbl"
         Me.addNewSubLbl.Size = New System.Drawing.Size(131, 20)
         Me.addNewSubLbl.TabIndex = 2
@@ -158,7 +159,7 @@ Partial Class Menu
         '
         Me.subIDLbl.AutoSize = True
         Me.subIDLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.subIDLbl.Location = New System.Drawing.Point(3, 26)
+        Me.subIDLbl.Location = New System.Drawing.Point(3, 20)
         Me.subIDLbl.Name = "subIDLbl"
         Me.subIDLbl.Size = New System.Drawing.Size(84, 20)
         Me.subIDLbl.TabIndex = 1
@@ -166,7 +167,7 @@ Partial Class Menu
         '
         'subIdTb
         '
-        Me.subIdTb.Location = New System.Drawing.Point(91, 28)
+        Me.subIdTb.Location = New System.Drawing.Point(93, 23)
         Me.subIdTb.Name = "subIdTb"
         Me.subIdTb.Size = New System.Drawing.Size(69, 20)
         Me.subIdTb.TabIndex = 0
@@ -178,7 +179,7 @@ Partial Class Menu
         Me.songList.ItemHeight = 18
         Me.songList.Location = New System.Drawing.Point(195, 61)
         Me.songList.Name = "songList"
-        Me.songList.Size = New System.Drawing.Size(159, 400)
+        Me.songList.Size = New System.Drawing.Size(159, 382)
         Me.songList.TabIndex = 3
         '
         'songPnl
@@ -231,16 +232,16 @@ Partial Class Menu
         '
         Me.isometricForcesBtn.Location = New System.Drawing.Point(361, 539)
         Me.isometricForcesBtn.Name = "isometricForcesBtn"
-        Me.isometricForcesBtn.Size = New System.Drawing.Size(120, 32)
+        Me.isometricForcesBtn.Size = New System.Drawing.Size(131, 32)
         Me.isometricForcesBtn.TabIndex = 10
         Me.isometricForcesBtn.Text = "isometric forces"
         Me.isometricForcesBtn.UseVisualStyleBackColor = True
         '
         'rangeOfMotionBtn
         '
-        Me.rangeOfMotionBtn.Location = New System.Drawing.Point(487, 539)
+        Me.rangeOfMotionBtn.Location = New System.Drawing.Point(498, 539)
         Me.rangeOfMotionBtn.Name = "rangeOfMotionBtn"
-        Me.rangeOfMotionBtn.Size = New System.Drawing.Size(125, 32)
+        Me.rangeOfMotionBtn.Size = New System.Drawing.Size(114, 32)
         Me.rangeOfMotionBtn.TabIndex = 11
         Me.rangeOfMotionBtn.Text = "range of motion"
         Me.rangeOfMotionBtn.UseVisualStyleBackColor = True
@@ -262,6 +263,26 @@ Partial Class Menu
         Me.gameSettingPnl.Name = "gameSettingPnl"
         Me.gameSettingPnl.Size = New System.Drawing.Size(248, 134)
         Me.gameSettingPnl.TabIndex = 13
+        '
+        'setGainsTb
+        '
+        Me.setGainsTb.AutoCompleteCustomSource.AddRange(New String() {"0"})
+        Me.setGainsTb.Location = New System.Drawing.Point(141, 109)
+        Me.setGainsTb.Name = "setGainsTb"
+        Me.setGainsTb.Size = New System.Drawing.Size(17, 20)
+        Me.setGainsTb.TabIndex = 24
+        Me.setGainsTb.Text = "0"
+        Me.setGainsTb.Visible = False
+        '
+        'useExplicitGainsBtn
+        '
+        Me.useExplicitGainsBtn.AutoSize = True
+        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(6, 75)
+        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
+        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
+        Me.useExplicitGainsBtn.TabIndex = 23
+        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
+        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
         '
         'setGainsInstructions
         '
@@ -341,25 +362,14 @@ Partial Class Menu
         Me.Label1.TabIndex = 13
         Me.Label1.Text = "Set Success Rate"
         '
-        'useExplicitGainsBtn
+        'gameSettingsBtn
         '
-        Me.useExplicitGainsBtn.AutoSize = True
-        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(6, 75)
-        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
-        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
-        Me.useExplicitGainsBtn.TabIndex = 23
-        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
-        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
-        '
-        'setGainsTb
-        '
-        Me.setGainsTb.AutoCompleteCustomSource.AddRange(New String() {"0"})
-        Me.setGainsTb.Location = New System.Drawing.Point(141, 109)
-        Me.setGainsTb.Name = "setGainsTb"
-        Me.setGainsTb.Size = New System.Drawing.Size(17, 20)
-        Me.setGainsTb.TabIndex = 24
-        Me.setGainsTb.Text = "0"
-        Me.setGainsTb.Visible = False
+        Me.gameSettingsBtn.Location = New System.Drawing.Point(12, 539)
+        Me.gameSettingsBtn.Name = "gameSettingsBtn"
+        Me.gameSettingsBtn.Size = New System.Drawing.Size(342, 32)
+        Me.gameSettingsBtn.TabIndex = 14
+        Me.gameSettingsBtn.Text = "game settings"
+        Me.gameSettingsBtn.UseVisualStyleBackColor = True
         '
         'Menu
         '
@@ -367,6 +377,7 @@ Partial Class Menu
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.ClientSize = New System.Drawing.Size(624, 583)
+        Me.Controls.Add(Me.gameSettingsBtn)
         Me.Controls.Add(Me.gameSettingPnl)
         Me.Controls.Add(Me.rangeOfMotionBtn)
         Me.Controls.Add(Me.isometricForcesBtn)
@@ -419,4 +430,5 @@ Partial Class Menu
     Friend WithEvents setGainsHSB As System.Windows.Forms.HScrollBar
     Friend WithEvents useExplicitGainsBtn As System.Windows.Forms.CheckBox
     Friend WithEvents setGainsTb As System.Windows.Forms.TextBox
+    Friend WithEvents gameSettingsBtn As System.Windows.Forms.Button
 End Class
