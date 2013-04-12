@@ -1,0 +1,8 @@
+minMsecBetweenBursts: 513
+maxMsecBetweenBursts: 1285
+maxNumberNotesPerBurst: 1
+allowedReactionTime: 4991
+sucRate: 50
+fakeSucRate: 50
+useExplicitGains: True
+gains: 31
