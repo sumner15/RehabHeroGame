@@ -30,6 +30,7 @@ Public Class GameSettings
     '----------------------------------------------------------------------------------'
     Public Sub New(ByVal studyID As String)
         settingsFileName = studyID
+        readGameSetFile()
     End Sub
 
 

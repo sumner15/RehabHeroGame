@@ -71,12 +71,16 @@ Public Class Menu
     '--------------------------------------------------------------------------------'
     Private Sub playSongBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles playSongBtn.Click
 
+
         currentSub.trial += 1
         currentSub.update()
 
         Dim successRate As Single
         Dim perceivedSuccessRate As Single
         Dim difficulties() As Integer = {level.superEasy, level.easy, level.medium}
+        If Not difficultyList.SelectedIndex >= 0 Then
+            difficultyList.SelectedIndex = 0
+        End If
 
         successRate = CSng(gameSets.get_sucRate) / 100.0
         perceivedSuccessRate = CSng(gameSets.get_fakeSucRate) / 100.0
@@ -90,7 +94,7 @@ Public Class Menu
                 Dim propGains() As Single = {gameSets.get_gains, gameSets.get_gains}
 
                 gameRunning = True
-                trialStr = currentSong.name & "_" & CStr(CInt(perceivedSuccessRate * 100)) & "_"
+                trialStr = currentSong.name & "_" & CStr(CInt(perceivedSuccessRate * 100)) & "_"                
                 ourWindow = New SongGame(currentSong, perceivedSuccessRate, propGains, difficulties(difficultyList.SelectedIndex))
                 ourWindow.Run(FPS)
                 ourWindow.Dispose()
