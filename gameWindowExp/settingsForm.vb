@@ -1,6 +1,6 @@
 ﻿Public Class settingsForm
 
-    Private studyPop As StudyPopulation
+    Private studyPop As StudyPopulation    
 
     '--------------------------------------------------------------------------------'
     '---------------------- constructor for the settings screen ---------------------'
@@ -9,16 +9,10 @@
         ' This call is required by the designer.
         InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.          
-        gameSets.readGameSetFile()
+        ' Add any initialization after the InitializeComponent() call.                  
         studyPop = New StudyPopulation()
         studyList.DataSource = studyPop.studyIds
-
-        'first, check if there is an existing settings file ("default")
-        If My.Computer.FileSystem.FileExists(GAMEPATH & "gameSettings\" & gameSets.settingsFileName & ".txt") Then
-            set_allSettings()
-        End If
-        'Set all of the labels to the HSB start values
+        gameSets.readGameSetFile()                
         set_allLabels()
     End Sub
 
@@ -43,17 +37,10 @@
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
     End Sub
 
-    Private Sub assistanceModeHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles assistanceModeHSB.Scroll
-        assistanceModeValLbl.Text = CStr(CSng(assistanceModeHSB.Value))
+    Private Sub GainsHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles GainsHSB.Scroll
+        explicitGainsLbl.Text = CStr(CSng(GainsHSB.Value))
     End Sub
 
-    Private Sub Kp1StartHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles Kp1StartHSB.Scroll
-        Kp1StartValLbl.Text = CStr(CSng(Kp1StartHSB.Value))
-    End Sub
-
-    Private Sub Kp2StartHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles Kp2StartHSB.Scroll
-        Kp2StartValLbl.Text = CStr(CSng(Kp2StartHSB.Value))
-    End Sub
 #End Region
 
     '--------------------------------------------------------------------------------'
@@ -116,6 +103,51 @@
 
 
     '--------------------------------------------------------------------------------'
+    '-------------------------- update horizontal scroll bars -----------------------'
+    '--------------------------------------------------------------------------------'
+    Private Sub SucRateHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles SucRateHSB.Scroll
+        ' I want this slider to be discrete
+        If SucRateHSB.Value >= 80 Then
+            SucRateHSB.Value = 99
+        ElseIf SucRateHSB.Value < 80 And SucRateHSB.Value > 60 Then
+            SucRateHSB.Value = 75
+        ElseIf SucRateHSB.Value <= 60 Then
+            SucRateHSB.Value = 50
+        End If
+
+        successRateLbl.Text = CStr(CSng(SucRateHSB.Value) / 100)
+    End Sub
+
+    Private Sub FakeSucRateHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles FakeSucRateHSB.Scroll
+        If FakeSucRateHSB.Value >= 80 Then
+            FakeSucRateHSB.Value = 99
+        ElseIf FakeSucRateHSB.Value < 80 And FakeSucRateHSB.Value > 60 Then
+            FakeSucRateHSB.Value = 75
+        ElseIf FakeSucRateHSB.Value <= 60 Then
+            FakeSucRateHSB.Value = 50
+        End If
+
+        fakeSuccessRateLbl.Text = CStr(CSng(FakeSucRateHSB.Value) / 100)
+    End Sub
+
+    '--------------------------------------------------------------------------------'
+    '----------------- toggle explicit gains settings visibility --------------------'
+    '--------------------------------------------------------------------------------'
+    Private Sub useExplicitGainsBtn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles useExplicitGainsBtn.CheckedChanged
+        GainsHSB.Visible = useExplicitGainsBtn.Checked
+        explicitGainsLbl.Visible = useExplicitGainsBtn.Checked
+        useExplicitGains = useExplicitGainsBtn.Checked 'set the global var
+
+        If useExplicitGainsBtn.Checked Then
+            successRateLbl.Text = "not used"
+            fakeSuccessRateLbl.Text = "not used"
+        Else
+            successRateLbl.Text = "please set"
+            fakeSuccessRateLbl.Text = "please set"
+        End If
+    End Sub
+
+    '--------------------------------------------------------------------------------'
     '-------------------- common use functions (get/set values) ---------------------'
     '--------------------------------------------------------------------------------'
 #Region "get and set"
@@ -125,9 +157,10 @@
         gameSets.set_maxMsecBetweenBursts(CSng(maxMsecBetweenBurstsHSB.Value))
         gameSets.set_maxNumberNotesPerBurst(CSng(maxNotesPerRiffHSB.Value))
         gameSets.set_allowedReactionTime(CSng(reactionTimeHSB.Value))
-        gameSets.set_assistanceMode(CSng(assistanceModeHSB.Value))
-        gameSets.set_Kp1Start(CSng(Kp1StartHSB.Value))
-        gameSets.set_Kp2Start(CSng(Kp2StartHSB.Value))
+        gameSets.set_useExplicitGains(CSng(useExplicitGainsBtn.Checked))
+        gameSets.set_sucRate(CSng(SucRateHSB.Value))
+        gameSets.set_fakeSucRate(CSng(FakeSucRateHSB.Value))
+        gameSets.set_gains(CSng(GainsHSB.Value))
         gameSets.writeGameSetFile()
     End Sub
 
@@ -138,9 +171,10 @@
         maxMsecBetweenBurstsHSB.Value = gameSets.get_maxMsecBetweenBursts
         maxNotesPerRiffHSB.Value = gameSets.get_maxNumberNotesPerBurst
         reactionTimeHSB.Value = gameSets.get_allowedReactionTime
-        assistanceModeHSB.Value = gameSets.get_assistanceMode
-        Kp1StartHSB.Value = gameSets.get_Kp1Start
-        Kp2StartHSB.Value = gameSets.get_Kp2Start
+        useExplicitGainsBtn.Checked = gameSets.get_useExplicitGains
+        SucRateHSB.Value = gameSets.get_sucRate
+        FakeSucRateHSB.Value = gameSets.get_fakeSucRate
+        GainsHSB.Value = gameSets.get_gains
     End Sub
 
     Private Sub set_allLabels()
@@ -149,11 +183,9 @@
         maxBurstValLbl.Text = CStr(CSng(maxMsecBetweenBurstsHSB.Value))
         maxNotesValLbl.Text = CStr(CSng(maxNotesPerRiffHSB.Value))
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
-        assistanceModeValLbl.Text = CStr(CSng(assistanceModeHSB.Value))
-        Kp1StartValLbl.Text = CStr(CSng(Kp1StartHSB.Value))
-        Kp2StartValLbl.Text = CStr(CSng(Kp2StartHSB.Value))
     End Sub
 #End Region
+
 
 End Class
 

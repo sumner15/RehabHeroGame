@@ -16,6 +16,7 @@ Module Module1
     Public trialStr As String = ""  'used
 
     Public gameSets As GameSettings
+    Public useExplicitGains As Boolean = False
 
     Public menu As Menu
 

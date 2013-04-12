@@ -15,9 +15,10 @@ Public Class GameSettings
     Private maxMsecBetweenBursts As Single
     Private maxNumberNotesPerBurst As Integer
     Private allowedReactionTime As Single 'how early the object appears in miliseconds
-    Private assistanceMode As Integer
-    Private Kp1Start As Single
-    Private Kp2Start As Single
+    Private useExplicitGains As Boolean
+    Private sucRate As Single
+    Private fakeSucRate As Single
+    Private gains As Single
 
     Public settingsFileName As String = "default"
     Public studyIds() As String
@@ -32,21 +33,6 @@ Public Class GameSettings
     End Sub
 
 
-    'Public Sub New()    
-    '    If My.Computer.FileSystem.FileExists(GAMEPATH & "gameSettings\" & settingsFileName & ".txt") Then
-    '        readGameSetFile()
-    '    Else
-    '        minMsecBetweenBursts = 300
-    '        maxMsecBetweenBursts = 1000
-    '        maxNumberNotesPerBurst = 1
-    '        allowedReactionTime = 51
-    '        assistanceMode = 2
-    '        Kp1Start = 2
-    '        Kp2Start = 2
-    '    End If
-    'End Sub
-
-
     '--------------------------------------------------------------------------------'
     '--------------------------- write game settings file ---------------------------'
     '--------------------------------------------------------------------------------'
@@ -58,9 +44,10 @@ Public Class GameSettings
         gameSetFile.WriteLine("maxMsecBetweenBursts: " & maxMsecBetweenBursts)
         gameSetFile.WriteLine("maxNumberNotesPerBurst: " & maxNumberNotesPerBurst)
         gameSetFile.WriteLine("allowedReactionTime: " & allowedReactionTime)
-        gameSetFile.WriteLine("assistanceMode: " & assistanceMode)
-        gameSetFile.WriteLine("Kp1Start: " & Kp1Start)
-        gameSetFile.WriteLine("Kp2Start: " & Kp2Start)
+        gameSetFile.WriteLine("sucRate: " & sucRate)
+        gameSetFile.WriteLine("fakeSucRate: " & fakeSucRate)
+        gameSetFile.WriteLine("useExplicitGains: " & useExplicitGains)
+        gameSetFile.WriteLine("gains: " & gains)
         gameSetFile.Close()
     End Sub
 
@@ -72,10 +59,11 @@ Public Class GameSettings
         minMsecBetweenBursts = gameSetDic.Lookup("minMsecBetweenBursts", "300")
         maxMsecBetweenBursts = gameSetDic.Lookup("maxMsecBetweenBursts", "1000")
         maxNumberNotesPerBurst = gameSetDic.Lookup("maxNumberNotesPerBurst", "1")
-        allowedReactionTime = gameSetDic.Lookup("allowedReactionTime", "51")
-        assistanceMode = gameSetDic.Lookup("assistanceMode", "2")
-        Kp1Start = gameSetDic.Lookup("Kp1Start", "2")
-        Kp2Start = gameSetDic.Lookup("Kp2Start", "2")
+        allowedReactionTime = gameSetDic.Lookup("allowedReactionTime", "1000")
+        useExplicitGains = gameSetDic.Lookup("useExplicitGains", "False")
+        sucRate = gameSetDic.Lookup("sucRate", "0.5")
+        fakeSucRate = gameSetDic.Lookup("fakeSucRate", "0.5")
+        gains = gameSetDic.Lookup("gains", "0")
 
     End Sub
 
@@ -99,16 +87,20 @@ Public Class GameSettings
         Return allowedReactionTime
     End Function
 
-    Public Function get_assistanceMode() As Integer
-        Return assistanceMode
+    Public Function get_useExplicitGains() As Boolean
+        Return useExplicitGains
     End Function
 
-    Public Function get_Kp1Start() As Single
-        Return Kp1Start
+    Public Function get_sucRate() As Single
+        Return sucRate
     End Function
 
-    Public Function get_Kp2Start() As Single
-        Return Kp2Start
+    Public Function get_fakeSucRate() As Single
+        Return fakeSucRate
+    End Function
+
+    Public Function get_gains() As Single
+        Return gains
     End Function
 #End Region
 
@@ -132,16 +124,20 @@ Public Class GameSettings
         allowedReactionTime = newVal
     End Sub
 
-    Public Sub set_assistanceMode(ByVal newVal As Integer)
-        assistanceMode = newVal
+    Public Sub set_useExplicitGains(ByVal newval As Boolean)
+        useExplicitGains = newval
     End Sub
 
-    Public Sub set_Kp1Start(ByVal newVal As Single)
-        Kp1Start = newVal
+    Public Sub set_sucRate(ByVal newVal As Single)
+        sucRate = newVal
     End Sub
 
-    Public Sub set_Kp2Start(ByVal newVal As Single)
-        Kp2Start = newVal        
+    Public Sub set_fakeSucRate(ByVal newVal As Single)
+        fakeSucRate = newVal
+    End Sub
+
+    Public Sub set_gains(ByVal newVal As Single)
+        gains = newVal
     End Sub
 #End Region
 

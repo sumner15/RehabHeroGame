@@ -14,11 +14,11 @@ Public Class GuitarString
     Public nextNote As Integer
     Public farNote As Integer
     Public previousNote As Integer = 0
-    Private hitLast As Boolean = False
-    Private winSizeS As Double = 5000  ' how early the object appears in miliseconds
+    Private hitLast As Boolean = False    
     Private winSizeU As Double = 18    ' how far away the object is when it appears
     Public xPos As Double
 
+    Private winSizeS As Double = gameSets.get_allowedReactionTime ' how early the object appears in miliseconds (5000 originally)
     Private hitWin As Double = 500   ' range in which hits are counted as sucessful
 
     Public Note As New MeshVbo(poly.TRIS)

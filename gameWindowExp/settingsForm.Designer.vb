@@ -26,9 +26,6 @@ Partial Class settingsForm
         Me.maxMsecBetweenBurstsLbl = New System.Windows.Forms.Label()
         Me.maxNumberNotesPerBurstLbl = New System.Windows.Forms.Label()
         Me.allowedReactionTimeLbl = New System.Windows.Forms.Label()
-        Me.assistanceModeLbl = New System.Windows.Forms.Label()
-        Me.Kp1StartLbl = New System.Windows.Forms.Label()
-        Me.Kp2StartLbl = New System.Windows.Forms.Label()
         Me.minMsecBetweenBurstsHSB = New System.Windows.Forms.HScrollBar()
         Me.maxMsecBetweenBurstsHSB = New System.Windows.Forms.HScrollBar()
         Me.maxNotesPerRiffHSB = New System.Windows.Forms.HScrollBar()
@@ -37,25 +34,30 @@ Partial Class settingsForm
         Me.maxNotesValLbl = New System.Windows.Forms.Label()
         Me.reactionTimeHSB = New System.Windows.Forms.HScrollBar()
         Me.reactionTimeValLbl = New System.Windows.Forms.Label()
-        Me.assistanceModeHSB = New System.Windows.Forms.HScrollBar()
-        Me.assistanceModeValLbl = New System.Windows.Forms.Label()
-        Me.Kp1StartHSB = New System.Windows.Forms.HScrollBar()
-        Me.Kp1StartValLbl = New System.Windows.Forms.Label()
-        Me.Kp2StartHSB = New System.Windows.Forms.HScrollBar()
-        Me.Kp2StartValLbl = New System.Windows.Forms.Label()
         Me.saveSettingsBtn = New System.Windows.Forms.Button()
         Me.studyList = New System.Windows.Forms.ListBox()
-        Me.addNewSubLbl = New System.Windows.Forms.Label()
+        Me.StudySettingsLbl = New System.Windows.Forms.Label()
         Me.updateLstBtn = New System.Windows.Forms.Button()
         Me.addNewStudyLbl = New System.Windows.Forms.Label()
         Me.studyIDLbl = New System.Windows.Forms.Label()
         Me.studyIdTb = New System.Windows.Forms.TextBox()
+        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
+        Me.GainsHSB = New System.Windows.Forms.HScrollBar()
+        Me.fakeSuccessRateLbl = New System.Windows.Forms.Label()
+        Me.FakeSucRateHSB = New System.Windows.Forms.HScrollBar()
+        Me.successRateLbl = New System.Windows.Forms.Label()
+        Me.SucRateHSB = New System.Windows.Forms.HScrollBar()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.explicitGainsLbl = New System.Windows.Forms.Label()
+        Me.RiffTimingLbl = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'minMsecBetweenBurstsLbl
         '
         Me.minMsecBetweenBurstsLbl.AutoSize = True
-        Me.minMsecBetweenBurstsLbl.Location = New System.Drawing.Point(35, 58)
+        Me.minMsecBetweenBurstsLbl.Location = New System.Drawing.Point(12, 43)
         Me.minMsecBetweenBurstsLbl.Name = "minMsecBetweenBurstsLbl"
         Me.minMsecBetweenBurstsLbl.Size = New System.Drawing.Size(149, 13)
         Me.minMsecBetweenBurstsLbl.TabIndex = 14
@@ -64,7 +66,7 @@ Partial Class settingsForm
         'maxMsecBetweenBurstsLbl
         '
         Me.maxMsecBetweenBurstsLbl.AutoSize = True
-        Me.maxMsecBetweenBurstsLbl.Location = New System.Drawing.Point(35, 106)
+        Me.maxMsecBetweenBurstsLbl.Location = New System.Drawing.Point(12, 91)
         Me.maxMsecBetweenBurstsLbl.Name = "maxMsecBetweenBurstsLbl"
         Me.maxMsecBetweenBurstsLbl.Size = New System.Drawing.Size(152, 13)
         Me.maxMsecBetweenBurstsLbl.TabIndex = 15
@@ -73,7 +75,7 @@ Partial Class settingsForm
         'maxNumberNotesPerBurstLbl
         '
         Me.maxNumberNotesPerBurstLbl.AutoSize = True
-        Me.maxNumberNotesPerBurstLbl.Location = New System.Drawing.Point(35, 152)
+        Me.maxNumberNotesPerBurstLbl.Location = New System.Drawing.Point(12, 137)
         Me.maxNumberNotesPerBurstLbl.Name = "maxNumberNotesPerBurstLbl"
         Me.maxNumberNotesPerBurstLbl.Size = New System.Drawing.Size(132, 13)
         Me.maxNumberNotesPerBurstLbl.TabIndex = 16
@@ -82,42 +84,15 @@ Partial Class settingsForm
         'allowedReactionTimeLbl
         '
         Me.allowedReactionTimeLbl.AutoSize = True
-        Me.allowedReactionTimeLbl.Location = New System.Drawing.Point(35, 199)
+        Me.allowedReactionTimeLbl.Location = New System.Drawing.Point(12, 184)
         Me.allowedReactionTimeLbl.Name = "allowedReactionTimeLbl"
         Me.allowedReactionTimeLbl.Size = New System.Drawing.Size(227, 13)
         Me.allowedReactionTimeLbl.TabIndex = 17
         Me.allowedReactionTimeLbl.Text = "Allowed reaction time (time for notes to appear)"
         '
-        'assistanceModeLbl
-        '
-        Me.assistanceModeLbl.AutoSize = True
-        Me.assistanceModeLbl.Location = New System.Drawing.Point(35, 239)
-        Me.assistanceModeLbl.Name = "assistanceModeLbl"
-        Me.assistanceModeLbl.Size = New System.Drawing.Size(87, 13)
-        Me.assistanceModeLbl.TabIndex = 18
-        Me.assistanceModeLbl.Text = "Assistance mode"
-        '
-        'Kp1StartLbl
-        '
-        Me.Kp1StartLbl.AutoSize = True
-        Me.Kp1StartLbl.Location = New System.Drawing.Point(35, 285)
-        Me.Kp1StartLbl.Name = "Kp1StartLbl"
-        Me.Kp1StartLbl.Size = New System.Drawing.Size(164, 13)
-        Me.Kp1StartLbl.TabIndex = 19
-        Me.Kp1StartLbl.Text = "Gain #1 initialization default (Kp1)"
-        '
-        'Kp2StartLbl
-        '
-        Me.Kp2StartLbl.AutoSize = True
-        Me.Kp2StartLbl.Location = New System.Drawing.Point(35, 332)
-        Me.Kp2StartLbl.Name = "Kp2StartLbl"
-        Me.Kp2StartLbl.Size = New System.Drawing.Size(164, 13)
-        Me.Kp2StartLbl.TabIndex = 20
-        Me.Kp2StartLbl.Text = "Gain #2 initialization default (Kp2)"
-        '
         'minMsecBetweenBurstsHSB
         '
-        Me.minMsecBetweenBurstsHSB.Location = New System.Drawing.Point(38, 71)
+        Me.minMsecBetweenBurstsHSB.Location = New System.Drawing.Point(15, 56)
         Me.minMsecBetweenBurstsHSB.Maximum = 999
         Me.minMsecBetweenBurstsHSB.Minimum = 1
         Me.minMsecBetweenBurstsHSB.Name = "minMsecBetweenBurstsHSB"
@@ -127,7 +102,7 @@ Partial Class settingsForm
         '
         'maxMsecBetweenBurstsHSB
         '
-        Me.maxMsecBetweenBurstsHSB.Location = New System.Drawing.Point(38, 119)
+        Me.maxMsecBetweenBurstsHSB.Location = New System.Drawing.Point(15, 104)
         Me.maxMsecBetweenBurstsHSB.Maximum = 2000
         Me.maxMsecBetweenBurstsHSB.Minimum = 50
         Me.maxMsecBetweenBurstsHSB.Name = "maxMsecBetweenBurstsHSB"
@@ -138,7 +113,7 @@ Partial Class settingsForm
         'maxNotesPerRiffHSB
         '
         Me.maxNotesPerRiffHSB.LargeChange = 1
-        Me.maxNotesPerRiffHSB.Location = New System.Drawing.Point(38, 165)
+        Me.maxNotesPerRiffHSB.Location = New System.Drawing.Point(15, 150)
         Me.maxNotesPerRiffHSB.Maximum = 5
         Me.maxNotesPerRiffHSB.Minimum = 1
         Me.maxNotesPerRiffHSB.Name = "maxNotesPerRiffHSB"
@@ -149,7 +124,7 @@ Partial Class settingsForm
         'minBurstValLbl
         '
         Me.minBurstValLbl.AutoSize = True
-        Me.minBurstValLbl.Location = New System.Drawing.Point(202, 71)
+        Me.minBurstValLbl.Location = New System.Drawing.Point(179, 56)
         Me.minBurstValLbl.Name = "minBurstValLbl"
         Me.minBurstValLbl.Size = New System.Drawing.Size(25, 13)
         Me.minBurstValLbl.TabIndex = 24
@@ -158,7 +133,7 @@ Partial Class settingsForm
         'maxBurstValLbl
         '
         Me.maxBurstValLbl.AutoSize = True
-        Me.maxBurstValLbl.Location = New System.Drawing.Point(202, 119)
+        Me.maxBurstValLbl.Location = New System.Drawing.Point(179, 104)
         Me.maxBurstValLbl.Name = "maxBurstValLbl"
         Me.maxBurstValLbl.Size = New System.Drawing.Size(31, 13)
         Me.maxBurstValLbl.TabIndex = 25
@@ -167,7 +142,7 @@ Partial Class settingsForm
         'maxNotesValLbl
         '
         Me.maxNotesValLbl.AutoSize = True
-        Me.maxNotesValLbl.Location = New System.Drawing.Point(202, 165)
+        Me.maxNotesValLbl.Location = New System.Drawing.Point(179, 150)
         Me.maxNotesValLbl.Name = "maxNotesValLbl"
         Me.maxNotesValLbl.Size = New System.Drawing.Size(13, 13)
         Me.maxNotesValLbl.TabIndex = 26
@@ -175,86 +150,28 @@ Partial Class settingsForm
         '
         'reactionTimeHSB
         '
-        Me.reactionTimeHSB.Location = New System.Drawing.Point(38, 212)
-        Me.reactionTimeHSB.Maximum = 1000
-        Me.reactionTimeHSB.Minimum = 50
+        Me.reactionTimeHSB.Location = New System.Drawing.Point(15, 197)
+        Me.reactionTimeHSB.Maximum = 5000
+        Me.reactionTimeHSB.Minimum = 200
         Me.reactionTimeHSB.Name = "reactionTimeHSB"
         Me.reactionTimeHSB.Size = New System.Drawing.Size(161, 13)
         Me.reactionTimeHSB.TabIndex = 27
-        Me.reactionTimeHSB.Value = 300
+        Me.reactionTimeHSB.Value = 1000
         '
         'reactionTimeValLbl
         '
         Me.reactionTimeValLbl.AutoSize = True
-        Me.reactionTimeValLbl.Location = New System.Drawing.Point(202, 212)
+        Me.reactionTimeValLbl.Location = New System.Drawing.Point(179, 197)
         Me.reactionTimeValLbl.Name = "reactionTimeValLbl"
-        Me.reactionTimeValLbl.Size = New System.Drawing.Size(19, 13)
+        Me.reactionTimeValLbl.Size = New System.Drawing.Size(31, 13)
         Me.reactionTimeValLbl.TabIndex = 28
-        Me.reactionTimeValLbl.Text = "50"
-        '
-        'assistanceModeHSB
-        '
-        Me.assistanceModeHSB.LargeChange = 1
-        Me.assistanceModeHSB.Location = New System.Drawing.Point(38, 252)
-        Me.assistanceModeHSB.Maximum = 5
-        Me.assistanceModeHSB.Minimum = 1
-        Me.assistanceModeHSB.Name = "assistanceModeHSB"
-        Me.assistanceModeHSB.Size = New System.Drawing.Size(161, 13)
-        Me.assistanceModeHSB.TabIndex = 29
-        Me.assistanceModeHSB.Value = 5
-        '
-        'assistanceModeValLbl
-        '
-        Me.assistanceModeValLbl.AutoSize = True
-        Me.assistanceModeValLbl.Location = New System.Drawing.Point(202, 252)
-        Me.assistanceModeValLbl.Name = "assistanceModeValLbl"
-        Me.assistanceModeValLbl.Size = New System.Drawing.Size(13, 13)
-        Me.assistanceModeValLbl.TabIndex = 30
-        Me.assistanceModeValLbl.Text = "5"
-        '
-        'Kp1StartHSB
-        '
-        Me.Kp1StartHSB.LargeChange = 5
-        Me.Kp1StartHSB.Location = New System.Drawing.Point(38, 298)
-        Me.Kp1StartHSB.Maximum = 45
-        Me.Kp1StartHSB.Name = "Kp1StartHSB"
-        Me.Kp1StartHSB.Size = New System.Drawing.Size(161, 13)
-        Me.Kp1StartHSB.TabIndex = 31
-        Me.Kp1StartHSB.Value = 5
-        '
-        'Kp1StartValLbl
-        '
-        Me.Kp1StartValLbl.AutoSize = True
-        Me.Kp1StartValLbl.Location = New System.Drawing.Point(202, 298)
-        Me.Kp1StartValLbl.Name = "Kp1StartValLbl"
-        Me.Kp1StartValLbl.Size = New System.Drawing.Size(13, 13)
-        Me.Kp1StartValLbl.TabIndex = 32
-        Me.Kp1StartValLbl.Text = "0"
-        '
-        'Kp2StartHSB
-        '
-        Me.Kp2StartHSB.LargeChange = 5
-        Me.Kp2StartHSB.Location = New System.Drawing.Point(38, 345)
-        Me.Kp2StartHSB.Maximum = 45
-        Me.Kp2StartHSB.Name = "Kp2StartHSB"
-        Me.Kp2StartHSB.Size = New System.Drawing.Size(161, 13)
-        Me.Kp2StartHSB.TabIndex = 33
-        Me.Kp2StartHSB.Value = 5
-        '
-        'Kp2StartValLbl
-        '
-        Me.Kp2StartValLbl.AutoSize = True
-        Me.Kp2StartValLbl.Location = New System.Drawing.Point(202, 345)
-        Me.Kp2StartValLbl.Name = "Kp2StartValLbl"
-        Me.Kp2StartValLbl.Size = New System.Drawing.Size(13, 13)
-        Me.Kp2StartValLbl.TabIndex = 34
-        Me.Kp2StartValLbl.Text = "0"
+        Me.reactionTimeValLbl.Text = "1000"
         '
         'saveSettingsBtn
         '
-        Me.saveSettingsBtn.Location = New System.Drawing.Point(38, 378)
+        Me.saveSettingsBtn.Location = New System.Drawing.Point(20, 393)
         Me.saveSettingsBtn.Name = "saveSettingsBtn"
-        Me.saveSettingsBtn.Size = New System.Drawing.Size(180, 32)
+        Me.saveSettingsBtn.Size = New System.Drawing.Size(202, 60)
         Me.saveSettingsBtn.TabIndex = 35
         Me.saveSettingsBtn.Text = "Save Settings"
         Me.saveSettingsBtn.UseVisualStyleBackColor = True
@@ -264,24 +181,24 @@ Partial Class settingsForm
         Me.studyList.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.studyList.FormattingEnabled = True
         Me.studyList.ItemHeight = 18
-        Me.studyList.Location = New System.Drawing.Point(283, 12)
+        Me.studyList.Location = New System.Drawing.Point(274, 43)
         Me.studyList.Name = "studyList"
         Me.studyList.Size = New System.Drawing.Size(178, 310)
         Me.studyList.TabIndex = 36
         '
-        'addNewSubLbl
+        'StudySettingsLbl
         '
-        Me.addNewSubLbl.AutoSize = True
-        Me.addNewSubLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.addNewSubLbl.Location = New System.Drawing.Point(34, 12)
-        Me.addNewSubLbl.Name = "addNewSubLbl"
-        Me.addNewSubLbl.Size = New System.Drawing.Size(124, 20)
-        Me.addNewSubLbl.TabIndex = 38
-        Me.addNewSubLbl.Text = "Current Subject:"
+        Me.StudySettingsLbl.AutoSize = True
+        Me.StudySettingsLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StudySettingsLbl.Location = New System.Drawing.Point(285, 5)
+        Me.StudySettingsLbl.Name = "StudySettingsLbl"
+        Me.StudySettingsLbl.Size = New System.Drawing.Size(142, 24)
+        Me.StudySettingsLbl.TabIndex = 38
+        Me.StudySettingsLbl.Text = "Study Settings"
         '
         'updateLstBtn
         '
-        Me.updateLstBtn.Location = New System.Drawing.Point(283, 378)
+        Me.updateLstBtn.Location = New System.Drawing.Point(265, 418)
         Me.updateLstBtn.Name = "updateLstBtn"
         Me.updateLstBtn.Size = New System.Drawing.Size(178, 32)
         Me.updateLstBtn.TabIndex = 42
@@ -292,7 +209,7 @@ Partial Class settingsForm
         '
         Me.addNewStudyLbl.AutoSize = True
         Me.addNewStudyLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.addNewStudyLbl.Location = New System.Drawing.Point(303, 327)
+        Me.addNewStudyLbl.Location = New System.Drawing.Point(285, 367)
         Me.addNewStudyLbl.Name = "addNewStudyLbl"
         Me.addNewStudyLbl.Size = New System.Drawing.Size(118, 20)
         Me.addNewStudyLbl.TabIndex = 41
@@ -302,7 +219,7 @@ Partial Class settingsForm
         '
         Me.studyIDLbl.AutoSize = True
         Me.studyIDLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.studyIDLbl.Location = New System.Drawing.Point(288, 347)
+        Me.studyIDLbl.Location = New System.Drawing.Point(270, 387)
         Me.studyIDLbl.Name = "studyIDLbl"
         Me.studyIDLbl.Size = New System.Drawing.Size(71, 20)
         Me.studyIDLbl.TabIndex = 40
@@ -310,29 +227,142 @@ Partial Class settingsForm
         '
         'studyIdTb
         '
-        Me.studyIdTb.Location = New System.Drawing.Point(378, 350)
+        Me.studyIdTb.Location = New System.Drawing.Point(360, 390)
         Me.studyIdTb.Name = "studyIdTb"
         Me.studyIdTb.Size = New System.Drawing.Size(69, 20)
         Me.studyIdTb.TabIndex = 39
+        '
+        'useExplicitGainsBtn
+        '
+        Me.useExplicitGainsBtn.AutoSize = True
+        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(20, 332)
+        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
+        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
+        Me.useExplicitGainsBtn.TabIndex = 52
+        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
+        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
+        '
+        'GainsHSB
+        '
+        Me.GainsHSB.LargeChange = 15
+        Me.GainsHSB.Location = New System.Drawing.Point(21, 355)
+        Me.GainsHSB.Maximum = 45
+        Me.GainsHSB.Name = "GainsHSB"
+        Me.GainsHSB.Size = New System.Drawing.Size(138, 10)
+        Me.GainsHSB.SmallChange = 5
+        Me.GainsHSB.TabIndex = 50
+        Me.GainsHSB.Visible = False
+        '
+        'fakeSuccessRateLbl
+        '
+        Me.fakeSuccessRateLbl.AutoSize = True
+        Me.fakeSuccessRateLbl.Location = New System.Drawing.Point(156, 313)
+        Me.fakeSuccessRateLbl.Name = "fakeSuccessRateLbl"
+        Me.fakeSuccessRateLbl.Size = New System.Drawing.Size(19, 13)
+        Me.fakeSuccessRateLbl.TabIndex = 49
+        Me.fakeSuccessRateLbl.Text = "50"
+        '
+        'FakeSucRateHSB
+        '
+        Me.FakeSucRateHSB.Location = New System.Drawing.Point(21, 316)
+        Me.FakeSucRateHSB.Maximum = 99
+        Me.FakeSucRateHSB.Minimum = 50
+        Me.FakeSucRateHSB.Name = "FakeSucRateHSB"
+        Me.FakeSucRateHSB.Size = New System.Drawing.Size(138, 10)
+        Me.FakeSucRateHSB.SmallChange = 10
+        Me.FakeSucRateHSB.TabIndex = 48
+        Me.FakeSucRateHSB.Value = 50
+        '
+        'successRateLbl
+        '
+        Me.successRateLbl.AutoSize = True
+        Me.successRateLbl.Location = New System.Drawing.Point(156, 276)
+        Me.successRateLbl.Name = "successRateLbl"
+        Me.successRateLbl.Size = New System.Drawing.Size(19, 13)
+        Me.successRateLbl.TabIndex = 47
+        Me.successRateLbl.Text = "50"
+        '
+        'SucRateHSB
+        '
+        Me.SucRateHSB.Location = New System.Drawing.Point(21, 279)
+        Me.SucRateHSB.Maximum = 99
+        Me.SucRateHSB.Minimum = 50
+        Me.SucRateHSB.Name = "SucRateHSB"
+        Me.SucRateHSB.Size = New System.Drawing.Size(138, 10)
+        Me.SucRateHSB.TabIndex = 43
+        Me.SucRateHSB.Value = 50
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(17, 298)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(120, 13)
+        Me.Label2.TabIndex = 46
+        Me.Label2.Text = "Set Fake Success Rate"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(18, 261)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(93, 13)
+        Me.Label1.TabIndex = 45
+        Me.Label1.Text = "Set Success Rate"
+        '
+        'explicitGainsLbl
+        '
+        Me.explicitGainsLbl.AutoSize = True
+        Me.explicitGainsLbl.Location = New System.Drawing.Point(156, 352)
+        Me.explicitGainsLbl.Name = "explicitGainsLbl"
+        Me.explicitGainsLbl.Size = New System.Drawing.Size(13, 13)
+        Me.explicitGainsLbl.TabIndex = 53
+        Me.explicitGainsLbl.Text = "0"
+        Me.explicitGainsLbl.Visible = False
+        '
+        'RiffTimingLbl
+        '
+        Me.RiffTimingLbl.AutoSize = True
+        Me.RiffTimingLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RiffTimingLbl.Location = New System.Drawing.Point(78, 16)
+        Me.RiffTimingLbl.Name = "RiffTimingLbl"
+        Me.RiffTimingLbl.Size = New System.Drawing.Size(109, 16)
+        Me.RiffTimingLbl.TabIndex = 54
+        Me.RiffTimingLbl.Text = "Notes Settings"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(41, 236)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(187, 16)
+        Me.Label3.TabIndex = 55
+        Me.Label3.Text = "Assistance Mode Settings"
         '
         'settingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(487, 422)
+        Me.ClientSize = New System.Drawing.Size(469, 467)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.RiffTimingLbl)
+        Me.Controls.Add(Me.explicitGainsLbl)
+        Me.Controls.Add(Me.useExplicitGainsBtn)
+        Me.Controls.Add(Me.GainsHSB)
+        Me.Controls.Add(Me.fakeSuccessRateLbl)
+        Me.Controls.Add(Me.FakeSucRateHSB)
+        Me.Controls.Add(Me.successRateLbl)
+        Me.Controls.Add(Me.SucRateHSB)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.updateLstBtn)
         Me.Controls.Add(Me.addNewStudyLbl)
         Me.Controls.Add(Me.studyIDLbl)
         Me.Controls.Add(Me.studyIdTb)
-        Me.Controls.Add(Me.addNewSubLbl)
+        Me.Controls.Add(Me.StudySettingsLbl)
         Me.Controls.Add(Me.studyList)
         Me.Controls.Add(Me.saveSettingsBtn)
-        Me.Controls.Add(Me.Kp2StartValLbl)
-        Me.Controls.Add(Me.Kp2StartHSB)
-        Me.Controls.Add(Me.Kp1StartValLbl)
-        Me.Controls.Add(Me.Kp1StartHSB)
-        Me.Controls.Add(Me.assistanceModeValLbl)
-        Me.Controls.Add(Me.assistanceModeHSB)
         Me.Controls.Add(Me.reactionTimeValLbl)
         Me.Controls.Add(Me.reactionTimeHSB)
         Me.Controls.Add(Me.maxNotesValLbl)
@@ -341,9 +371,6 @@ Partial Class settingsForm
         Me.Controls.Add(Me.maxNotesPerRiffHSB)
         Me.Controls.Add(Me.maxMsecBetweenBurstsHSB)
         Me.Controls.Add(Me.minMsecBetweenBurstsHSB)
-        Me.Controls.Add(Me.Kp2StartLbl)
-        Me.Controls.Add(Me.Kp1StartLbl)
-        Me.Controls.Add(Me.assistanceModeLbl)
         Me.Controls.Add(Me.allowedReactionTimeLbl)
         Me.Controls.Add(Me.maxNumberNotesPerBurstLbl)
         Me.Controls.Add(Me.maxMsecBetweenBurstsLbl)
@@ -358,9 +385,6 @@ Partial Class settingsForm
     Friend WithEvents maxMsecBetweenBurstsLbl As System.Windows.Forms.Label
     Friend WithEvents maxNumberNotesPerBurstLbl As System.Windows.Forms.Label
     Friend WithEvents allowedReactionTimeLbl As System.Windows.Forms.Label
-    Friend WithEvents assistanceModeLbl As System.Windows.Forms.Label
-    Friend WithEvents Kp1StartLbl As System.Windows.Forms.Label
-    Friend WithEvents Kp2StartLbl As System.Windows.Forms.Label
     Friend WithEvents minMsecBetweenBurstsHSB As System.Windows.Forms.HScrollBar
     Friend WithEvents maxMsecBetweenBurstsHSB As System.Windows.Forms.HScrollBar
     Friend WithEvents maxNotesPerRiffHSB As System.Windows.Forms.HScrollBar
@@ -369,17 +393,22 @@ Partial Class settingsForm
     Friend WithEvents maxNotesValLbl As System.Windows.Forms.Label
     Friend WithEvents reactionTimeHSB As System.Windows.Forms.HScrollBar
     Friend WithEvents reactionTimeValLbl As System.Windows.Forms.Label
-    Friend WithEvents assistanceModeHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents assistanceModeValLbl As System.Windows.Forms.Label
-    Friend WithEvents Kp1StartHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents Kp1StartValLbl As System.Windows.Forms.Label
-    Friend WithEvents Kp2StartHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents Kp2StartValLbl As System.Windows.Forms.Label
     Friend WithEvents saveSettingsBtn As System.Windows.Forms.Button
     Friend WithEvents studyList As System.Windows.Forms.ListBox
-    Friend WithEvents addNewSubLbl As System.Windows.Forms.Label
+    Friend WithEvents StudySettingsLbl As System.Windows.Forms.Label
     Friend WithEvents updateLstBtn As System.Windows.Forms.Button
     Friend WithEvents addNewStudyLbl As System.Windows.Forms.Label
     Friend WithEvents studyIDLbl As System.Windows.Forms.Label
     Friend WithEvents studyIdTb As System.Windows.Forms.TextBox
+    Friend WithEvents useExplicitGainsBtn As System.Windows.Forms.CheckBox
+    Friend WithEvents GainsHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents fakeSuccessRateLbl As System.Windows.Forms.Label
+    Friend WithEvents FakeSucRateHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents successRateLbl As System.Windows.Forms.Label
+    Friend WithEvents SucRateHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents explicitGainsLbl As System.Windows.Forms.Label
+    Friend WithEvents RiffTimingLbl As System.Windows.Forms.Label
+    Friend WithEvents Label3 As System.Windows.Forms.Label
 End Class

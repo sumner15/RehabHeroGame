@@ -39,21 +39,11 @@ Partial Class Menu
         Me.songNameLbl = New System.Windows.Forms.Label()
         Me.thumbnail = New System.Windows.Forms.PictureBox()
         Me.playSongBtn = New System.Windows.Forms.Button()
-        Me.difficultyList = New System.Windows.Forms.ListBox()
         Me.isometricForcesBtn = New System.Windows.Forms.Button()
         Me.rangeOfMotionBtn = New System.Windows.Forms.Button()
         Me.gameSettingPnl = New System.Windows.Forms.Panel()
-        Me.setGainsTb = New System.Windows.Forms.TextBox()
-        Me.useExplicitGainsBtn = New System.Windows.Forms.CheckBox()
-        Me.setGainsInstructions = New System.Windows.Forms.Label()
-        Me.setGainsHSB = New System.Windows.Forms.HScrollBar()
-        Me.fakeSuccessRateLbl = New System.Windows.Forms.Label()
-        Me.setFakeSucRateHSB = New System.Windows.Forms.HScrollBar()
-        Me.successRateLbl = New System.Windows.Forms.Label()
-        Me.setSucRateHSB = New System.Windows.Forms.HScrollBar()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.gameSettingsBtn = New System.Windows.Forms.Button()
+        Me.difficultyList = New System.Windows.Forms.ListBox()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -219,168 +209,60 @@ Partial Class Menu
         Me.playSongBtn.Text = "Play Song"
         Me.playSongBtn.UseVisualStyleBackColor = True
         '
-        'difficultyList
-        '
-        Me.difficultyList.FormattingEnabled = True
-        Me.difficultyList.Items.AddRange(New Object() {"easy", "medium", "hard"})
-        Me.difficultyList.Location = New System.Drawing.Point(187, 13)
-        Me.difficultyList.Name = "difficultyList"
-        Me.difficultyList.Size = New System.Drawing.Size(58, 56)
-        Me.difficultyList.TabIndex = 9
-        '
         'isometricForcesBtn
         '
-        Me.isometricForcesBtn.Location = New System.Drawing.Point(361, 539)
+        Me.isometricForcesBtn.Location = New System.Drawing.Point(3, 73)
         Me.isometricForcesBtn.Name = "isometricForcesBtn"
-        Me.isometricForcesBtn.Size = New System.Drawing.Size(131, 32)
+        Me.isometricForcesBtn.Size = New System.Drawing.Size(123, 52)
         Me.isometricForcesBtn.TabIndex = 10
         Me.isometricForcesBtn.Text = "isometric forces"
         Me.isometricForcesBtn.UseVisualStyleBackColor = True
         '
         'rangeOfMotionBtn
         '
-        Me.rangeOfMotionBtn.Location = New System.Drawing.Point(498, 539)
+        Me.rangeOfMotionBtn.Location = New System.Drawing.Point(132, 73)
         Me.rangeOfMotionBtn.Name = "rangeOfMotionBtn"
-        Me.rangeOfMotionBtn.Size = New System.Drawing.Size(114, 32)
+        Me.rangeOfMotionBtn.Size = New System.Drawing.Size(113, 52)
         Me.rangeOfMotionBtn.TabIndex = 11
         Me.rangeOfMotionBtn.Text = "range of motion"
         Me.rangeOfMotionBtn.UseVisualStyleBackColor = True
         '
         'gameSettingPnl
         '
-        Me.gameSettingPnl.Controls.Add(Me.setGainsTb)
-        Me.gameSettingPnl.Controls.Add(Me.useExplicitGainsBtn)
-        Me.gameSettingPnl.Controls.Add(Me.setGainsInstructions)
-        Me.gameSettingPnl.Controls.Add(Me.setGainsHSB)
-        Me.gameSettingPnl.Controls.Add(Me.fakeSuccessRateLbl)
-        Me.gameSettingPnl.Controls.Add(Me.setFakeSucRateHSB)
-        Me.gameSettingPnl.Controls.Add(Me.successRateLbl)
-        Me.gameSettingPnl.Controls.Add(Me.setSucRateHSB)
-        Me.gameSettingPnl.Controls.Add(Me.Label2)
-        Me.gameSettingPnl.Controls.Add(Me.Label1)
+        Me.gameSettingPnl.Controls.Add(Me.gameSettingsBtn)
+        Me.gameSettingPnl.Controls.Add(Me.rangeOfMotionBtn)
         Me.gameSettingPnl.Controls.Add(Me.difficultyList)
+        Me.gameSettingPnl.Controls.Add(Me.isometricForcesBtn)
         Me.gameSettingPnl.Location = New System.Drawing.Point(364, 399)
         Me.gameSettingPnl.Name = "gameSettingPnl"
         Me.gameSettingPnl.Size = New System.Drawing.Size(248, 134)
         Me.gameSettingPnl.TabIndex = 13
         '
-        'setGainsTb
-        '
-        Me.setGainsTb.AutoCompleteCustomSource.AddRange(New String() {"0"})
-        Me.setGainsTb.Location = New System.Drawing.Point(141, 109)
-        Me.setGainsTb.Name = "setGainsTb"
-        Me.setGainsTb.Size = New System.Drawing.Size(17, 20)
-        Me.setGainsTb.TabIndex = 24
-        Me.setGainsTb.Text = "0"
-        Me.setGainsTb.Visible = False
-        '
-        'useExplicitGainsBtn
-        '
-        Me.useExplicitGainsBtn.AutoSize = True
-        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(6, 75)
-        Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
-        Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
-        Me.useExplicitGainsBtn.TabIndex = 23
-        Me.useExplicitGainsBtn.Text = "Use Explicit Gains"
-        Me.useExplicitGainsBtn.UseVisualStyleBackColor = True
-        '
-        'setGainsInstructions
-        '
-        Me.setGainsInstructions.AutoSize = True
-        Me.setGainsInstructions.Location = New System.Drawing.Point(4, 95)
-        Me.setGainsInstructions.Name = "setGainsInstructions"
-        Me.setGainsInstructions.Size = New System.Drawing.Size(96, 13)
-        Me.setGainsInstructions.TabIndex = 20
-        Me.setGainsInstructions.Text = "Set Gains Explicitly"
-        Me.setGainsInstructions.Visible = False
-        '
-        'setGainsHSB
-        '
-        Me.setGainsHSB.LargeChange = 15
-        Me.setGainsHSB.Location = New System.Drawing.Point(6, 112)
-        Me.setGainsHSB.Maximum = 45
-        Me.setGainsHSB.Name = "setGainsHSB"
-        Me.setGainsHSB.Size = New System.Drawing.Size(132, 13)
-        Me.setGainsHSB.SmallChange = 5
-        Me.setGainsHSB.TabIndex = 19
-        Me.setGainsHSB.Visible = False
-        '
-        'fakeSuccessRateLbl
-        '
-        Me.fakeSuccessRateLbl.AutoSize = True
-        Me.fakeSuccessRateLbl.Location = New System.Drawing.Point(142, 56)
-        Me.fakeSuccessRateLbl.Name = "fakeSuccessRateLbl"
-        Me.fakeSuccessRateLbl.Size = New System.Drawing.Size(16, 13)
-        Me.fakeSuccessRateLbl.TabIndex = 18
-        Me.fakeSuccessRateLbl.Text = ".5"
-        '
-        'setFakeSucRateHSB
-        '
-        Me.setFakeSucRateHSB.Location = New System.Drawing.Point(7, 56)
-        Me.setFakeSucRateHSB.Maximum = 99
-        Me.setFakeSucRateHSB.Minimum = 50
-        Me.setFakeSucRateHSB.Name = "setFakeSucRateHSB"
-        Me.setFakeSucRateHSB.Size = New System.Drawing.Size(132, 13)
-        Me.setFakeSucRateHSB.SmallChange = 10
-        Me.setFakeSucRateHSB.TabIndex = 17
-        Me.setFakeSucRateHSB.Value = 50
-        '
-        'successRateLbl
-        '
-        Me.successRateLbl.AutoSize = True
-        Me.successRateLbl.Location = New System.Drawing.Point(142, 19)
-        Me.successRateLbl.Name = "successRateLbl"
-        Me.successRateLbl.Size = New System.Drawing.Size(16, 13)
-        Me.successRateLbl.TabIndex = 16
-        Me.successRateLbl.Text = ".5"
-        '
-        'setSucRateHSB
-        '
-        Me.setSucRateHSB.Location = New System.Drawing.Point(7, 19)
-        Me.setSucRateHSB.Maximum = 99
-        Me.setSucRateHSB.Minimum = 50
-        Me.setSucRateHSB.Name = "setSucRateHSB"
-        Me.setSucRateHSB.Size = New System.Drawing.Size(132, 13)
-        Me.setSucRateHSB.TabIndex = 1
-        Me.setSucRateHSB.Value = 50
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 41)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(120, 13)
-        Me.Label2.TabIndex = 14
-        Me.Label2.Text = "Set Fake Success Rate"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(4, 4)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(93, 13)
-        Me.Label1.TabIndex = 13
-        Me.Label1.Text = "Set Success Rate"
-        '
         'gameSettingsBtn
         '
-        Me.gameSettingsBtn.Location = New System.Drawing.Point(12, 539)
+        Me.gameSettingsBtn.Location = New System.Drawing.Point(3, 11)
         Me.gameSettingsBtn.Name = "gameSettingsBtn"
-        Me.gameSettingsBtn.Size = New System.Drawing.Size(342, 32)
+        Me.gameSettingsBtn.Size = New System.Drawing.Size(178, 56)
         Me.gameSettingsBtn.TabIndex = 14
         Me.gameSettingsBtn.Text = "game settings"
         Me.gameSettingsBtn.UseVisualStyleBackColor = True
+        '
+        'difficultyList
+        '
+        Me.difficultyList.FormattingEnabled = True
+        Me.difficultyList.Items.AddRange(New Object() {"easy", "medium", "hard"})
+        Me.difficultyList.Location = New System.Drawing.Point(187, 11)
+        Me.difficultyList.Name = "difficultyList"
+        Me.difficultyList.Size = New System.Drawing.Size(58, 56)
+        Me.difficultyList.TabIndex = 45
         '
         'Menu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
-        Me.ClientSize = New System.Drawing.Size(624, 583)
-        Me.Controls.Add(Me.gameSettingsBtn)
+        Me.ClientSize = New System.Drawing.Size(624, 541)
         Me.Controls.Add(Me.gameSettingPnl)
-        Me.Controls.Add(Me.rangeOfMotionBtn)
-        Me.Controls.Add(Me.isometricForcesBtn)
         Me.Controls.Add(Me.playSongBtn)
         Me.Controls.Add(Me.songPnl)
         Me.Controls.Add(Me.songList)
@@ -395,7 +277,6 @@ Partial Class Menu
         Me.songPnl.PerformLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gameSettingPnl.ResumeLayout(False)
-        Me.gameSettingPnl.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -412,7 +293,6 @@ Partial Class Menu
     Friend WithEvents songNameLbl As System.Windows.Forms.Label
     Friend WithEvents thumbnail As System.Windows.Forms.PictureBox
     Friend WithEvents playSongBtn As System.Windows.Forms.Button
-    Friend WithEvents difficultyList As System.Windows.Forms.ListBox
     Friend WithEvents isometricForcesBtn As System.Windows.Forms.Button
     Friend WithEvents rangeOfMotionBtn As System.Windows.Forms.Button
     Friend WithEvents handLbl As System.Windows.Forms.Label
@@ -420,15 +300,6 @@ Partial Class Menu
     Friend WithEvents subHandList As System.Windows.Forms.ListBox
     Friend WithEvents trialNumLbl As System.Windows.Forms.Label
     Friend WithEvents gameSettingPnl As System.Windows.Forms.Panel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents setSucRateHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents fakeSuccessRateLbl As System.Windows.Forms.Label
-    Friend WithEvents setFakeSucRateHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents successRateLbl As System.Windows.Forms.Label
-    Friend WithEvents setGainsInstructions As System.Windows.Forms.Label
-    Friend WithEvents setGainsHSB As System.Windows.Forms.HScrollBar
-    Friend WithEvents useExplicitGainsBtn As System.Windows.Forms.CheckBox
-    Friend WithEvents setGainsTb As System.Windows.Forms.TextBox
     Friend WithEvents gameSettingsBtn As System.Windows.Forms.Button
+    Friend WithEvents difficultyList As System.Windows.Forms.ListBox
 End Class
