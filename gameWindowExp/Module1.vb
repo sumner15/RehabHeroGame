@@ -1,8 +1,6 @@
 ﻿Imports System
 Imports System.Windows.Forms
 
-'This comment is an initial test of Mercurial/TortiseHG push process -SUMNER (03/07/13)
-
 Module Module1
 
     'Public GAMEPATH As String = "C:\ROBOTIC LAB\Hand Rehabilitation Robot\expo2012\gameWindowExp\"
@@ -16,7 +14,8 @@ Module Module1
     Public currentSub As Subject
     Public currentSong As Song
     Public trialStr As String = ""  'used
-    'Public gameSettings As GameSettings = New GameSettings()
+
+    Public gameSets As GameSettings
 
     Public menu As Menu
 
@@ -26,10 +25,11 @@ Module Module1
         setContextValues()
         makeAbsentDirectories()
 
+        gameSets = New GameSettings("Default")
+
         Application.EnableVisualStyles()
         menu = New Menu
         Application.Run(menu)
-
     End Sub
 
     ''------------------------------- make absent directories ---------------------------''

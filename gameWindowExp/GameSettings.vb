@@ -19,22 +19,21 @@ Public Class GameSettings
     Private Kp1Start As Single
     Private Kp2Start As Single
 
-    Private settingsFileName As String = "default"
+    Public settingsFileName As String = "default"
+    Public studyIds() As String
 
     Private gameSetDic As FileDict
-
-    Public ID As String
 
     '----------------------------------------------------------------------------------'
     '------------------------------------ constructor ---------------------------------'
     '----------------------------------------------------------------------------------'
-    Public Sub New()
-        ID = currentSub.ID
+    Public Sub New(ByVal studyID As String)
+        settingsFileName = studyID
     End Sub
 
-    'Public Sub New()
-    '    ID = currentSub.ID
-    '    If My.Computer.FileSystem.FileExists(GAMEPATH & "gameSettings\" & ID & ".txt") Then
+
+    'Public Sub New()    
+    '    If My.Computer.FileSystem.FileExists(GAMEPATH & "gameSettings\" & settingsFileName & ".txt") Then
     '        readGameSetFile()
     '    Else
     '        minMsecBetweenBursts = 300
@@ -51,8 +50,10 @@ Public Class GameSettings
     '--------------------------------------------------------------------------------'
     '--------------------------- write game settings file ---------------------------'
     '--------------------------------------------------------------------------------'
-    Public Sub writeGameSetFile()        
-        Dim gameSetFile As StreamWriter = New StreamWriter(GAMEPATH & "gameSettings\" & settingsFileName & ".txt")
+    Public Sub writeGameSetFile()
+        Dim fullFileName As String = GAMEPATH & "gameSettings\" & settingsFileName & ".txt"
+        Console.WriteLine(fullFileName)
+        Dim gameSetFile As StreamWriter = New StreamWriter(fullFileName)
         gameSetFile.WriteLine("minMsecBetweenBursts: " & minMsecBetweenBursts)
         gameSetFile.WriteLine("maxMsecBetweenBursts: " & maxMsecBetweenBursts)
         gameSetFile.WriteLine("maxNumberNotesPerBurst: " & maxNumberNotesPerBurst)
@@ -90,7 +91,7 @@ Public Class GameSettings
         Return maxMsecBetweenBursts
     End Function
 
-    Public Function get_maxNumberNotesPerBurst() As Single
+    Public Function get_maxNumberNotesPerBurst() As Integer
         Return maxNumberNotesPerBurst
     End Function
 
@@ -98,7 +99,7 @@ Public Class GameSettings
         Return allowedReactionTime
     End Function
 
-    Public Function get_assistanceMode() As Single
+    Public Function get_assistanceMode() As Integer
         Return assistanceMode
     End Function
 
