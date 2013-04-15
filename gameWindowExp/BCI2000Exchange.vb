@@ -34,8 +34,8 @@ Public Class BCI2000Exchange
     Private operatorWindow As Boolean = False
     Private verbose As Boolean = False
     Private visualize As Boolean = True
-    Private udpIncomingPort As Integer = 0 ' specify port number, or 0 to use BCI2000Automation calls for incoming updates instead
-    Private udpOutgoingPort As Integer = 0 ' specify port number, or 0 to use BCI2000Automation calls for outgoing updates instead
+    Private udpIncomingPort As Integer = 4567 ' specify port number, or 0 to use BCI2000Automation calls for incoming updates instead
+    Private udpOutgoingPort As Integer = 5678 ' specify port number, or 0 to use BCI2000Automation calls for outgoing updates instead
     ' TODO: ideally we would get rid of the udp communication and use BCI2000Automation COM calls exclusively, making for much simpler vb code in this file, but currently each interpreter command takes too long to return (Juergen will try to fix this)
 #End Region
 
@@ -85,8 +85,7 @@ Public Class BCI2000Exchange
 
 
         modules(0) = "gUSBampSource32Release --local"  'TODO: get the 32-bit 3.12.00 DLL and replace the one that's currently in prog
-        'modules(0) = "SignalGenerator --local" 'TODO: this line is for testing with a fake signal in the absence of actual EEG hardware - remove it!
-        'modules(0) = modules(0) & " --FileFormat=Null"  'TODO: this line prevents EEG data from being saved to disk - remove it!
+        'modules(0) = "SignalGenerator --local --FileFormat=Null" 'TODO: this line is for testing with a fake signal in the absence of actual EEG hardware - remove it!
 
         modules(1) = "DummySignalProcessing --local" 'TODO: eventually, replace this with some real BCI signal processing (such as SpectralSignalProcessing) to do real BCI interaction
         modules(2) = "DummyApplication --local" ' this one can probably be left as is: the song game takes on the role of the application module
