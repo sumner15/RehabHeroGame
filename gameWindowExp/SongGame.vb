@@ -39,6 +39,7 @@ Public Class SongGame
     Private randomBlocker As New Random()
 
     Public secondHand As FingerBot
+    Public bci2000 As BCI2000Exchange = Nothing
     Private explicitGains() As Single = {0.0, 0.0} ' only used when in explicit gain mode
     Private useExplicitGains As Boolean = False
 
@@ -46,7 +47,7 @@ Public Class SongGame
     Private startupTimer As New Stopwatch
     Private trueStartUpDelay As Single
     Private zeroingInst As New TextSign("relax while the robot zeros itself")
-    Private scoreText As New TextSign("this is ued to show your score")
+    Private scoreText As New TextSign("this is used to show your score")
 
     Private scorefile As New StreamWriter(GAMEPATH & "scoreFiles\" & "score_" & currentSub.ID & "_" & String.Format("{0:yyyyMMddhhmmss}", Now) & ".txt")
     Private greatSuccess As Boolean = False
@@ -88,6 +89,7 @@ Public Class SongGame
         PrepBlockedTrials(0)
         'debugFile.WriteLine("pos1" & vbTab & "pos2" & vbTab & "desiredNote" & vbTab & "desiredNoteTime" & vbTab & "time")
         debugFile.WriteLine("status" & vbTab & "desirednote" & vbTab & "kp1" & vbTab & "kd1" & vbTab & "kp2" & vbTab & "kv2")
+
     End Sub
 
     '----------------------------------------------------------------------------------'
@@ -284,6 +286,8 @@ Public Class SongGame
         'secondHand.updateDGains(inTimeWindow, blockedTrial)
         'secondHand.updateGainsRatiometrically(blockedTrial)
         'secondHand.updateGainFile()
+        'secondHand.updateGainsRatiometrically(blockedTrial)
+        'secondHand.updateGainFile()
         secondHand.updateWeightsRationmetrically(blockedTrial)
 
     End Sub
@@ -430,7 +434,7 @@ Public Class SongGame
         startupTimer.Start()
         absoluteTimer.Start()
         scorefile.WriteLine("stringNum" & vbTab & "noteStime" & vbTab & "TrueSuccess" & vbTab & "perceivedSuccess")
-
+ 
         secondHand.initializeGains()
 
         secondHand.getMovementTimes()
@@ -450,6 +454,7 @@ Public Class SongGame
             End Select
         End If
 
+        bci2000 = New BCI2000Exchange(Me) ' TODO: make this optional/switchable: if you leave bci2000 = Nothing, then nothing will happen
     End Sub
     '----------------------------------------------------------------------------------'
     '----------------------- drawing commands - render event --------------------------'
@@ -525,6 +530,7 @@ Public Class SongGame
         secondHand.getPos()
         secondHand.getTargetTime()
         secondHand.moveFingerBalls()
+        If Not (bci2000 Is Nothing) Then bci2000.Update(Me)
 
         'If blockedTrial And (secondHand.targetTime > (fretboard.nextNoteTime - secondHand.fixedDur * 1000 - 200) And (Not fretboard.songOver)) Then
         '    secondHand.moveFingersToCurrent(True)
@@ -577,7 +583,7 @@ Public Class SongGame
         mySong.player.Dispose()
 
         debugFile.Close()
-
+        If Not (bci2000 Is Nothing) Then bci2000.Close()
     End Sub
 
 #End Region

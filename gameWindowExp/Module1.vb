@@ -80,8 +80,9 @@ Module Module1
     '' Setup context specific values (like the IP address of the target computer)
     Sub setContextValues()
         If My.Computer.Name = "FINGER-HOSTUCI" Then
-            'TARGETIP = "169.254.201.253"
             TARGETIP = "129.101.53.73"
+        ElseIf My.Computer.Name = "HOST2" Then
+            TARGETIP = "169.254.201.253" ' Wadsworth BCI setup
         Else
             TARGETIP = "129.101.53.73"
         End If

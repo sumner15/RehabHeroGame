@@ -99,3 +99,35 @@ Public Class Subject
     End Function
 End Class
 
+Public Class FileDict
+    Private sourceFileName As String
+    Private content As Dictionary(Of String, String)
+
+    Public Sub New(fileName As String)
+        sourceFileName = fileName
+        Read()
+    End Sub
+    Public Sub Read()
+        Dim file As StreamReader = New StreamReader(sourceFileName)
+        Dim lines As String() = file.ReadToEnd().Split(vbNewLine)
+        file.Close()
+        content = New Dictionary(Of String, String)
+        Dim parts As String()
+        For Each line In lines
+            parts = line.Split({":"c}, 2)
+            If parts.Length = 2 Then content.Add(parts(0).Trim(), parts(1).Trim())
+        Next
+    End Sub
+    Public Function Lookup(key As String, defaultValue As String) As String
+        If content.ContainsKey(key) Then Return content(key) Else Return defaultValue
+    End Function
+    Public Sub Write()
+        Dim file As StreamWriter = New StreamWriter(sourceFileName)
+        Dim list As New List(Of String)(content.Keys)
+        For Each key In list
+            file.WriteLine("{0}: {1}", key, content(key))
+        Next
+        file.Close()
+    End Sub
+
+End Class

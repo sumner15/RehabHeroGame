@@ -934,12 +934,12 @@ Public Class FingerBot
             stat = target_obj.SetParam(parameters_obj.Kp2, setVal) ' backwards in right hand mode (gold is Kp2 and Kd2)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd2, setVal)
-            Console.WriteLine("gain 1 incramented to " & Kp1)
+            'Console.WriteLine("gain incramented to " & Kp1)
         Else
             stat = target_obj.SetParam(parameters_obj.Kp1, setVal)
             setVal(0) = Kv1
             stat = target_obj.SetParam(parameters_obj.Kd1, setVal)
-            Console.WriteLine("gain 1 incramented to " & Kp1)
+            'Console.WriteLine("gain incramented to " & Kp1)
         End If
 
     End Sub
@@ -1108,8 +1108,8 @@ Public Class FingerBot
     Public Sub attributeGainsToSubject()
 
         If rightHandMode Then
-            currentSub.Kp1 = Kp2
-            currentSub.Kp2 = Kp1
+            currentSub.Kp1 = Kp2   ' TODO: am i right to be alarmed by this swap?  Elsewhere, "1" and "2" assume that handedness is *already* taken into account (gold is 1 in right hand mode, 2 in left hand mode)
+            currentSub.Kp2 = Kp1   ' also, in initalizeGains(), the values are not swapped *back* in a handedness-sensitive way...
             currentSub.Kd1 = Kv2
             currentSub.Kd2 = Kv1                        
             currentSub.update()
@@ -1142,7 +1142,7 @@ Public Class FingerBot
     End Sub
 
     '--------------------------------------------------------------------------------'
-    '---------------- get the proportional gains (they're private) ------------------'
+    '---------------- get the prop[ortional gains (they're private) -----------------'
     '--------------------------------------------------------------------------------'
     Public Function getPropGains() As Single()
         Return {Kp1, Kp2}
@@ -1349,6 +1349,13 @@ Public Class FingerBot
     '--------------------------------------------------------------------------------'
     Public Sub getPos()
         checkScopeReset()
+
+        'Dim val As Single
+        'val = target_obj.GetSignal(signals_obj.posBlue)
+        'If val > 0.05 Then Console.WriteLine("Blue: " & val)
+        'val = target_obj.GetSignal(signals_obj.posGold)
+        'If val > 0.05 Then Console.WriteLine("Gold: " & val)
+
         If rightHandMode Then
             posF2 = target_obj.GetSignal(signals_obj.posBlue) - zeroPos2
             velF2 = target_obj.GetSignal(signals_obj.velBlue)
@@ -1459,11 +1466,12 @@ Public Class FingerBot
         'Console.WriteLine("gravity direction value " & CStr(gDir))
 
         'hand = currentSub.hand 'this looks like a valid call to the subjects file, but the files have no hand entry (yet)?
-        'If gDir < 0.001 Then        
+            'If currentSub.hand.ToUpper().StartsWith("L") Then MsgBox("This subject usually uses the left hand... Turn robot over?")
         If StrComp(hand, "L") Then
             rightHandMode = True
             hand = "R"
         Else
+            'If currentSub.hand.ToUpper().StartsWith("R") Then MsgBox("This subject usually uses the right hand... Turn robot over?")
             rightHandMode = False
             hand = "L"
         End If
