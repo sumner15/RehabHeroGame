@@ -52,6 +52,7 @@ Partial Class settingsForm
         Me.explicitGainsLbl = New System.Windows.Forms.Label()
         Me.RiffTimingLbl = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.useBCICbox = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'minMsecBetweenBurstsLbl
@@ -169,7 +170,7 @@ Partial Class settingsForm
         '
         'saveSettingsBtn
         '
-        Me.saveSettingsBtn.Location = New System.Drawing.Point(20, 393)
+        Me.saveSettingsBtn.Location = New System.Drawing.Point(21, 434)
         Me.saveSettingsBtn.Name = "saveSettingsBtn"
         Me.saveSettingsBtn.Size = New System.Drawing.Size(202, 60)
         Me.saveSettingsBtn.TabIndex = 35
@@ -183,7 +184,7 @@ Partial Class settingsForm
         Me.studyList.ItemHeight = 18
         Me.studyList.Location = New System.Drawing.Point(274, 43)
         Me.studyList.Name = "studyList"
-        Me.studyList.Size = New System.Drawing.Size(178, 310)
+        Me.studyList.Size = New System.Drawing.Size(178, 346)
         Me.studyList.TabIndex = 36
         '
         'StudySettingsLbl
@@ -198,7 +199,7 @@ Partial Class settingsForm
         '
         'updateLstBtn
         '
-        Me.updateLstBtn.Location = New System.Drawing.Point(265, 418)
+        Me.updateLstBtn.Location = New System.Drawing.Point(265, 447)
         Me.updateLstBtn.Name = "updateLstBtn"
         Me.updateLstBtn.Size = New System.Drawing.Size(178, 32)
         Me.updateLstBtn.TabIndex = 42
@@ -209,7 +210,7 @@ Partial Class settingsForm
         '
         Me.addNewStudyLbl.AutoSize = True
         Me.addNewStudyLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.addNewStudyLbl.Location = New System.Drawing.Point(285, 367)
+        Me.addNewStudyLbl.Location = New System.Drawing.Point(285, 396)
         Me.addNewStudyLbl.Name = "addNewStudyLbl"
         Me.addNewStudyLbl.Size = New System.Drawing.Size(118, 20)
         Me.addNewStudyLbl.TabIndex = 41
@@ -219,7 +220,7 @@ Partial Class settingsForm
         '
         Me.studyIDLbl.AutoSize = True
         Me.studyIDLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.studyIDLbl.Location = New System.Drawing.Point(270, 387)
+        Me.studyIDLbl.Location = New System.Drawing.Point(270, 416)
         Me.studyIDLbl.Name = "studyIDLbl"
         Me.studyIDLbl.Size = New System.Drawing.Size(71, 20)
         Me.studyIDLbl.TabIndex = 40
@@ -227,7 +228,7 @@ Partial Class settingsForm
         '
         'studyIdTb
         '
-        Me.studyIdTb.Location = New System.Drawing.Point(360, 390)
+        Me.studyIdTb.Location = New System.Drawing.Point(360, 419)
         Me.studyIdTb.Name = "studyIdTb"
         Me.studyIdTb.Size = New System.Drawing.Size(69, 20)
         Me.studyIdTb.TabIndex = 39
@@ -340,11 +341,23 @@ Partial Class settingsForm
         Me.Label3.TabIndex = 55
         Me.Label3.Text = "Assistance Mode Settings"
         '
+        'useBCICbox
+        '
+        Me.useBCICbox.AutoSize = True
+        Me.useBCICbox.BackColor = System.Drawing.Color.Transparent
+        Me.useBCICbox.Location = New System.Drawing.Point(20, 396)
+        Me.useBCICbox.Name = "useBCICbox"
+        Me.useBCICbox.Size = New System.Drawing.Size(63, 17)
+        Me.useBCICbox.TabIndex = 56
+        Me.useBCICbox.Text = "use BCI"
+        Me.useBCICbox.UseVisualStyleBackColor = False
+        '
         'settingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(469, 467)
+        Me.ClientSize = New System.Drawing.Size(469, 527)
+        Me.Controls.Add(Me.useBCICbox)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.RiffTimingLbl)
         Me.Controls.Add(Me.explicitGainsLbl)
@@ -411,4 +424,5 @@ Partial Class settingsForm
     Friend WithEvents explicitGainsLbl As System.Windows.Forms.Label
     Friend WithEvents RiffTimingLbl As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents useBCICbox As System.Windows.Forms.CheckBox
 End Class

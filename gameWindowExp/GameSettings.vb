@@ -19,6 +19,7 @@ Public Class GameSettings
     Private sucRate As Single
     Private fakeSucRate As Single
     Private gains As Single
+    Private useBCI As Boolean
 
     Public settingsFileName As String = "default"
     Public studyIds() As String
@@ -49,6 +50,7 @@ Public Class GameSettings
         gameSetFile.WriteLine("fakeSucRate: " & fakeSucRate)
         gameSetFile.WriteLine("useExplicitGains: " & useExplicitGains)
         gameSetFile.WriteLine("gains: " & gains)
+        gameSetFile.WriteLine("useBCI: " & useBCI)
         gameSetFile.Close()
     End Sub
 
@@ -65,7 +67,7 @@ Public Class GameSettings
         sucRate = gameSetDic.Lookup("sucRate", "0.5")
         fakeSucRate = gameSetDic.Lookup("fakeSucRate", "0.5")
         gains = gameSetDic.Lookup("gains", "0")
-
+        useBCI = gameSetDic.Lookup("useBCI", "False")
     End Sub
 
     '----------------------------------------------------------------------------------'
@@ -103,6 +105,10 @@ Public Class GameSettings
     Public Function get_gains() As Single
         Return gains
     End Function
+
+    Public Function get_useBCI() As Boolean
+        Return useBCI
+    End Function
 #End Region
 
     '----------------------------------------------------------------------------------'
@@ -139,6 +145,10 @@ Public Class GameSettings
 
     Public Sub set_gains(ByVal newVal As Single)
         gains = newVal
+    End Sub
+
+    Public Sub set_useBCI(ByVal newVal As Boolean)
+        useBCI = newVal
     End Sub
 #End Region
 

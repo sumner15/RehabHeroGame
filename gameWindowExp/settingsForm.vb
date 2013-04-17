@@ -161,6 +161,7 @@
         gameSets.set_sucRate(CSng(SucRateHSB.Value))
         gameSets.set_fakeSucRate(CSng(FakeSucRateHSB.Value))
         gameSets.set_gains(CSng(GainsHSB.Value))
+        gameSets.set_useBCI(CSng(useBCICbox.Checked))
         gameSets.writeGameSetFile()
     End Sub
 
@@ -175,6 +176,7 @@
         SucRateHSB.Value = gameSets.get_sucRate
         FakeSucRateHSB.Value = gameSets.get_fakeSucRate
         GainsHSB.Value = gameSets.get_gains
+        useBCICbox.Checked = gameSets.get_useBCI
     End Sub
 
     Private Sub set_allLabels()
@@ -185,7 +187,6 @@
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
     End Sub
 #End Region
-
 
 End Class
 

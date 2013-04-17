@@ -454,7 +454,9 @@ Public Class SongGame
             End Select
         End If
 
-        bci2000 = New BCI2000Exchange(Me) ' TODO: make this optional/switchable: if you leave bci2000 = Nothing, then nothing will happen
+        If gameSets.get_useBCI Then
+            bci2000 = New BCI2000Exchange(Me)
+        End If
     End Sub
     '----------------------------------------------------------------------------------'
     '----------------------- drawing commands - render event --------------------------'

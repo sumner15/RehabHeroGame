@@ -6,3 +6,4 @@ sucRate: 50
 fakeSucRate: 50
 useExplicitGains: False
 gains: 0
+useBCI: False
