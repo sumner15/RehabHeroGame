@@ -18,8 +18,8 @@ Public Class GuitarString
     Private winSizeU As Double = 18    ' how far away the object is when it appears
     Public xPos As Double
 
-    Private winSizeS As Double = gameSets.get_allowedReactionTime ' how early the object appears in miliseconds (5000 originally)
-    Private hitWin As Double = 500   ' range in which hits are counted as sucessful
+    Private winSizeS As Double = gameSets.get_allowedReactionTime ' how early the object appears in miliseconds (5000 originally)    
+    Private hitWin As Double = gameSets.get_hitWindowSize ' range in which hits are counted as sucessful (500 originally)
 
     Public Note As New MeshVbo(poly.TRIS)
 
@@ -130,6 +130,10 @@ Public Class GuitarString
             hitLast = False
             Return False
         End If
+    End Function
+
+    Public Function getNoteRate() As Single
+        Return winSizeU / winSizeS
     End Function
 
 End Class

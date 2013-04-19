@@ -53,6 +53,10 @@ Partial Class settingsForm
         Me.RiffTimingLbl = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.useBCICbox = New System.Windows.Forms.CheckBox()
+        Me.hitWindowValLbl = New System.Windows.Forms.Label()
+        Me.hitWindowSizeHSB = New System.Windows.Forms.HScrollBar()
+        Me.hitWindowSizeLbl = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'minMsecBetweenBurstsLbl
@@ -67,7 +71,7 @@ Partial Class settingsForm
         'maxMsecBetweenBurstsLbl
         '
         Me.maxMsecBetweenBurstsLbl.AutoSize = True
-        Me.maxMsecBetweenBurstsLbl.Location = New System.Drawing.Point(12, 91)
+        Me.maxMsecBetweenBurstsLbl.Location = New System.Drawing.Point(12, 69)
         Me.maxMsecBetweenBurstsLbl.Name = "maxMsecBetweenBurstsLbl"
         Me.maxMsecBetweenBurstsLbl.Size = New System.Drawing.Size(152, 13)
         Me.maxMsecBetweenBurstsLbl.TabIndex = 15
@@ -76,7 +80,7 @@ Partial Class settingsForm
         'maxNumberNotesPerBurstLbl
         '
         Me.maxNumberNotesPerBurstLbl.AutoSize = True
-        Me.maxNumberNotesPerBurstLbl.Location = New System.Drawing.Point(12, 137)
+        Me.maxNumberNotesPerBurstLbl.Location = New System.Drawing.Point(12, 98)
         Me.maxNumberNotesPerBurstLbl.Name = "maxNumberNotesPerBurstLbl"
         Me.maxNumberNotesPerBurstLbl.Size = New System.Drawing.Size(132, 13)
         Me.maxNumberNotesPerBurstLbl.TabIndex = 16
@@ -85,11 +89,11 @@ Partial Class settingsForm
         'allowedReactionTimeLbl
         '
         Me.allowedReactionTimeLbl.AutoSize = True
-        Me.allowedReactionTimeLbl.Location = New System.Drawing.Point(12, 184)
+        Me.allowedReactionTimeLbl.Location = New System.Drawing.Point(12, 178)
         Me.allowedReactionTimeLbl.Name = "allowedReactionTimeLbl"
-        Me.allowedReactionTimeLbl.Size = New System.Drawing.Size(227, 13)
+        Me.allowedReactionTimeLbl.Size = New System.Drawing.Size(197, 13)
         Me.allowedReactionTimeLbl.TabIndex = 17
-        Me.allowedReactionTimeLbl.Text = "Allowed reaction time (time for notes to appear)"
+        Me.allowedReactionTimeLbl.Text = "Reaction time (time notes are on screen)"
         '
         'minMsecBetweenBurstsHSB
         '
@@ -103,7 +107,7 @@ Partial Class settingsForm
         '
         'maxMsecBetweenBurstsHSB
         '
-        Me.maxMsecBetweenBurstsHSB.Location = New System.Drawing.Point(15, 104)
+        Me.maxMsecBetweenBurstsHSB.Location = New System.Drawing.Point(15, 82)
         Me.maxMsecBetweenBurstsHSB.Maximum = 2000
         Me.maxMsecBetweenBurstsHSB.Minimum = 50
         Me.maxMsecBetweenBurstsHSB.Name = "maxMsecBetweenBurstsHSB"
@@ -114,7 +118,7 @@ Partial Class settingsForm
         'maxNotesPerRiffHSB
         '
         Me.maxNotesPerRiffHSB.LargeChange = 1
-        Me.maxNotesPerRiffHSB.Location = New System.Drawing.Point(15, 150)
+        Me.maxNotesPerRiffHSB.Location = New System.Drawing.Point(15, 111)
         Me.maxNotesPerRiffHSB.Maximum = 5
         Me.maxNotesPerRiffHSB.Minimum = 1
         Me.maxNotesPerRiffHSB.Name = "maxNotesPerRiffHSB"
@@ -134,7 +138,7 @@ Partial Class settingsForm
         'maxBurstValLbl
         '
         Me.maxBurstValLbl.AutoSize = True
-        Me.maxBurstValLbl.Location = New System.Drawing.Point(179, 104)
+        Me.maxBurstValLbl.Location = New System.Drawing.Point(179, 82)
         Me.maxBurstValLbl.Name = "maxBurstValLbl"
         Me.maxBurstValLbl.Size = New System.Drawing.Size(31, 13)
         Me.maxBurstValLbl.TabIndex = 25
@@ -143,7 +147,7 @@ Partial Class settingsForm
         'maxNotesValLbl
         '
         Me.maxNotesValLbl.AutoSize = True
-        Me.maxNotesValLbl.Location = New System.Drawing.Point(179, 150)
+        Me.maxNotesValLbl.Location = New System.Drawing.Point(179, 111)
         Me.maxNotesValLbl.Name = "maxNotesValLbl"
         Me.maxNotesValLbl.Size = New System.Drawing.Size(13, 13)
         Me.maxNotesValLbl.TabIndex = 26
@@ -151,7 +155,7 @@ Partial Class settingsForm
         '
         'reactionTimeHSB
         '
-        Me.reactionTimeHSB.Location = New System.Drawing.Point(15, 197)
+        Me.reactionTimeHSB.Location = New System.Drawing.Point(15, 191)
         Me.reactionTimeHSB.Maximum = 5000
         Me.reactionTimeHSB.Minimum = 200
         Me.reactionTimeHSB.Name = "reactionTimeHSB"
@@ -162,7 +166,7 @@ Partial Class settingsForm
         'reactionTimeValLbl
         '
         Me.reactionTimeValLbl.AutoSize = True
-        Me.reactionTimeValLbl.Location = New System.Drawing.Point(179, 197)
+        Me.reactionTimeValLbl.Location = New System.Drawing.Point(179, 191)
         Me.reactionTimeValLbl.Name = "reactionTimeValLbl"
         Me.reactionTimeValLbl.Size = New System.Drawing.Size(31, 13)
         Me.reactionTimeValLbl.TabIndex = 28
@@ -236,7 +240,7 @@ Partial Class settingsForm
         'useExplicitGainsBtn
         '
         Me.useExplicitGainsBtn.AutoSize = True
-        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(20, 332)
+        Me.useExplicitGainsBtn.Location = New System.Drawing.Point(15, 356)
         Me.useExplicitGainsBtn.Name = "useExplicitGainsBtn"
         Me.useExplicitGainsBtn.Size = New System.Drawing.Size(111, 17)
         Me.useExplicitGainsBtn.TabIndex = 52
@@ -246,7 +250,7 @@ Partial Class settingsForm
         'GainsHSB
         '
         Me.GainsHSB.LargeChange = 15
-        Me.GainsHSB.Location = New System.Drawing.Point(21, 355)
+        Me.GainsHSB.Location = New System.Drawing.Point(16, 379)
         Me.GainsHSB.Maximum = 45
         Me.GainsHSB.Name = "GainsHSB"
         Me.GainsHSB.Size = New System.Drawing.Size(138, 10)
@@ -257,7 +261,7 @@ Partial Class settingsForm
         'fakeSuccessRateLbl
         '
         Me.fakeSuccessRateLbl.AutoSize = True
-        Me.fakeSuccessRateLbl.Location = New System.Drawing.Point(156, 313)
+        Me.fakeSuccessRateLbl.Location = New System.Drawing.Point(151, 337)
         Me.fakeSuccessRateLbl.Name = "fakeSuccessRateLbl"
         Me.fakeSuccessRateLbl.Size = New System.Drawing.Size(19, 13)
         Me.fakeSuccessRateLbl.TabIndex = 49
@@ -265,7 +269,7 @@ Partial Class settingsForm
         '
         'FakeSucRateHSB
         '
-        Me.FakeSucRateHSB.Location = New System.Drawing.Point(21, 316)
+        Me.FakeSucRateHSB.Location = New System.Drawing.Point(16, 340)
         Me.FakeSucRateHSB.Maximum = 99
         Me.FakeSucRateHSB.Minimum = 50
         Me.FakeSucRateHSB.Name = "FakeSucRateHSB"
@@ -277,7 +281,7 @@ Partial Class settingsForm
         'successRateLbl
         '
         Me.successRateLbl.AutoSize = True
-        Me.successRateLbl.Location = New System.Drawing.Point(156, 276)
+        Me.successRateLbl.Location = New System.Drawing.Point(151, 300)
         Me.successRateLbl.Name = "successRateLbl"
         Me.successRateLbl.Size = New System.Drawing.Size(19, 13)
         Me.successRateLbl.TabIndex = 47
@@ -285,7 +289,7 @@ Partial Class settingsForm
         '
         'SucRateHSB
         '
-        Me.SucRateHSB.Location = New System.Drawing.Point(21, 279)
+        Me.SucRateHSB.Location = New System.Drawing.Point(16, 303)
         Me.SucRateHSB.Maximum = 99
         Me.SucRateHSB.Minimum = 50
         Me.SucRateHSB.Name = "SucRateHSB"
@@ -296,7 +300,7 @@ Partial Class settingsForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(17, 298)
+        Me.Label2.Location = New System.Drawing.Point(12, 322)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(120, 13)
         Me.Label2.TabIndex = 46
@@ -305,7 +309,7 @@ Partial Class settingsForm
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(18, 261)
+        Me.Label1.Location = New System.Drawing.Point(13, 285)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(93, 13)
         Me.Label1.TabIndex = 45
@@ -314,7 +318,7 @@ Partial Class settingsForm
         'explicitGainsLbl
         '
         Me.explicitGainsLbl.AutoSize = True
-        Me.explicitGainsLbl.Location = New System.Drawing.Point(156, 352)
+        Me.explicitGainsLbl.Location = New System.Drawing.Point(151, 376)
         Me.explicitGainsLbl.Name = "explicitGainsLbl"
         Me.explicitGainsLbl.Size = New System.Drawing.Size(13, 13)
         Me.explicitGainsLbl.TabIndex = 53
@@ -325,17 +329,17 @@ Partial Class settingsForm
         '
         Me.RiffTimingLbl.AutoSize = True
         Me.RiffTimingLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RiffTimingLbl.Location = New System.Drawing.Point(78, 16)
+        Me.RiffTimingLbl.Location = New System.Drawing.Point(82, 13)
         Me.RiffTimingLbl.Name = "RiffTimingLbl"
-        Me.RiffTimingLbl.Size = New System.Drawing.Size(109, 16)
+        Me.RiffTimingLbl.Size = New System.Drawing.Size(82, 16)
         Me.RiffTimingLbl.TabIndex = 54
-        Me.RiffTimingLbl.Text = "Notes Settings"
+        Me.RiffTimingLbl.Text = "Riff Timing"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(41, 236)
+        Me.Label3.Location = New System.Drawing.Point(36, 260)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(187, 16)
         Me.Label3.TabIndex = 55
@@ -345,18 +349,60 @@ Partial Class settingsForm
         '
         Me.useBCICbox.AutoSize = True
         Me.useBCICbox.BackColor = System.Drawing.Color.Transparent
-        Me.useBCICbox.Location = New System.Drawing.Point(20, 396)
+        Me.useBCICbox.Location = New System.Drawing.Point(81, 411)
         Me.useBCICbox.Name = "useBCICbox"
         Me.useBCICbox.Size = New System.Drawing.Size(63, 17)
         Me.useBCICbox.TabIndex = 56
         Me.useBCICbox.Text = "use BCI"
         Me.useBCICbox.UseVisualStyleBackColor = False
         '
+        'hitWindowValLbl
+        '
+        Me.hitWindowValLbl.AutoSize = True
+        Me.hitWindowValLbl.Location = New System.Drawing.Point(179, 227)
+        Me.hitWindowValLbl.Name = "hitWindowValLbl"
+        Me.hitWindowValLbl.Size = New System.Drawing.Size(25, 13)
+        Me.hitWindowValLbl.TabIndex = 59
+        Me.hitWindowValLbl.Text = "500"
+        '
+        'hitWindowSizeHSB
+        '
+        Me.hitWindowSizeHSB.Location = New System.Drawing.Point(15, 227)
+        Me.hitWindowSizeHSB.Maximum = 1000
+        Me.hitWindowSizeHSB.Minimum = 50
+        Me.hitWindowSizeHSB.Name = "hitWindowSizeHSB"
+        Me.hitWindowSizeHSB.Size = New System.Drawing.Size(161, 13)
+        Me.hitWindowSizeHSB.TabIndex = 58
+        Me.hitWindowSizeHSB.Value = 500
+        '
+        'hitWindowSizeLbl
+        '
+        Me.hitWindowSizeLbl.AutoSize = True
+        Me.hitWindowSizeLbl.Location = New System.Drawing.Point(12, 214)
+        Me.hitWindowSizeLbl.Name = "hitWindowSizeLbl"
+        Me.hitWindowSizeLbl.Size = New System.Drawing.Size(150, 13)
+        Me.hitWindowSizeLbl.TabIndex = 57
+        Me.hitWindowSizeLbl.Text = "Hit Window Size (milliseconds)"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(78, 143)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(92, 16)
+        Me.Label4.TabIndex = 60
+        Me.Label4.Text = "Note Timing"
+        '
         'settingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(469, 527)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.hitWindowValLbl)
+        Me.Controls.Add(Me.hitWindowSizeHSB)
+        Me.Controls.Add(Me.hitWindowSizeLbl)
         Me.Controls.Add(Me.useBCICbox)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.RiffTimingLbl)
@@ -425,4 +471,8 @@ Partial Class settingsForm
     Friend WithEvents RiffTimingLbl As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents useBCICbox As System.Windows.Forms.CheckBox
+    Friend WithEvents hitWindowValLbl As System.Windows.Forms.Label
+    Friend WithEvents hitWindowSizeHSB As System.Windows.Forms.HScrollBar
+    Friend WithEvents hitWindowSizeLbl As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

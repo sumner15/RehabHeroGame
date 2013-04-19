@@ -79,7 +79,7 @@ Public Class SongGame
         secondHand = New FingerBot()
         mySong = New Song(GAMEPATH & "songs\happy together\")
         mySong.createAudioPlayer()
-        fretboard = New Fretboard(mySong, level.superEasy)
+        fretboard = New Fretboard(mySong, level.superEasy)        
         cloudBox.readWavefront("cloudSphere.obj")
 
         initializeGL()
@@ -102,7 +102,7 @@ Public Class SongGame
         
         mySong = currentSong
         mySong.createAudioPlayer()
-        fretboard = New Fretboard(mySong, difficulty)
+        fretboard = New Fretboard(mySong, difficulty)        
         cloudBox.readWavefront("cloudSphere.obj")
 
         initializeGL()
@@ -123,7 +123,7 @@ Public Class SongGame
 
         mySong = currentSong
         mySong.createAudioPlayer()
-        fretboard = New Fretboard(mySong, difficulty)
+        fretboard = New Fretboard(mySong, difficulty)        
         cloudBox.readWavefront("cloudSphere.obj")
 
         initializeGL()
@@ -147,7 +147,8 @@ Public Class SongGame
 
         mySong = currentSong
         mySong.createAudioPlayer()
-        fretboard = New Fretboard(mySong, difficulty)
+        fretboard = New Fretboard(mySong, difficulty)        
+
         cloudBox.readWavefront("cloudSphere.obj")
 
         initializeGL()
@@ -260,7 +261,7 @@ Public Class SongGame
         secondHand.checkFingerHitVis(fretboard)
 
         ' check if it was on time
-        If (secondHand.hitChanged) And secondHand.InPosWindow And secondHand.InTimeWindow Then
+        If (secondHand.hitChanged) And secondHand.InTimeWindow Then
             'Console.WriteLine("NOTE HIT CORRECTLY")
             greatSuccess = True
         Else
@@ -523,10 +524,10 @@ Public Class SongGame
     '----------------------------------------------------------------------------------'
     Private Sub purdyWindow_UpdateFrame(ByVal sender As Object, ByVal e As OpenTK.FrameEventArgs) Handles Me.UpdateFrame
         ' you can put your state code ( or anything else of a similar nature) here
-        'If Mouse.Item(0) = True Then
-        '    thetaY = Mouse.X / 1.25
-        '    thetaX = Mouse.Y / 1.25
-        'End If
+        If Mouse.Item(0) = True Then
+            thetaY = Mouse.X / 1.25
+            thetaX = Mouse.Y / 1.25
+        End If
         camPos(2) = Mouse.Wheel + 4
 
         secondHand.getPos()

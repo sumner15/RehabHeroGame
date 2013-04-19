@@ -86,7 +86,7 @@ Public Class FingerBot
     Private reachtime As Single = 0
     Public startTime As Double = 0
 
-    Private posHitWindow As Single = 0.02
+    Private posHitWindow As Single = 0.02    
     Private velThreshold As Single = 0.0035
 
     Private FittsA As Double = 0.0125
@@ -167,6 +167,8 @@ Public Class FingerBot
 
         initializeGains()
     End Sub
+
+
 #End Region
 
 #Region "settup and shutdown functions"
@@ -1277,8 +1279,8 @@ Public Class FingerBot
         fingers2Ball.drawModel()
 
         backLine.drawModel()
-        targFrontLine.drawModel()
-        targBackLine.drawModel()
+        'targFrontLine.drawModel()
+        'targBackLine.drawModel()
     End Sub
 
     Public Sub moveFingerBalls()

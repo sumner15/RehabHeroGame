@@ -15,6 +15,7 @@ Public Class GameSettings
     Private maxMsecBetweenBursts As Single
     Private maxNumberNotesPerBurst As Integer
     Private allowedReactionTime As Single 'how early the object appears in miliseconds
+    Private hitWindowSize As Single
     Private useExplicitGains As Boolean
     Private sucRate As Single
     Private fakeSucRate As Single
@@ -46,6 +47,7 @@ Public Class GameSettings
         gameSetFile.WriteLine("maxMsecBetweenBursts: " & maxMsecBetweenBursts)
         gameSetFile.WriteLine("maxNumberNotesPerBurst: " & maxNumberNotesPerBurst)
         gameSetFile.WriteLine("allowedReactionTime: " & allowedReactionTime)
+        gameSetFile.WriteLine("hitWindowSize: " & hitWindowSize)
         gameSetFile.WriteLine("sucRate: " & sucRate)
         gameSetFile.WriteLine("fakeSucRate: " & fakeSucRate)
         gameSetFile.WriteLine("useExplicitGains: " & useExplicitGains)
@@ -63,6 +65,7 @@ Public Class GameSettings
         maxMsecBetweenBursts = gameSetDic.Lookup("maxMsecBetweenBursts", "1000")
         maxNumberNotesPerBurst = gameSetDic.Lookup("maxNumberNotesPerBurst", "1")
         allowedReactionTime = gameSetDic.Lookup("allowedReactionTime", "1000")
+        hitWindowSize = gameSetDic.Lookup("hitWindowSize", "500")
         useExplicitGains = gameSetDic.Lookup("useExplicitGains", "False")
         sucRate = gameSetDic.Lookup("sucRate", "0.5")
         fakeSucRate = gameSetDic.Lookup("fakeSucRate", "0.5")
@@ -88,6 +91,10 @@ Public Class GameSettings
 
     Public Function get_allowedReactionTime() As Single
         Return allowedReactionTime
+    End Function
+
+    Public Function get_hitWindowSize() As Single
+        Return hitWindowSize
     End Function
 
     Public Function get_useExplicitGains() As Boolean
@@ -131,8 +138,12 @@ Public Class GameSettings
         allowedReactionTime = newVal
     End Sub
 
-    Public Sub set_useExplicitGains(ByVal newval As Boolean)
-        useExplicitGains = newval
+    Public Sub set_hitWindowSize(ByVal newVal As Single)
+        hitWindowSize = newVal
+    End Sub
+
+    Public Sub set_useExplicitGains(ByVal newVal As Boolean)
+        useExplicitGains = newVal
     End Sub
 
     Public Sub set_sucRate(ByVal newVal As Single)

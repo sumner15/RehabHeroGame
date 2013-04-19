@@ -37,6 +37,10 @@
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
     End Sub
 
+    Private Sub hitWindowSizeHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles hitWindowSizeHSB.Scroll
+        hitWindowValLbl.Text = CStr(CSng(hitWindowSizeHSB.Value))
+    End Sub
+
     Private Sub GainsHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles GainsHSB.Scroll
         explicitGainsLbl.Text = CStr(CSng(GainsHSB.Value))
     End Sub
@@ -103,7 +107,7 @@
 
 
     '--------------------------------------------------------------------------------'
-    '-------------------------- update horizontal scroll bars -----------------------'
+    '------------------------ update success rate scroll bars -----------------------'
     '--------------------------------------------------------------------------------'
     Private Sub SucRateHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles SucRateHSB.Scroll
         ' I want this slider to be discrete
@@ -157,6 +161,7 @@
         gameSets.set_maxMsecBetweenBursts(CSng(maxMsecBetweenBurstsHSB.Value))
         gameSets.set_maxNumberNotesPerBurst(CSng(maxNotesPerRiffHSB.Value))
         gameSets.set_allowedReactionTime(CSng(reactionTimeHSB.Value))
+        gameSets.set_hitWindowSize(CSng(hitWindowSizeHSB.Value))
         gameSets.set_useExplicitGains(CSng(useExplicitGainsBtn.Checked))
         gameSets.set_sucRate(CSng(SucRateHSB.Value))
         gameSets.set_fakeSucRate(CSng(FakeSucRateHSB.Value))
@@ -172,6 +177,7 @@
         maxMsecBetweenBurstsHSB.Value = gameSets.get_maxMsecBetweenBursts
         maxNotesPerRiffHSB.Value = gameSets.get_maxNumberNotesPerBurst
         reactionTimeHSB.Value = gameSets.get_allowedReactionTime
+        hitWindowSizeHSB.Value = gameSets.get_hitWindowSize
         useExplicitGainsBtn.Checked = gameSets.get_useExplicitGains
         SucRateHSB.Value = gameSets.get_sucRate
         FakeSucRateHSB.Value = gameSets.get_fakeSucRate
@@ -185,6 +191,7 @@
         maxBurstValLbl.Text = CStr(CSng(maxMsecBetweenBurstsHSB.Value))
         maxNotesValLbl.Text = CStr(CSng(maxNotesPerRiffHSB.Value))
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
+        hitWindowValLbl.Text = CStr(CSng(hitWindowSizeHSB.Value))
     End Sub
 #End Region
 
