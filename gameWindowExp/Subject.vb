@@ -86,8 +86,8 @@ Public Class Subject
     Public Function getSessionString() As String
         Dim today As Boolean = Math.Floor(lastSessionDate.Subtract(epoch).TotalDays) = Math.Floor(Now.Subtract(epoch).TotalDays)
         Dim never As Boolean = (lastSessionDate = epoch)
-        If never Then Return "no previous session"
-        Dim result As String = "Last measurement: session " & lastSessionNumber.ToString("000.##")
+        If never Then Return "       no previous session"
+        Dim result As String = "session " & lastSessionNumber.ToString("000.##")
         result = result & If(today, " today", " on " & lastSessionDate.ToString("yyyy-MM-dd"))
         result = result & " at " & lastSessionDate.ToString("h:mm tt")
         Return result
@@ -97,5 +97,6 @@ Public Class Subject
         Dim number As Integer = If(hrs < 4, lastSessionNumber, lastSessionNumber + 1)
         Return number.ToString("000.##")
     End Function
+
 End Class
 

@@ -26,12 +26,11 @@ Partial Class Menu
         Me.subjectList = New System.Windows.Forms.ListBox()
         Me.titleRehabHeroLbl = New System.Windows.Forms.Label()
         Me.subjectPnl = New System.Windows.Forms.Panel()
-        Me.trialNumLbl = New System.Windows.Forms.Label()
+        Me.lastSessionLabel = New System.Windows.Forms.Label()
         Me.subHandList = New System.Windows.Forms.ListBox()
         Me.trialNumTextLbl = New System.Windows.Forms.Label()
         Me.handLbl = New System.Windows.Forms.Label()
         Me.updateLstBtn = New System.Windows.Forms.Button()
-        Me.addNewSubLbl = New System.Windows.Forms.Label()
         Me.subIDLbl = New System.Windows.Forms.Label()
         Me.subIdTb = New System.Windows.Forms.TextBox()
         Me.songList = New System.Windows.Forms.ListBox()
@@ -44,6 +43,8 @@ Partial Class Menu
         Me.gameSettingPnl = New System.Windows.Forms.Panel()
         Me.gameSettingsBtn = New System.Windows.Forms.Button()
         Me.difficultyList = New System.Windows.Forms.ListBox()
+        Me.sessionNumberTB = New System.Windows.Forms.TextBox()
+        Me.LastMeasurementLbl = New System.Windows.Forms.Label()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -57,7 +58,7 @@ Partial Class Menu
         Me.subjectList.ItemHeight = 18
         Me.subjectList.Location = New System.Drawing.Point(12, 61)
         Me.subjectList.Name = "subjectList"
-        Me.subjectList.Size = New System.Drawing.Size(178, 382)
+        Me.subjectList.Size = New System.Drawing.Size(178, 346)
         Me.subjectList.TabIndex = 0
         '
         'titleRehabHeroLbl
@@ -74,34 +75,35 @@ Partial Class Menu
         '
         'subjectPnl
         '
-        Me.subjectPnl.Controls.Add(Me.trialNumLbl)
+        Me.subjectPnl.Controls.Add(Me.LastMeasurementLbl)
+        Me.subjectPnl.Controls.Add(Me.lastSessionLabel)
         Me.subjectPnl.Controls.Add(Me.subHandList)
-        Me.subjectPnl.Controls.Add(Me.trialNumTextLbl)
+        Me.subjectPnl.Controls.Add(Me.sessionNumberTB)
         Me.subjectPnl.Controls.Add(Me.handLbl)
         Me.subjectPnl.Controls.Add(Me.updateLstBtn)
-        Me.subjectPnl.Controls.Add(Me.addNewSubLbl)
+        Me.subjectPnl.Controls.Add(Me.trialNumTextLbl)
         Me.subjectPnl.Controls.Add(Me.subIDLbl)
         Me.subjectPnl.Controls.Add(Me.subIdTb)
-        Me.subjectPnl.Location = New System.Drawing.Point(15, 449)
+        Me.subjectPnl.Location = New System.Drawing.Point(15, 413)
         Me.subjectPnl.Name = "subjectPnl"
-        Me.subjectPnl.Size = New System.Drawing.Size(340, 84)
+        Me.subjectPnl.Size = New System.Drawing.Size(340, 120)
         Me.subjectPnl.TabIndex = 2
         '
-        'trialNumLbl
+        'lastSessionLabel
         '
-        Me.trialNumLbl.AutoSize = True
-        Me.trialNumLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumLbl.Location = New System.Drawing.Point(280, 52)
-        Me.trialNumLbl.Name = "trialNumLbl"
-        Me.trialNumLbl.Size = New System.Drawing.Size(18, 20)
-        Me.trialNumLbl.TabIndex = 14
-        Me.trialNumLbl.Text = "0"
+        Me.lastSessionLabel.AutoSize = True
+        Me.lastSessionLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lastSessionLabel.Location = New System.Drawing.Point(154, 88)
+        Me.lastSessionLabel.Name = "lastSessionLabel"
+        Me.lastSessionLabel.Size = New System.Drawing.Size(94, 15)
+        Me.lastSessionLabel.TabIndex = 14
+        Me.lastSessionLabel.Text = "last session info"
         '
         'subHandList
         '
         Me.subHandList.FormattingEnabled = True
         Me.subHandList.Items.AddRange(New Object() {"R", "L"})
-        Me.subHandList.Location = New System.Drawing.Point(255, 13)
+        Me.subHandList.Location = New System.Drawing.Point(84, 52)
         Me.subHandList.Name = "subHandList"
         Me.subHandList.Size = New System.Drawing.Size(17, 30)
         Me.subHandList.TabIndex = 13
@@ -110,17 +112,17 @@ Partial Class Menu
         '
         Me.trialNumTextLbl.AutoSize = True
         Me.trialNumTextLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumTextLbl.Location = New System.Drawing.Point(176, 52)
+        Me.trialNumTextLbl.Location = New System.Drawing.Point(195, 10)
         Me.trialNumTextLbl.Name = "trialNumTextLbl"
-        Me.trialNumTextLbl.Size = New System.Drawing.Size(98, 20)
+        Me.trialNumTextLbl.Size = New System.Drawing.Size(102, 20)
         Me.trialNumTextLbl.TabIndex = 6
-        Me.trialNumTextLbl.Text = "Trial Number"
+        Me.trialNumTextLbl.Text = "Trial Number:"
         '
         'handLbl
         '
         Me.handLbl.AutoSize = True
         Me.handLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.handLbl.Location = New System.Drawing.Point(201, 20)
+        Me.handLbl.Location = New System.Drawing.Point(30, 59)
         Me.handLbl.Name = "handLbl"
         Me.handLbl.Size = New System.Drawing.Size(48, 20)
         Me.handLbl.TabIndex = 4
@@ -128,38 +130,28 @@ Partial Class Menu
         '
         'updateLstBtn
         '
-        Me.updateLstBtn.Location = New System.Drawing.Point(7, 49)
+        Me.updateLstBtn.Location = New System.Drawing.Point(17, 88)
         Me.updateLstBtn.Name = "updateLstBtn"
-        Me.updateLstBtn.Size = New System.Drawing.Size(153, 23)
+        Me.updateLstBtn.Size = New System.Drawing.Size(119, 23)
         Me.updateLstBtn.TabIndex = 3
         Me.updateLstBtn.Text = "Update Subject List"
         Me.updateLstBtn.UseVisualStyleBackColor = True
-        '
-        'addNewSubLbl
-        '
-        Me.addNewSubLbl.AutoSize = True
-        Me.addNewSubLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.addNewSubLbl.Location = New System.Drawing.Point(18, 0)
-        Me.addNewSubLbl.Name = "addNewSubLbl"
-        Me.addNewSubLbl.Size = New System.Drawing.Size(131, 20)
-        Me.addNewSubLbl.TabIndex = 2
-        Me.addNewSubLbl.Text = "Add New Subject"
         '
         'subIDLbl
         '
         Me.subIDLbl.AutoSize = True
         Me.subIDLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.subIDLbl.Location = New System.Drawing.Point(3, 20)
+        Me.subIDLbl.Location = New System.Drawing.Point(13, 10)
         Me.subIDLbl.Name = "subIDLbl"
-        Me.subIDLbl.Size = New System.Drawing.Size(84, 20)
+        Me.subIDLbl.Size = New System.Drawing.Size(123, 20)
         Me.subIDLbl.TabIndex = 1
-        Me.subIDLbl.Text = "Subject ID"
+        Me.subIDLbl.Text = "New Subject ID:"
         '
         'subIdTb
         '
-        Me.subIdTb.Location = New System.Drawing.Point(93, 23)
+        Me.subIdTb.Location = New System.Drawing.Point(34, 33)
         Me.subIdTb.Name = "subIdTb"
-        Me.subIdTb.Size = New System.Drawing.Size(69, 20)
+        Me.subIdTb.Size = New System.Drawing.Size(91, 20)
         Me.subIdTb.TabIndex = 0
         '
         'songList
@@ -169,7 +161,7 @@ Partial Class Menu
         Me.songList.ItemHeight = 18
         Me.songList.Location = New System.Drawing.Point(195, 61)
         Me.songList.Name = "songList"
-        Me.songList.Size = New System.Drawing.Size(159, 382)
+        Me.songList.Size = New System.Drawing.Size(159, 346)
         Me.songList.TabIndex = 3
         '
         'songPnl
@@ -256,6 +248,23 @@ Partial Class Menu
         Me.difficultyList.Size = New System.Drawing.Size(58, 56)
         Me.difficultyList.TabIndex = 45
         '
+        'sessionNumberTB
+        '
+        Me.sessionNumberTB.Location = New System.Drawing.Point(199, 33)
+        Me.sessionNumberTB.Name = "sessionNumberTB"
+        Me.sessionNumberTB.Size = New System.Drawing.Size(91, 20)
+        Me.sessionNumberTB.TabIndex = 15
+        '
+        'LastMeasurementLbl
+        '
+        Me.LastMeasurementLbl.AutoSize = True
+        Me.LastMeasurementLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LastMeasurementLbl.Location = New System.Drawing.Point(177, 72)
+        Me.LastMeasurementLbl.Name = "LastMeasurementLbl"
+        Me.LastMeasurementLbl.Size = New System.Drawing.Size(134, 16)
+        Me.LastMeasurementLbl.TabIndex = 16
+        Me.LastMeasurementLbl.Text = "last measurement:"
+        '
         'Menu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -285,7 +294,6 @@ Partial Class Menu
     Friend WithEvents titleRehabHeroLbl As System.Windows.Forms.Label
     Friend WithEvents subjectPnl As System.Windows.Forms.Panel
     Friend WithEvents updateLstBtn As System.Windows.Forms.Button
-    Friend WithEvents addNewSubLbl As System.Windows.Forms.Label
     Friend WithEvents subIDLbl As System.Windows.Forms.Label
     Friend WithEvents subIdTb As System.Windows.Forms.TextBox
     Friend WithEvents songList As System.Windows.Forms.ListBox
@@ -298,8 +306,10 @@ Partial Class Menu
     Friend WithEvents handLbl As System.Windows.Forms.Label
     Friend WithEvents trialNumTextLbl As System.Windows.Forms.Label
     Friend WithEvents subHandList As System.Windows.Forms.ListBox
-    Friend WithEvents trialNumLbl As System.Windows.Forms.Label
+    Friend WithEvents lastSessionLabel As System.Windows.Forms.Label
     Friend WithEvents gameSettingPnl As System.Windows.Forms.Panel
     Friend WithEvents gameSettingsBtn As System.Windows.Forms.Button
     Friend WithEvents difficultyList As System.Windows.Forms.ListBox
+    Friend WithEvents sessionNumberTB As System.Windows.Forms.TextBox
+    Friend WithEvents LastMeasurementLbl As System.Windows.Forms.Label
 End Class

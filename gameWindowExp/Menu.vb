@@ -52,7 +52,12 @@ Public Class Menu
         Dim selected As Integer
         selected = subjectList.SelectedIndex
         currentSub = pop.subjects(selected)
-        trialNumLbl.Text = currentSub.getExpectedSessionNumber()
+        updateSubjectInfoGUI()
+    End Sub
+
+    Private Sub updateSubjectInfoGUI()
+        lastSessionLabel.Text = currentSub.getSessionString()
+        sessionNumberTB.Text = currentSub.getExpectedSessionNumber()
     End Sub
 
     '--------------------------------------------------------------------------------'
@@ -71,9 +76,14 @@ Public Class Menu
     '--------------------------------------------------------------------------------'
     Private Sub playSongBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles playSongBtn.Click
 
+        If currentSub.ID = "default" Then MsgBox("select a real subject name") : Return
+        If difficultyList.SelectedIndex = -1 Then MsgBox("choose a difficulty level") : Return
 
         currentSub.trial += 1
+        currentSub.lastSessionDate = Now()
+        currentSub.lastSessionNumber = sessionNumberTB.Text
         currentSub.update()
+        updateSubjectInfoGUI()
 
         Dim successRate As Single
         Dim perceivedSuccessRate As Single
