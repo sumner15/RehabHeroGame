@@ -132,8 +132,5 @@ Public Class GuitarString
         End If
     End Function
 
-    Public Function getNoteRate() As Single
-        Return winSizeU / winSizeS
-    End Function
 
 End Class
