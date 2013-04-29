@@ -192,6 +192,9 @@
         maxNotesValLbl.Text = CStr(CSng(maxNotesPerRiffHSB.Value))
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
         hitWindowValLbl.Text = CStr(CSng(hitWindowSizeHSB.Value))
+        successRateLbl.Text = CStr(CSng(SucRateHSB.Value))
+        fakeSuccessRateLbl.Text = CStr(CSng(FakeSucRateHSB.Value))
+        explicitGainsLbl.Text = CStr(CSng(GainsHSB.Value))
     End Sub
 #End Region
 
