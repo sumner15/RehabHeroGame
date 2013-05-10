@@ -79,12 +79,12 @@ Public Class GameSettings
     Public Function hasChanged() As Boolean
         ' Caution: extremely nasty hack ahead
         Dim tempSettingsName As String = "_temp"
-        Console.WriteLine(useBCI)
+        'Console.WriteLine(useBCI)
         writeGameSetFile(tempSettingsName)
         Dim fd1 As FileDict = New FileDict(GAMEPATH & "gameSettings\" & tempSettingsName & ".txt")
         Dim fd2 As FileDict = New FileDict(GAMEPATH & "gameSettings\" & settingsFileName & ".txt")
-        Console.WriteLine(fd1.AsText().Replace(vbNewLine, "; "))
-        Console.WriteLine(fd2.AsText().Replace(vbNewLine, "; "))
+        'Console.WriteLine(fd1.AsText().Replace(vbNewLine, "; "))
+        'Console.WriteLine(fd2.AsText().Replace(vbNewLine, "; "))
         Return (String.Compare(fd1.AsText(), fd2.AsText()) <> 0)
         'Dim gameSetFile As StreamWriter = New StreamWriter("C:\Users\Admin\Desktop\zark.txt")
     End Function
