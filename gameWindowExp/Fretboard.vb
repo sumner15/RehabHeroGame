@@ -71,7 +71,7 @@ Public Class Fretboard
                 Next
                 Exit Select
         End Select
-
+        filterNotes()
         stage = New MeshVbo(poly.QUADS)
         stage.readWavefront("fretBoard.obj")
         stage.useMaterial = False
@@ -85,6 +85,99 @@ Public Class Fretboard
         'getNextNote()
 
     End Sub
+
+    Private Sub filterNotes()
+        ' manipulate notes in two places: allNotes( 0 to totalNumberOfNotes,  0 to 2 )
+        '                                 strings( i ).noteTimes( 0 to numberOfNotesOnThisString )   for i = 0 to 2
+        ' remove notes that violate the conditions set by minMsecBetweenBursts and maxNumberNotesPerBurst
+        ' In Python this would be about ten lines.
+
+        Dim minGap As Double = gameSets.get_minMsecBetweenBursts()
+        Dim maxGap As Double = gameSets.get_maxMsecBetweenBursts()
+        Dim maxRiffLength As Integer = gameSets.get_maxNumberNotesPerBurst()
+
+        Dim lastNoteTime As Double = 0
+        Dim riffLength As Integer = 0
+        Dim index_all As Integer = 0
+        Dim nLeft_all As Integer = 0
+
+        Dim indices As Integer()
+        ReDim indices(strings.Length - 1)
+        Dim nLeft As Integer()
+        ReDim nLeft(strings.Length - 1)
+        Dim sel As Boolean()()
+        ReDim sel(strings.Length - 1)
+        ' initialize counters and arrays for the string-by-string search
+        For iString As Integer = 0 To strings.Length - 1
+            'Console.WriteLine("string {0} has {1} notes", iString, strings(iString).noteTimes.Length)
+            ReDim sel(iString)(strings(iString).noteTimes.Length - 1)
+            indices(iString) = 0
+            nLeft(iString) = 0
+        Next
+        Dim sel_all As Boolean()
+        ReDim sel_all(allNotes.GetLength(0) - 1)
+
+        Dim maxString = 2 ' don't take into account notes on strings 3 and 4 (they should not be removed, and they are not included in allNotes anyway)
+
+        While True
+            Dim noteTime As Double = -1
+            Dim noteString As Integer = -1
+            ' Find the string and time of the next note
+            For iString As Integer = 0 To maxString ' by iterating through the strings
+                Dim index As Integer = indices(iString) ' looking at the next note on each string
+                If index < strings(iString).noteTimes.Length Then  ' and seeing which string has a note soonest
+                    If noteTime < 0 Or strings(iString).noteTimes(index) < noteTime Then
+                        noteTime = strings(iString).noteTimes(index)
+                        noteString = iString
+                    End If
+                End If
+            Next
+            If noteString = -1 Then Exit While ' must have exhausted all strings
+            riffLength += 1
+            If noteTime - lastNoteTime >= minGap Then riffLength = 1
+            If noteTime - lastNoteTime >= maxGap Then Console.WriteLine("maxMsecBetweenBursts exceeded") ' can't actually prevent this
+            Dim keep As Boolean = (riffLength <= maxRiffLength)
+            sel(noteString)(indices(noteString)) = keep   ' selector arrays for each string
+            sel_all(index_all) = keep  ' selector array for allNotes
+            'If noteTime < 30000 Then Console.WriteLine("{0} {1}:  {2}", noteTime, noteString, keep)
+            If keep Then
+                lastNoteTime = noteTime
+                nLeft(noteString) += 1
+                nLeft_all += 1
+            End If
+            indices(noteString) += 1
+            index_all += 1
+        End While
+        ' reconstruct the array of note times for each string, including only selected notes:
+        For iString As Integer = 0 To maxString
+            Dim newNoteTimes As Double()
+            ReDim newNoteTimes(nLeft(iString) - 1) ' this array will replace the previous noteTimes member array of the GuitarString object
+            Dim index As Integer = 0
+            For iNote As Integer = 0 To strings(iString).noteTimes.Length - 1
+                If sel(iString)(iNote) Then
+                    newNoteTimes(index) = strings(iString).noteTimes(iNote)
+                    index += 1
+                End If
+            Next
+            strings(iString).noteTimes = newNoteTimes
+            ReDim strings(iString).hitTimes(nLeft(iString) - 1, 1)
+        Next
+        ' reconstruct the table allNotes, including only selected notes:
+        Dim newAllNotes As Double(,)
+        ReDim newAllNotes(nLeft_all - 1, allNotes.GetLength(1) - 1)
+        index_all = 0
+        For iNote As Integer = 0 To allNotes.GetLength(0) - 1
+            If sel_all(iNote) Then
+                For iCol As Integer = 0 To allNotes.GetLength(1) - 1
+                    newAllNotes(index_all, iCol) = allNotes(iNote, iCol)
+                Next
+                index_all += 1
+            End If
+        Next
+        allNotes = newAllNotes
+
+    End Sub
+
 
     '----------------------------------------------------------------------------------'
     '-------------------------------- drawing function --------------------------------'
