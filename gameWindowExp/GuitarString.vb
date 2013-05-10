@@ -132,8 +132,18 @@ Public Class GuitarString
         End If
     End Function
 
-    Public Function getNoteRate() As Single
-        Return winSizeU / winSizeS
+    '----------------------------------------------------------------------------------'
+    '-------------------------- get the time of the next note -------------------------'
+    '----------------------------------------------------------------------------------'
+    Public Function getNextNoteTime() As Single
+        If nextNote = 0 And noteTimes.Length > 1 Then
+            Return noteTimes(nextNote + 1)
+        Else
+            Return noteTimes(nextNote)
+        End If
+
     End Function
+
+
 
 End Class
