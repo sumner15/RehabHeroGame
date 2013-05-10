@@ -8,3 +8,4 @@ fakeSucRate: 50
 useExplicitGains: False
 gains: 0
 useBCI: False
+takeEveryNNotes:1

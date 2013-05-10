@@ -27,14 +27,13 @@ Public Class Fretboard
     Private currentNote As Integer = 0
     Public nextNotePos As Single
     Public nextNoteTime As Double
+    Public previousNoteTime As Double = 0
 
     Public songOver As Boolean = False
 
     Private fretBoardZ As Single
     Private winSizeS As Double = 5000  ' how early notes appear in miliseconds
     Private winSizeU As Double = 18    ' how far away notes are when they appears
-
-    Private takeNth As Integer = 2
 
     Private timeSinceLastMove As New Stopwatch
 
@@ -43,6 +42,7 @@ Public Class Fretboard
     '----------------------------------------------------------------------------------'
     ' the constructor requires that we pass in a song and a difficulty
     Public Sub New(ByRef mySong As Song, ByVal difficulty As Integer)
+        Dim takeNth As Integer = gameSets.get_takeEveryNNotes()
         Select Case difficulty
             Case level.superEasy
                 allNotes = mySong.superEasyAll
@@ -210,25 +210,48 @@ Public Class Fretboard
     '----------------------------------- get next note --------------------------------'
     '----------------------------------------------------------------------------------'
     ' scan through all the strings. don't just use the dumb allNotes array
-    Public Sub getNextNote()
-        Dim soonestNote As Double() = {strings(0).getNextNoteTime(), 0}
-        ' note, this should go to 4, but there's a dumb bug where string 4 and 5 allways claim the next note because their nextNote is allways at time == 0.
-        ' this is acrappy fix, but I'm realllllly short on thime here
+    Public Sub getNextNote(ByRef currentTime As Single)
+        
         Dim checkNextNoteT As Double = 0
-        For i = 1 To 2 Step 1
+        checkNextNoteT = strings(0).getNextNoteTime()
+        Dim soonestNote As Double() = {checkNextNoteT, 0}
+        ' we need to make sure that there are still notes available int that array
+        If (checkNextNoteT > previousNoteTime) And Not strings(0).checkIfLast() Then
+            soonestNote = {checkNextNoteT, 0}
+        Else
+            soonestNote = {0, 0}
+        End If
+
+        For i = 1 To 4 Step 1
             checkNextNoteT = strings(i).getNextNoteTime()
-            If checkNextNoteT <= soonestNote(0) Then
+            If (checkNextNoteT > previousNoteTime) And (checkNextNoteT <= soonestNote(0)) And Not strings(i).checkIfLast() Then
                 soonestNote = {checkNextNoteT, i}
             End If
         Next
 
-        nextNoteTime = soonestNote(0)
-        nextNotePos = CInt(soonestNote(1))
-        If (currentNote + 1) < numNotes Then
-            currentNote += 1
-        Else
+        previousNoteTime = checkNextNoteT ' every once in a while this wierd thing happends where it suddenly wants to skip a bunch of notes in a row. I think that means that it's current note is set in the past.
+
+        ' only update them if the value is in the future!
+        If (soonestNote(0) > currentTime) Then
+            nextNoteTime = soonestNote(0)
+            ' the value that I need to send is not the index, but the position. Just apply the index to the position vector.
+            nextNotePos = positions(soonestNote(1))
+            If (currentNote + 1) < numNotes Then
+                currentNote += 1
+            Else
+                songOver = True
+            End If
+        End If
+
+        ' add an end condition if all the strings have finished their last note.
+        Dim allAtLastNote As Boolean = True
+        For i = 0 To 4
+            allAtLastNote = allAtLastNote And strings(i).checkIfLast()
+        Next
+        If allAtLastNote Then
             songOver = True
         End If
+
         'Console.Write("next note: " & nextNotePos & vbTab & "time: " & nextNoteTime & vbNewLine)
     End Sub
     'Public Sub getNextNote()

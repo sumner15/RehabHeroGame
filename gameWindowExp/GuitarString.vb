@@ -11,7 +11,7 @@ Imports OpenTK.Graphics.OpenGL
 Public Class GuitarString
     Public noteTimes() As Double
     Public hitTimes(0, 1) As Double  ' first column indicates whether or not the note was hit, the second column gives the time at which it was hit
-    Public nextNote As Integer
+    Public nextNote As Integer = 0
     Public farNote As Integer
     Public previousNote As Integer = 0
     Private hitLast As Boolean = False    
@@ -108,7 +108,7 @@ Public Class GuitarString
         Next i
 
         ' advance next note and previous note
-        If (noteTimes(nextNote) - gameTime < -(hitWin / 2)) And ((nextNote + 1) < (noteTimes.Length - 1)) Then
+        If (noteTimes(nextNote) - gameTime < -(hitWin / 2)) And ((nextNote + 1) < (noteTimes.Length)) Then
             previousNote = nextNote
             nextNote = nextNote + 1
         End If
@@ -136,14 +136,20 @@ Public Class GuitarString
     '-------------------------- get the time of the next note -------------------------'
     '----------------------------------------------------------------------------------'
     Public Function getNextNoteTime() As Single
-        If nextNote = 0 And noteTimes.Length > 1 Then
-            Return noteTimes(nextNote + 1)
-        Else
-            Return noteTimes(nextNote)
-        End If
-
+        Return noteTimes(nextNote)
     End Function
 
+    '----------------------------------------------------------------------------------'
+    '---------------------- check if we have passed the last note ---------------------'
+    '----------------------------------------------------------------------------------'
+    ' check if we have pass the last note in this array. If so, return true
+    Public Function checkIfLast() As Boolean
+        If (nextNote + 1) < (noteTimes.Length) Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
 
 
 End Class

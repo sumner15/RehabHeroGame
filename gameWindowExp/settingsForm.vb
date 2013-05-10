@@ -41,6 +41,10 @@
         hitWindowValLbl.Text = CStr(CSng(hitWindowSizeHSB.Value))
     End Sub
 
+    Private Sub takeNthNoteHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles takeNthNoteHSB.Scroll
+        takeNthNoteLbl.Text = CStr(CInt(takeNthNoteHSB.Value))
+    End Sub
+
     Private Sub GainsHSB_Scroll(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ScrollEventArgs) Handles GainsHSB.Scroll
         explicitGainsLbl.Text = CStr(CSng(GainsHSB.Value))
     End Sub
@@ -162,6 +166,7 @@
         gameSets.set_maxNumberNotesPerBurst(CSng(maxNotesPerRiffHSB.Value))
         gameSets.set_allowedReactionTime(CSng(reactionTimeHSB.Value))
         gameSets.set_hitWindowSize(CSng(hitWindowSizeHSB.Value))
+        gameSets.set_takeEveryNNotes(CInt(takeNthNoteHSB.Value))
         gameSets.set_useExplicitGains(CSng(useExplicitGainsBtn.Checked))
         gameSets.set_sucRate(CSng(SucRateHSB.Value))
         gameSets.set_fakeSucRate(CSng(FakeSucRateHSB.Value))
@@ -178,6 +183,7 @@
         maxNotesPerRiffHSB.Value = gameSets.get_maxNumberNotesPerBurst
         reactionTimeHSB.Value = gameSets.get_allowedReactionTime
         hitWindowSizeHSB.Value = gameSets.get_hitWindowSize
+        takeNthNoteHSB.Value = gameSets.get_takeEveryNNotes
         useExplicitGainsBtn.Checked = gameSets.get_useExplicitGains
         SucRateHSB.Value = gameSets.get_sucRate
         FakeSucRateHSB.Value = gameSets.get_fakeSucRate
@@ -192,6 +198,7 @@
         maxNotesValLbl.Text = CStr(CSng(maxNotesPerRiffHSB.Value))
         reactionTimeValLbl.Text = CStr(CSng(reactionTimeHSB.Value))
         hitWindowValLbl.Text = CStr(CSng(hitWindowSizeHSB.Value))
+        takeNthNoteLbl.Text = CStr(takeNthNoteHSB.Value)
         successRateLbl.Text = CStr(CSng(SucRateHSB.Value))
         fakeSuccessRateLbl.Text = CStr(CSng(FakeSucRateHSB.Value))
         explicitGainsLbl.Text = CStr(CSng(GainsHSB.Value))
