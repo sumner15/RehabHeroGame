@@ -355,7 +355,6 @@ Public Class SongGame
             End If
 
             ' determine whether to block the next trial
-            Console.WriteLine("currentNote " & CStr(currentNote))
             If blockedNotes(currentNote) Then
                 blockedTrial = 1
             Else
@@ -366,7 +365,7 @@ Public Class SongGame
             greatSuccess = False ' just resetting it
             greatSuccessVis = False
             hitAttempted = False
-            'secondHand.moveFingersToCurrent(False)
+            secondHand.moveFingersToCurrent(False)
             fretboard.getNextNote()
             'secondHand.getMovementTimes()
 

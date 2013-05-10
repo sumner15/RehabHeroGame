@@ -34,8 +34,6 @@ Public Class Fretboard
     Private winSizeS As Double = 5000  ' how early notes appear in miliseconds
     Private winSizeU As Double = 18    ' how far away notes are when they appears
 
-    Private takeNth As Integer = 2
-
     Private timeSinceLastMove As New Stopwatch
 
     '----------------------------------------------------------------------------------'
@@ -47,28 +45,28 @@ Public Class Fretboard
             Case level.superEasy
                 allNotes = mySong.superEasyAll
                 For i = 0 To 4 Step 1
-                    strings(i) = New GuitarString(takeEveryNthNote(takeNth, mySong.superEasy(i).onTimes), i)
+                    strings(i) = New GuitarString(mySong.superEasy(i).onTimes, i)
                     targets(i) = New Target(i)
                 Next
                 Exit Select
             Case level.easy
                 allNotes = mySong.easyAll
                 For i = 0 To 4 Step 1
-                    strings(i) = New GuitarString(takeEveryNthNote(takeNth, mySong.easy(i).onTimes), i)
+                    strings(i) = New GuitarString(mySong.easy(i).onTimes, i)
                     targets(i) = New Target(i)
                 Next
                 Exit Select
             Case level.medium
                 allNotes = mySong.mediumAll
                 For i = 0 To 4 Step 1
-                    strings(i) = New GuitarString(takeEveryNthNote(takeNth, mySong.medium(i).onTimes), i)
+                    strings(i) = New GuitarString(mySong.medium(i).onTimes, i)
                     targets(i) = New Target(i)
                 Next
                 Exit Select
             Case level.Amazing
                 allNotes = mySong.amazingAll
                 For i = 0 To 4 Step 1
-                    strings(i) = New GuitarString(takeEveryNthNote(takeNth, mySong.amazing(i).onTimes), i)
+                    strings(i) = New GuitarString(mySong.amazing(i).onTimes, i)
                     targets(i) = New Target(i)
                 Next
                 Exit Select
@@ -81,7 +79,7 @@ Public Class Fretboard
         stage.loadTexture("fretBoard3.bmp")
         fretBoardZ = -8
 
-        numNotes = countUpNotes() 'allNotes.GetLength(0)
+        numNotes = allNotes.GetLength(0)
 
         timeSinceLastMove.Start()
         'getNextNote()
@@ -209,79 +207,16 @@ Public Class Fretboard
     '----------------------------------------------------------------------------------'
     '----------------------------------- get next note --------------------------------'
     '----------------------------------------------------------------------------------'
-    ' scan through all the strings. don't just use the dumb allNotes array
+    ' looks at all of the strings and checks which one has the next note
     Public Sub getNextNote()
-        Dim soonestNote As Double() = {strings(0).getNextNoteTime(), 0}
-        ' note, this should go to 4, but there's a dumb bug where string 4 and 5 allways claim the next note because their nextNote is allways at time == 0.
-        ' this is acrappy fix, but I'm realllllly short on thime here
-        Dim checkNextNoteT As Double = 0
-        For i = 1 To 2 Step 1
-            checkNextNoteT = strings(i).getNextNoteTime()
-            If checkNextNoteT <= soonestNote(0) Then
-                soonestNote = {checkNextNoteT, i}
-            End If
-        Next
-
-        nextNoteTime = soonestNote(0)
-        nextNotePos = CInt(soonestNote(1))
-        If (currentNote + 1) < numNotes Then
+        nextNoteTime = allNotes(currentNote, 0)
+        nextNotePos = positions(CInt(allNotes(currentNote, 2)))
+        If (currentNote + 1) < allNotes.GetLength(0) Then
             currentNote += 1
         Else
             songOver = True
         End If
         'Console.Write("next note: " & nextNotePos & vbTab & "time: " & nextNoteTime & vbNewLine)
     End Sub
-    'Public Sub getNextNote()
-    '    nextNoteTime = allNotes(currentNote, 0)
-    '    nextNotePos = positions(CInt(allNotes(currentNote, 2)))
-    '    Console.WriteLine("this ran " & nextNoteTime)
-    '    If (currentNote + 1) < allNotes.GetLength(0) Then
-    '        currentNote += 1
-    '    Else
-    '        songOver = True
-    '    End If
-    '    'Console.Write("next note: " & nextNotePos & vbTab & "time: " & nextNoteTime & vbNewLine)
-    'End Sub
-
-    '----------------------------------------------------------------------------------'
-    '-------------------------------- count up the notes ------------------------------'
-    '----------------------------------------------------------------------------------'
-    ' since we want to get away from using the allNotes array, we need to count up the 
-    ' actual number of notes in all of the songs
-    Public Function countUpNotes() As Integer
-        Dim nNotes As Integer = 0
-        For i = 0 To 4 Step 1
-            nNotes += strings(i).noteTimes.GetLength(0)
-        Next
-        Return nNotes
-    End Function
-
-    '----------------------------------------------------------------------------------'
-    '-------------------------------- take every nth note -----------------------------'
-    '----------------------------------------------------------------------------------'
-    ' I'm actually going to write this to take every nth note from each string. It seems
-    ' that is more likely to be what the user would want, and it's easier to do.
-    Private Function takeEveryNthNote(ByVal n As Integer, ByRef noteTimeArray As Double()) As Double()
-        ' for each string take every nth note
-        Dim currentNumberOfNotes As Integer = noteTimeArray.GetLength(0)
-        Dim newNumberOfNotes = Floor(currentNumberOfNotes / n)
-        Dim newNoteTimes(newNumberOfNotes) As Double
-        Dim count As Integer = 0
-
-        If n >= 1 Then
-            For ii = 0 To (currentNumberOfNotes - 1) Step n
-                newNoteTimes(count) = noteTimeArray(ii)
-                If ((count + 1) < newNumberOfNotes) Then
-                    count += 1
-                End If
-            Next
-            Return newNoteTimes
-        Else
-            MsgBox("tried to take every " & CStr(n) & "th note - n must be >= 1. we just used all the notes isntead")
-            Return noteTimeArray
-        End If
-
-
-    End Function
 
 End Class
