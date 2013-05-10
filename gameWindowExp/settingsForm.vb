@@ -54,7 +54,8 @@
         'make sure we have set real-life-possible values before we set anything
         If CSng(maxMsecBetweenBurstsHSB.Value) > CSng(minMsecBetweenBurstsHSB.Value) Then
             '---set all the settings from the scrollbars---'
-            set_allSettings()            
+            set_allSettings()
+            gameSets.writeGameSetFile()
             Me.Close() 'close the setting window'
         Else
             MsgBox("please set the maximum time between bursts larger than the minimum time between bursts")
@@ -101,7 +102,7 @@
 
             Me.Close() 'close the setting window'
         Else
-            MsgBox("Enter the subject's information before trying to save the subject.")
+            MsgBox("Enter the name of the condition before trying to save settings.")
         End If
     End Sub
 
@@ -167,7 +168,6 @@
         gameSets.set_fakeSucRate(CSng(FakeSucRateHSB.Value))
         gameSets.set_gains(CSng(GainsHSB.Value))
         gameSets.set_useBCI(CSng(useBCICbox.Checked))
-        gameSets.writeGameSetFile()
     End Sub
 
     Private Sub get_allSettings()
@@ -197,6 +197,9 @@
         explicitGainsLbl.Text = CStr(CSng(GainsHSB.Value))
     End Sub
 #End Region
-
+    Private Sub settingsForm_Disposed(ByVal sender As Object, ByVal e As Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        set_allSettings()
+        Module1.menu.gameSettingsBtn.Text = "game settings:" & vbNewLine & gameSets.settingsFileName & If(gameSets.hasChanged(), " (modified)", "")
+    End Sub
 End Class
 

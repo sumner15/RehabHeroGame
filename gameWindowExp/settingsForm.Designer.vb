@@ -98,7 +98,7 @@ Partial Class settingsForm
         'minMsecBetweenBurstsHSB
         '
         Me.minMsecBetweenBurstsHSB.Location = New System.Drawing.Point(15, 56)
-        Me.minMsecBetweenBurstsHSB.Maximum = 999
+        Me.minMsecBetweenBurstsHSB.Maximum = 5000
         Me.minMsecBetweenBurstsHSB.Minimum = 1
         Me.minMsecBetweenBurstsHSB.Name = "minMsecBetweenBurstsHSB"
         Me.minMsecBetweenBurstsHSB.Size = New System.Drawing.Size(161, 13)
@@ -108,7 +108,7 @@ Partial Class settingsForm
         'maxMsecBetweenBurstsHSB
         '
         Me.maxMsecBetweenBurstsHSB.Location = New System.Drawing.Point(15, 82)
-        Me.maxMsecBetweenBurstsHSB.Maximum = 2000
+        Me.maxMsecBetweenBurstsHSB.Maximum = 5000
         Me.maxMsecBetweenBurstsHSB.Minimum = 50
         Me.maxMsecBetweenBurstsHSB.Name = "maxMsecBetweenBurstsHSB"
         Me.maxMsecBetweenBurstsHSB.Size = New System.Drawing.Size(161, 13)

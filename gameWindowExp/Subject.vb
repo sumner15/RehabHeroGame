@@ -88,7 +88,7 @@ Public Class Subject
         Dim never As Boolean = (lastSessionDate = epoch)
         If never Then Return "       no previous session"
         Dim result As String = "session " & lastSessionNumber.ToString("000.##")
-        result = result & If(today, " today", " on " & lastSessionDate.ToString("yyyy-MM-dd"))
+        result = result & If(today, " today", " on " & lastSessionDate.ToString("yyyy-MM-dd") & vbNewLine)
         result = result & " at " & lastSessionDate.ToString("h:mm tt")
         Return result
     End Function

@@ -40,8 +40,11 @@ Public Class GameSettings
     '--------------------------- write game settings file ---------------------------'
     '--------------------------------------------------------------------------------'
     Public Sub writeGameSetFile()
-        Dim fullFileName As String = GAMEPATH & "gameSettings\" & settingsFileName & ".txt"
-        Console.WriteLine(fullFileName)
+        writeGameSetFile(settingsFileName)
+    End Sub
+    Public Sub writeGameSetFile(filename As String)
+        Dim fullFileName As String = GAMEPATH & "gameSettings\" & filename & ".txt"
+        'Console.WriteLine(fullFileName)
         Dim gameSetFile As StreamWriter = New StreamWriter(fullFileName)
         gameSetFile.WriteLine("minMsecBetweenBursts: " & minMsecBetweenBursts)
         gameSetFile.WriteLine("maxMsecBetweenBursts: " & maxMsecBetweenBursts)
@@ -72,6 +75,19 @@ Public Class GameSettings
         gains = gameSetDic.Lookup("gains", "0")
         useBCI = gameSetDic.Lookup("useBCI", "False")
     End Sub
+
+    Public Function hasChanged() As Boolean
+        ' Caution: extremely nasty hack ahead
+        Dim tempSettingsName As String = "_temp"
+        Console.WriteLine(useBCI)
+        writeGameSetFile(tempSettingsName)
+        Dim fd1 As FileDict = New FileDict(GAMEPATH & "gameSettings\" & tempSettingsName & ".txt")
+        Dim fd2 As FileDict = New FileDict(GAMEPATH & "gameSettings\" & settingsFileName & ".txt")
+        Console.WriteLine(fd1.AsText().Replace(vbNewLine, "; "))
+        Console.WriteLine(fd2.AsText().Replace(vbNewLine, "; "))
+        Return (String.Compare(fd1.AsText(), fd2.AsText()) <> 0)
+        'Dim gameSetFile As StreamWriter = New StreamWriter("C:\Users\Admin\Desktop\zark.txt")
+    End Function
 
     '----------------------------------------------------------------------------------'
     '---------------------- functions to get private values ---------------------------'

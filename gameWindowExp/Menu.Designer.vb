@@ -26,11 +26,13 @@ Partial Class Menu
         Me.subjectList = New System.Windows.Forms.ListBox()
         Me.titleRehabHeroLbl = New System.Windows.Forms.Label()
         Me.subjectPnl = New System.Windows.Forms.Panel()
+        Me.LastMeasurementLbl = New System.Windows.Forms.Label()
         Me.lastSessionLabel = New System.Windows.Forms.Label()
         Me.subHandList = New System.Windows.Forms.ListBox()
-        Me.trialNumTextLbl = New System.Windows.Forms.Label()
+        Me.sessionNumberTB = New System.Windows.Forms.TextBox()
         Me.handLbl = New System.Windows.Forms.Label()
         Me.updateLstBtn = New System.Windows.Forms.Button()
+        Me.trialNumTextLbl = New System.Windows.Forms.Label()
         Me.subIDLbl = New System.Windows.Forms.Label()
         Me.subIdTb = New System.Windows.Forms.TextBox()
         Me.songList = New System.Windows.Forms.ListBox()
@@ -43,8 +45,6 @@ Partial Class Menu
         Me.gameSettingPnl = New System.Windows.Forms.Panel()
         Me.gameSettingsBtn = New System.Windows.Forms.Button()
         Me.difficultyList = New System.Windows.Forms.ListBox()
-        Me.sessionNumberTB = New System.Windows.Forms.TextBox()
-        Me.LastMeasurementLbl = New System.Windows.Forms.Label()
         Me.subjectPnl.SuspendLayout()
         Me.songPnl.SuspendLayout()
         CType(Me.thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -89,6 +89,16 @@ Partial Class Menu
         Me.subjectPnl.Size = New System.Drawing.Size(340, 120)
         Me.subjectPnl.TabIndex = 2
         '
+        'LastMeasurementLbl
+        '
+        Me.LastMeasurementLbl.AutoSize = True
+        Me.LastMeasurementLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LastMeasurementLbl.Location = New System.Drawing.Point(177, 72)
+        Me.LastMeasurementLbl.Name = "LastMeasurementLbl"
+        Me.LastMeasurementLbl.Size = New System.Drawing.Size(134, 16)
+        Me.LastMeasurementLbl.TabIndex = 16
+        Me.LastMeasurementLbl.Text = "last measurement:"
+        '
         'lastSessionLabel
         '
         Me.lastSessionLabel.AutoSize = True
@@ -108,15 +118,12 @@ Partial Class Menu
         Me.subHandList.Size = New System.Drawing.Size(17, 30)
         Me.subHandList.TabIndex = 13
         '
-        'trialNumTextLbl
+        'sessionNumberTB
         '
-        Me.trialNumTextLbl.AutoSize = True
-        Me.trialNumTextLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.trialNumTextLbl.Location = New System.Drawing.Point(195, 10)
-        Me.trialNumTextLbl.Name = "trialNumTextLbl"
-        Me.trialNumTextLbl.Size = New System.Drawing.Size(102, 20)
-        Me.trialNumTextLbl.TabIndex = 6
-        Me.trialNumTextLbl.Text = "Trial Number:"
+        Me.sessionNumberTB.Location = New System.Drawing.Point(199, 33)
+        Me.sessionNumberTB.Name = "sessionNumberTB"
+        Me.sessionNumberTB.Size = New System.Drawing.Size(91, 20)
+        Me.sessionNumberTB.TabIndex = 15
         '
         'handLbl
         '
@@ -136,6 +143,16 @@ Partial Class Menu
         Me.updateLstBtn.TabIndex = 3
         Me.updateLstBtn.Text = "Update Subject List"
         Me.updateLstBtn.UseVisualStyleBackColor = True
+        '
+        'trialNumTextLbl
+        '
+        Me.trialNumTextLbl.AutoSize = True
+        Me.trialNumTextLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.trialNumTextLbl.Location = New System.Drawing.Point(195, 10)
+        Me.trialNumTextLbl.Name = "trialNumTextLbl"
+        Me.trialNumTextLbl.Size = New System.Drawing.Size(130, 20)
+        Me.trialNumTextLbl.TabIndex = 6
+        Me.trialNumTextLbl.Text = "Session Number:"
         '
         'subIDLbl
         '
@@ -247,23 +264,6 @@ Partial Class Menu
         Me.difficultyList.Name = "difficultyList"
         Me.difficultyList.Size = New System.Drawing.Size(58, 56)
         Me.difficultyList.TabIndex = 45
-        '
-        'sessionNumberTB
-        '
-        Me.sessionNumberTB.Location = New System.Drawing.Point(199, 33)
-        Me.sessionNumberTB.Name = "sessionNumberTB"
-        Me.sessionNumberTB.Size = New System.Drawing.Size(91, 20)
-        Me.sessionNumberTB.TabIndex = 15
-        '
-        'LastMeasurementLbl
-        '
-        Me.LastMeasurementLbl.AutoSize = True
-        Me.LastMeasurementLbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LastMeasurementLbl.Location = New System.Drawing.Point(177, 72)
-        Me.LastMeasurementLbl.Name = "LastMeasurementLbl"
-        Me.LastMeasurementLbl.Size = New System.Drawing.Size(134, 16)
-        Me.LastMeasurementLbl.TabIndex = 16
-        Me.LastMeasurementLbl.Text = "last measurement:"
         '
         'Menu
         '

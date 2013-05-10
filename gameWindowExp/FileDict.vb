@@ -37,13 +37,18 @@ Public Class FileDict
         End If
 
     End Function
+    Public Function AsText() As String
+        Dim result As String = ""
+        Dim list As New List(Of String)(content.Keys)
+        list.Sort()
+        For Each key In list
+            result = result & key & ": " & content(key) & vbNewLine
+        Next
+        Return result
+    End Function
     Public Sub Write()
         Dim file As StreamWriter = New StreamWriter(sourceFileName)
-        Dim list As New List(Of String)(content.Keys)
-        For Each key In list
-            file.WriteLine("{0}: {1}", key, content(key))
-        Next
+        file.Write(AsText())
         file.Close()
     End Sub
-
 End Class
